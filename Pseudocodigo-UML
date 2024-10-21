@@ -1,0 +1,213 @@
+class CustomEnum{
+   +nombre: string
+
+   +CustomEnum(nombre:string): CustomEnum
+   +getNombre(): String
+
+}
+
+class Filtro{
+}
+
+class AlquilerManager{
+}
+class ReservaManager{
+}
+class UsuarioManager{
+}
+class EnumManager{
+}
+class Sistema{
+    +alquileres List<Alquileres>
+    +usuarios List<Usuario>
+    + reservas List<Reserva>
+    + enums HashMap<string, string>
+
+    + buscarAlquiler(ciudad: string, fechaDeEntrada: LocalData, fechaDeSalida: LocalDate, cantHuespedes: Int, precioMinimo: Int, precioMaximo: int)
+    + obtenerAlquiler(id?): Alquiler
+    + registrarUsuario(usuario: Usuario): Usuario
+    + estaRegistrado(usuario: Usuario): Boolean
+    + darDeAltaAlquiler(Inmueble | Alquiler)
+    + validacionesDeAlta(alquiler: Alquiler)
+    + gererarAlquiler(propietario, ...otrosdatos?): Alquiler | void?
+    + crearReserva(alquiler, usuario)
+    + cancelarReserva(alquiler, usario)
+    + reservasDe(usuario)
+    + reservasFuturasDe(usuario)
+    + reservasEn(ciduad, usuario)
+    + ciudadesDeReservas(usuario)
+    + aprobarReserva(propietario: Propietario): void (validacion si le pertenece)
+
+
+    + crearCategoria(nombre: string): Categoria
+    + crearTipoDeInmueble(nombre:string): TipoDeInmueble
+    + crearServicio(nombre:string): Servicio
+    + topTenInquilinos(); List<Inquilino>
+    + inmueblesLibres(): List<Inmuebles> || List<Alquileres>
+
+}
+
+
+class ReseñaManager{
+    + reseñasDePropietarios: HashMap<String, Reseña>
+    + reseñasDeInquilino: HashMap<String, Reseña>
+    + reseñasDeInmueble: HashMap<String, Reseña>
+
+    + ReseñaManager(sistema: Sistema)
+    + agregarReseñaPropietario(reseña: ReseñaDePropietario, propietaro: Propietario)
+    + agregarReseñaInquilino(reseña: ReseñaDeInquilino, inquilino: Inquilino)
+    + agregarReseñaInmueble(reseña: ReseñaInmueble, inmueble:Inmueble)
+    + calcularPromedioReseñas(Propietario): double
+    + calcularPromedioReseñas(Inquilino): double
+ 
+}
+
+class Usuario {
+    +nombre: String
+    +direccion: String
+    +telefono: String
+    +reseñas: List<Reseña>
+    +categoria: Categoria
+    +permiso:?
+
+    +Usuario(nombre:String, direccion:String, telefono: String): Usuario
+   
+    + iniciarSesion()?
+    
+
+}
+
+class Propietario {
+    +inmuebles: List<Inmueble>
+
+    +generarInmueble(...datosInmueble): Inmueble
+    +lePerteneceInmueble(inmueble: Inmueble): Boolean
+
+}
+
+class Inquilino {
+
+
+}
+
+class Administrador{
+
+}
+
+' Herencia
+Usuario <|-- Propietario
+Usuario <|-- Inquilino
+Usuario <|-- Administrador
+
+' Definimos la clase Inmueble
+class MailManager{
+   + enviarMail()
+   + recibirMAil()
+   + leerMail
+
+}
+
+class Inmueble {
+    +vecesAlquilado: int
+    +tipoInmueble: TipoInmueble
+    +superficie: float
+    +pais: String
+    +ciudad: String
+    +direccion: String
+    +servicios:  String
+    +capacidad: int
+    +fotos: List<String>
+    +Reseñas: List<Reseña>
+    +ocupado: Boolean
+   
+   
+    +puedeReservarse(): Boolean
+    
+}
+
+
+' Definimos la clase Alquiler
+
+class Periodo{
+    fechaInicio: date
+    fechaFinal: date
+    precio: double
+
+    Periodo(fechaInicio:date, fechafinal:date, precio:double): void
+    perteneceAPeriodo(fecha:date): boolean
+    obtenerPrecio(): double
+
+}
+
+class Alquiler {
+    +inmueble: Inmueble
+    +checkin: String
+    +checkout: String
+    +formaPago: String
+    +Periodos: List<Periodos> 
+    +estado: enum pendiente | checkin | checkout?
+    + reserva: null | Reserva
+
+    -calcularPrecio(fecha:Date) : Double
+
+    +calcularPrecioPeriodo(fechaInicio: date, fechaFinal:date): Double
+    +checkin()
+    +checkout()
+    -generarCalificacion():
+}
+
+class Reserva{
+   + estado: creada | pendiente | aceptada | cancelada | finalizada
+   + formaDePago
+   + fechaInicio
+   + fechaFinal
+
+   +Reserva(formaDePago: enum(FormaDePago), ...datosCorrespondientes): void | Reserva
+}
+
+Class Reseña{
+   +puntaje: Int
+   +comentario: string
+   +emisor: Usuario
+
+}
+Interface ReseñaInmueble{
+   +Emisor: Inquilino
+   +Receptor: Inmueble
+
+   +ReseñaInmueble(emisor: Inquilino, receptor: Inmueble, puntaje:int, cometario: string)
+}
+
+class ReseñaPropietario{
+  +Emisor: Inquilino
+  +Receptor: Propietario
+
+  +ReseñaPropietario(emisor: Inquilino, receptor: Propietario, puntaje:int, cometario: string): ReseñaPropietario
+}
+
+class ReseñaInquilino{
+  +Emisor: Propietario
+  +Receptor: Inquilino
+ 
+  +ReseñaInquilino(emisor: Propietario, receptor: Inquilino, puntaje:int, cometario: string): ReseñaInquilino
+ 
+}
+
+abstract PoliticaDeCancelacion{
+    +fechaDeCancelacion: date
+    +fechaDeInicio: date 
+
+    +montoPorCancelacion(): Double 
+}
+
+class CancelacionGratuita{
+    +montoPorCancelacion():Double
+}
+
+class SinCancelacion{
+    +montoPorCancelacion(): Double
+}
+
+class Intermedia{
+    +montoPorCancelacion():Double
+}
