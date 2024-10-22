@@ -1,7 +1,7 @@
-package tpIntegradorVersionMia.Usuario;
+package tpIntegrador.Usuario;
 
-import tpIntegradorVersionMia.Inmueble.Inmueble;
-import tpIntegradorVersionMia.Sistema.Sistema;
+import tpIntegrador.Inmueble.Inmueble;
+import tpIntegrador.Sistema.Sistema;
 
 public class Propietario extends Usuario{
 	private Inmueble inm;
@@ -14,7 +14,7 @@ public class Propietario extends Usuario{
 		return this.inm;
 	}
 	
-	public void darDeAltaEn(Sistema sm, Alquiler alq) {
-		sm.darDeAltaAlquiler(alq);
-	}
+//	public void darDeAltaEn(Sistema sm, Alquiler alq) {
+//		sm.darDeAltaAlquiler(alq);
+//	}
 }

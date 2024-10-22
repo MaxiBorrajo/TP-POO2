@@ -1,4 +1,4 @@
-package tpIntegradorVersionMia.Inmueble;
+package tpIntegrador.Inmueble;
 
 public class Ubicacion {
 	

@@ -1,4 +1,4 @@
-package tpIntegradorVersionMia.Usuario;
+package tpIntegrador.Usuario;
 
 public abstract class Usuario {
 	private String nombre;

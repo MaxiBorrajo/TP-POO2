@@ -1,4 +1,4 @@
-package tpIntegradorVersionMia.Inmueble;
+package tpIntegrador.Inmueble;
 
 import java.util.List;
 
