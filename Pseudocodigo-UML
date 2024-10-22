@@ -94,12 +94,6 @@ class Administrador{
 
 }
 
-' Herencia
-Usuario <|-- Propietario
-Usuario <|-- Inquilino
-Usuario <|-- Administrador
-
-' Definimos la clase Inmueble
 class MailManager{
    + enviarMail()
    + recibirMAil()
@@ -125,8 +119,6 @@ class Inmueble {
     
 }
 
-
-' Definimos la clase Alquiler
 
 class Periodo{
     fechaInicio: date
