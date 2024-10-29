@@ -1,4 +1,4 @@
-package tpIntegrador.Inmueble;
+package sistema.Inmueble;
 
 public class Ubicacion {
 	

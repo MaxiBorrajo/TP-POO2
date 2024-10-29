@@ -1,14 +1,16 @@
-package tpIntegrador.Inmueble;
+package sistema.Inmueble;
+import sistema.enums.Servicio;
+import sistema.enums.TipoDeInmueble;
 
 import java.util.List;
 
 import tpIntegradorVersionMia.Sistema.Servicio;
 
 public class Inmueble {
-	
+	private int id;
 	private int superficie;
 	private TipoDeInmueble tipo;
-	private Ubicacion ubi;
+	private Ubicacion ubicacion;
 	private List<Servicio> servicios;
 	private int capacidad;
 
@@ -19,7 +21,7 @@ public class Inmueble {
 			int capacidad) {
 		this.superficie =  superficie;
 		this.tipo = tipo;
-		this.ubi = ubi;
+		this.ubicacion = ubi;
 		this.servicios = servicios;
 		this.capacidad = capacidad;
 	}

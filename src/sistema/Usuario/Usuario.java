@@ -1,6 +1,6 @@
-package tpIntegrador.Usuario;
+package sistema.Usuario;
 
-public abstract class Usuario {
+public class Usuario {
 	private String nombre;
 	private String email;
 	private String telefono;
@@ -11,6 +11,5 @@ public abstract class Usuario {
 		this.email = email;
 		this.telefono = telefono;
 	}
-	
 	
 }

@@ -1,20 +1,23 @@
-package tpIntegrador.Usuario;
+package sistema.Usuario;
 
-import tpIntegrador.Inmueble.Inmueble;
-import tpIntegrador.Sistema.Sistema;
+import sistema.Inmueble.Inmueble;
+
+import java.util.List;
 
 public class Propietario extends Usuario{
-	private Inmueble inm;
-	public Propietario(String nombre, String mail, String telefono, Inmueble inm) {
-		super(nombre, mail, telefono);
-		this.inm = inm;
+	private List<Inmueble> inmuebles;
+	
+	public Propietario(String nombreCompleto, String email, String telefono) {
+		super(nombreCompleto, email, telefono);
+	}
+
+	
+	public List<Inmueble> getinmueble() {
+		return this.inmuebles;
 	}
 	
-	public Inmueble getinmueble() {
-		return this.inm;
+	public void addInmueble(Inmueble inmueble) {
+		this.inmuebles.add(inmueble);
 	}
-	
-//	public void darDeAltaEn(Sistema sm, Alquiler alq) {
-//		sm.darDeAltaAlquiler(alq);
-//	}
+
 }
