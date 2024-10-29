@@ -10,7 +10,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import sistema.Usuario.Inquilino;
 
-@RunWith(MockitoJUnitRunner.class)
 public class AlquilerManagerTest {
 
     private AlquilerManager alquilerManager;    
@@ -20,11 +19,11 @@ public class AlquilerManagerTest {
     	fail("Not yet implemented");
     }
     @Test
-    public void unPropietarioPuedeCrearUnAlquiler() {
+    public void unPropietarioPuedeDarDeAltaUnAlquiler() {
     	fail("Not yet implemented");
     }
     @Test
-    public void unInquilinoNoPuedeCrearUnAlquiler() {
+    public void unInquilinoNoPuedeDarDeAltaUnAlquiler() {
     	fail("Not yet implemented");
     }
     @Test

@@ -1,10 +1,9 @@
 package sistema.Inmueble;
-import sistema.enums.Servicio;
-import sistema.enums.TipoDeInmueble;
+import sistema.enums.customEnums.Servicio;
+import sistema.enums.customEnums.TipoDeInmueble;
 
 import java.util.List;
-
-import tpIntegradorVersionMia.Sistema.Servicio;
+;
 
 public class Inmueble {
 	private int id;

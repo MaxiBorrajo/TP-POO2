@@ -20,15 +20,15 @@ public class Alquiler {
 	
 	
 	public void setId(int id) {
-		this.id = id
+		this.id = id;
 	}
 	public int getId() {
-		return this.id
+		return this.id;
 	}
 	public void agregarPeriodo(Periodo periodo) {
 		//validar si no existe un periodo que coincida con este, no puede haber
 		//mas de un precio por dia
-		this.periodos.add(periodo)
+		this.periodos.add(periodo);
 	}
 	public double cacularPrecioPeriodo(LocalDate fechaInicio, LocalDate fechaFinal) {
         double totalPrecio = 0.0;
