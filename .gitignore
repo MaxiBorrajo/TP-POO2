@@ -2,6 +2,7 @@
 /.idea/
 *.iml
 *.xml
-.classpath
-.metadata
-.project
+*.classpath
+*.project
+.metadata/
+*.prefs
