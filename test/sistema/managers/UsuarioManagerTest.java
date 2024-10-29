@@ -1,25 +1,46 @@
-package tpIntegrador.Sistema;
+package sistema.managers;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 import org.junit.Before;
 import org.junit.Test;
-import tpIntegrador.Usuario.Inquilino;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-public class SistemaTest {
-	private Sistema sistema;
+import sistema.Usuario.Inquilino;
+
+@RunWith(MockitoJUnitRunner.class)
+public class UsuarioManagerTest {
+
+	@Mock
+    private UsuarioManager usuarioManager;    
+    
+    @Mock
     private Inquilino usuarioNuevo;
 
-    @Before
-    public void setUp() {
-        sistema = new Sistema();
-        usuarioNuevo = new Inquilino("pepe", "pepe@pepe.com", "12345678");
-    }
 
     @Test
-    public void testSistemaPuedeGuardarUnUsuario() {
-        sistema.registrarUsuario(usuarioNuevo);
-        assertTrue(sistema.estaRegistrado(usuarioNuevo));
-        assertEquals(sistema.cantidadDeUsuarios(), 1);
-    }
+    public void testUsuarioManagerPuedeGuardarUnUsuario() {
+     
+        doNothing().when(usuarioManager).registrarUsuario(usuarioNuevo);
+        when(usuarioManager.estaRegistrado(usuarioNuevo)).thenReturn(true);
+        when(usuarioManager.cantidadDeUsuarios()).thenReturn(1);
 
+        usuarioManager.registrarUsuario(usuarioNuevo);
+
+        assertTrue(usuarioManager.estaRegistrado(usuarioNuevo));
+        assertEquals(1, usuarioManager.cantidadDeUsuarios());
+
+        verify(usuarioManager).registrarUsuario(usuarioNuevo);
+        verify(usuarioManager).estaRegistrado(usuarioNuevo);
+        verify(usuarioManager).cantidadDeUsuarios();
+    }
+    @Test
+    public void testUnUsuarioNoPuedeRegistrarseDosVeces() {
+    	fail("Not yet implemented");
+    }
+    
 }
