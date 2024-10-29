@@ -24,5 +24,15 @@ public class Inmueble {
 		this.servicios = servicios;
 		this.capacidad = capacidad;
 	}
+
+	public boolean esDeCiudad(String ciudad) {
+		// TODO Auto-generated method stub
+		return this.ubicacion.estaEnCiudad(ciudad);
+	}
+
+	public int getCapacidad() {
+		// TODO Auto-generated method stub
+		return this.capacidad;
+	}
 	
 }

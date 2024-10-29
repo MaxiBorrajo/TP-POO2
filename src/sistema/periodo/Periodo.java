@@ -23,5 +23,15 @@ public class Periodo {
 		return this.precio;
 		
 	}
+
+	public boolean precioMinimoEsMenorA(double precioMinimo) {
+		// TODO Auto-generated method stub
+		return precioMinimo >= this.precio;
+	}
+
+	public boolean precioMayorA(double precioMaximo) {
+		// TODO Auto-generated method stub
+		return precioMaximo <=this.precio;
+	}
 	
 }

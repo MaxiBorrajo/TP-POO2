@@ -49,5 +49,24 @@ public class Alquiler {
         }
         return totalPrecio;
     }
+	public boolean esDeCiudad(String ciudad) {
+		// TODO Auto-generated method stub
+		return this.inmueble.esDeCiudad(ciudad);
+	}
+	
+	public boolean perteneceAAlgunPeriodo(LocalDate entrada, LocalDate salida) {
+		// TODO Auto-generated method stub ver si rompe con algun caso
+		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(entrada)) && this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(salida));
+	}
+	public boolean aceptaCantidadHuespedes(int cant) {
+		// TODO Auto-generated method stub
+		return cant >= this.inmueble.getCapacidad();
+	}
+	
+	public boolean cumplePrecioEnPeriodo(double precioMinimo, double precioMaximo, LocalDate entrada, LocalDate salida) {
+		// TODO Auto-generated method stub
+		double precioPorFecha = this.cacularPrecioPeriodo(entrada, salida);
+		return precioMinimo <= precioPorFecha & precioPorFecha >= precioMaximo;
+	}
 	
 }

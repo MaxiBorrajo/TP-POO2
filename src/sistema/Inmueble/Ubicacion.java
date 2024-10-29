@@ -11,5 +11,10 @@ public class Ubicacion {
 		this.ciudad = ciudad;
 		this.direccion = direccion;
 	}
+
+	public boolean estaEnCiudad(String ciudad2) {
+		// TODO Auto-generated method stub
+		return this.ciudad.equals(ciudad2);
+	}
 	
 }
