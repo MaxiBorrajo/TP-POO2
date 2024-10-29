@@ -10,26 +10,18 @@ class Filtro{
 }
 
 class AlquilerManager{
-}
-class ReservaManager{
-}
-class UsuarioManager{
-}
-class EnumManager{
-}
-class Sistema{
     +alquileres List<Alquileres>
-    +usuarios List<Usuario>
-    + reservas List<Reserva>
-    + enums HashMap<string, string>
-
+    
     + buscarAlquiler(ciudad: string, fechaDeEntrada: LocalData, fechaDeSalida: LocalDate, cantHuespedes: Int, precioMinimo: Int, precioMaximo: int)
     + obtenerAlquiler(id?): Alquiler
-    + registrarUsuario(usuario: Usuario): Usuario
-    + estaRegistrado(usuario: Usuario): Boolean
+     + gererarAlquiler(propietario, ...otrosdatos?): Alquiler | void?
     + darDeAltaAlquiler(Inmueble | Alquiler)
     + validacionesDeAlta(alquiler: Alquiler)
-    + gererarAlquiler(propietario, ...otrosdatos?): Alquiler | void?
+    + inmueblesLibres(): List<Inmuebles> || List<Alquileres>
+}
+class ReservaManager{
+     + reservas List<Reserva>
+
     + crearReserva(alquiler, usuario)
     + cancelarReserva(alquiler, usario)
     + reservasDe(usuario)
@@ -37,14 +29,22 @@ class Sistema{
     + reservasEn(ciduad, usuario)
     + ciudadesDeReservas(usuario)
     + aprobarReserva(propietario: Propietario): void (validacion si le pertenece)
-
-
+}
+class UsuarioManager{
+    +usuarios List<Usuario>
+    
+    + registrarUsuario(usuario: Usuario): Usuario
+    + estaRegistrado(usuario: Usuario): Boolean
+    + cantiddadDeUsuarios(): int
+    + topTenInquilinos(); List<Inquilino>
+  
+}
+class EnumManager{
+    + enums HashMap<string, string>
+    
     + crearCategoria(nombre: string): Categoria
     + crearTipoDeInmueble(nombre:string): TipoDeInmueble
     + crearServicio(nombre:string): Servicio
-    + topTenInquilinos(); List<Inquilino>
-    + inmueblesLibres(): List<Inmuebles> || List<Alquileres>
-
 }
 
 
