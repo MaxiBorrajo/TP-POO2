@@ -1,18 +1,10 @@
 package sistema.managers;
-import java.util.ArrayList;
 import java.util.List;
-
-
 import sistema.alquiler.Alquiler;
+
 public class AlquilerManager {
 	private List<Alquiler> alquileres;
 	private int siguienteId;
-	
-	
-	public AlquilerManager() {
-		this.alquileres = new ArrayList<Alquiler>();
-		this.siguienteId = 0;
-	}
 	
 	public void darDeAltaAlquiler(Alquiler alquiler) {
 		//validar
@@ -22,34 +14,13 @@ public class AlquilerManager {
 	}
 	
 	
-	 public Alquiler getAlquilerPorId(int id) {
-		// reemplazar por filtro
-		// FiltroSimple f = new FiltroSimple((a -> a.getId() == id));
-	        return this.alquileres.stream()
-	                .filter(alquiler -> alquiler.getId() == id)
-	                .findFirst()
-	                .orElse(null);
-	 }
-	 
-	
-	 
-	 public List<Alquiler> getAlquileres(){
+	public Alquiler obtenerInformacionAlquiler(Alquiler alquiler) {
+		return alquiler;
+	}
+	public List<Alquiler> getAlquileres(){
 		return this.alquileres;
 	}
 
-
-	 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	
 //	
