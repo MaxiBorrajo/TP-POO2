@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import sistema.Usuario.Inquilino;
+import sistema.usuario.Inquilino;
 
 public class AlquilerManagerTest {
 
