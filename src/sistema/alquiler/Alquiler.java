@@ -109,4 +109,8 @@ public class Alquiler {
 		return precioMinimo <= precioPorFecha & precioPorFecha >= precioMaximo;
 	}
 
+	public Inmueble getInmueble() {
+		return this.inmueble;
+	}
+
 }
