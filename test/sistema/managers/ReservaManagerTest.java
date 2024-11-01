@@ -34,6 +34,7 @@ public class ReservaManagerTest {
         userManager.registrarUsuario(inquilino);
         propietario.addInmueble(inmueble);
         
+        
 
 	}
 //	ORI: WIP - Toy en eso
