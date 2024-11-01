@@ -13,7 +13,6 @@ public class Alquiler {
 	private List<FormaDePago> formasDePago;
 	private List<Periodo> periodos;
 	private List<Periodo> diasRervados;
-	private Reserva reserva;
 	private double precioDefault;
 	
 	
@@ -31,6 +30,9 @@ public class Alquiler {
 		this.periodos.add(periodo);
 	}
 	public double cacularPrecioPeriodo(LocalDate fechaInicio, LocalDate fechaFinal) {
+		//this.periodos.strea().mapToInt(p -> p.valorParaPeriodo(fechaInicio, fechaFinal)).size() -
+		//-  calcularDistanciaFecha(fechaInicio, fechaFinal)) modulo  *precioBase + lo anterior   
+		//
         double totalPrecio = 0.0;
         LocalDate currentDate = fechaInicio;
         while (!currentDate.isAfter(fechaFinal)) {
@@ -49,6 +51,8 @@ public class Alquiler {
         }
         return totalPrecio;
     }
+	
+	
 	public boolean esDeCiudad(String ciudad) {
 		// TODO Auto-generated method stub
 		return this.inmueble.esDeCiudad(ciudad);

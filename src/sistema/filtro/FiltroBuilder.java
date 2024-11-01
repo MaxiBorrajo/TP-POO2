@@ -8,20 +8,26 @@ import  sistema.alquiler.*;
 
 public class FiltroBuilder {
 	
-	public FiltroDeSistema filtroDelSistema(String ciudad, LocalDate entrada, LocalDate salida){
+	public FiltroCompuesto<Alquiler> filtroDelSistema(String ciudad, LocalDate entrada, LocalDate salida){
 		List<Filtro<Alquiler>> filtros = new ArrayList<Filtro<Alquiler>>(
 				Arrays.asList(this.filtroDeCiudad(ciudad) , this.filtroPorPeriodo(entrada, salida)));
 		
-		return new FiltroDeSistema(filtros);
+		return new FiltroCompuesto<Alquiler>(filtros);
 	}
 	
-	public FiltroDeSistema filtroDelSistema(String ciudad, LocalDate entrada, LocalDate salida, double precioMinimo, double precioMaximo) {
+	public FiltroCompuesto<Alquiler> filtroDelSistema(String ciudad, LocalDate entrada, LocalDate salida, double precioMinimo, double precioMaximo) {
 		List<Filtro<Alquiler>> filtros = new ArrayList<Filtro<Alquiler>>(
 				Arrays.asList(this.filtroDeCiudad(ciudad) , this.filtroPorPeriodo(entrada, salida) , 
-						this.filtroPrecioPorEstePeriodo(precioMinimo,precioMaximo, entrada,salida) ));
+						this.filtroPrecioPorEstePeriodo(precioMinimo,precioMaximo,entrada,salida) ));
 		
-		return new FiltroDeSistema(filtros);
+		return new FiltroCompuesto<Alquiler>(filtros);
 	}
+	
+	
+	
+
+	
+	
 	
 	
 	
