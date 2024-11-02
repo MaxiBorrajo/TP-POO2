@@ -5,6 +5,9 @@ import org.junit.Test;
 
 public class AlquilerTest {
 
+	
+	
+	
     @Test
     public void unPropietarioPuedeCrearUnAlquiler() {
     	fail("Not yet implemented");

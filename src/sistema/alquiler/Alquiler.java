@@ -47,6 +47,7 @@ public class Alquiler {
 		// fechaFinal)).size() -
 		// - calcularDistanciaFecha(fechaInicio, fechaFinal)) modulo *precioBase + lo
 		// anterior
+		// this.periodos.stream().reduce(((acc, p ) -> acc + p.isEmpty() ? p.get() : 0) ,0)
 		//
 		double totalPrecio = 0.0;
 		LocalDate currentDate = fechaInicio;
@@ -92,7 +93,7 @@ public class Alquiler {
 	}
 
 	public boolean perteneceAAlgunPeriodo(LocalDate entrada, LocalDate salida) {
-		// TODO Auto-generated method stub ver si rompe con algun caso
+		// TODO Auto-generated method stub ver si rompe con algun caso, esto posiblemente ya no se usa
 		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(entrada))
 				&& this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(salida));
 	}
@@ -112,5 +113,17 @@ public class Alquiler {
 	public Inmueble getInmueble() {
 		return this.inmueble;
 	}
+
+	public boolean estaDisponibleLuego(LocalDate entrada) {
+		// TODO Auto-generated method stub
+		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(entrada));
+	}
+
+	public boolean estaDisponibleAntes(LocalDate salida) {
+		// TODO Auto-generated method stub
+		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(salida));
+	}
+	
+	
 
 }

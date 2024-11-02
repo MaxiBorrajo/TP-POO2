@@ -1,5 +1,6 @@
 package sistema.filtro;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FiltroCompuesto<T> extends Filtro<T>{
@@ -8,6 +9,10 @@ public class FiltroCompuesto<T> extends Filtro<T>{
 	
 	public FiltroCompuesto(List<Filtro<T>> filtros) {
 		this.filtros = filtros;
+	}
+	
+	public FiltroCompuesto() {
+		this.filtros = new ArrayList<Filtro<T>>();
 	}
 
 	@Override

@@ -1,16 +1,23 @@
 package sistema.managers;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
+import sistema.filtro.FiltroDeSistema;
 
 public class AlquilerManager {
 	private List<Alquiler> alquileres;
 	private int siguienteId;
 
+	public AlquilerManager() {
+		this.siguienteId = 0;
+		this.alquileres = new ArrayList<Alquiler>();
+	}
+	
 	public void darDeAltaAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault) throws InmuebleConAlquilerYaExiste {
 		boolean inmuebleYaTieneAlquiler = this.alquileres.stream()
 				.anyMatch(alquiler -> alquiler.getInmueble().equals(inmueble));
@@ -29,6 +36,10 @@ public class AlquilerManager {
 
 	public List<Alquiler> getAlquileres() {
 		return this.alquileres;
+	}
+	
+	public List<Alquiler> filtrarAlquiler(FiltroDeSistema filtro){
+		return filtro.filtrarLista(this.alquileres);
 	}
 
 //	
