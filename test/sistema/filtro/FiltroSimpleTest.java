@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class FiltroTest {
+class FiltroSimpleTest {
 	
 	private Filtro<Integer> filtro;
 	
@@ -19,7 +19,7 @@ class FiltroTest {
 	}
 
 	@Test
-	void test() {
+	void testFiltra4Resultado() {
 		List<Integer> list = new ArrayList<Integer>(Arrays.asList(1,2,3));
 		
 		assertEquals(1,this.filtro.filtrarLista(list).size());

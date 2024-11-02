@@ -3,16 +3,28 @@ package sistema.managers;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.List;
+
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import sistema.alquiler.Alquiler;
+import sistema.filtro.FiltroDeSistema;
 import sistema.usuario.Inquilino;
 
 public class AlquilerManagerTest {
 
-    private AlquilerManager alquilerManager;    
+    private AlquilerManager alqM;
+    
+    @BeforeEach
+    void setUp() {
+    	this.alqM = new AlquilerManager();
+    }
     
     @Test
     public void unPropietarioDebeEstarRegistradoParaPoderCrearAlquiler() {
@@ -37,6 +49,15 @@ public class AlquilerManagerTest {
     @Test
     public void unInquilinoPuedePedirElCalculoDePrecioParaUnPeriodo() {
     	fail("Not yet implemented");
+    }
+    
+    @Test
+    public void unInquilinoQuiereFiltrarLosAlquileres() {
+    	FiltroDeSistema f  = mock(FiltroDeSistema.class);
+    	List<Alquiler> a = this.alqM.getAlquileres();
+    	
+    	this.alqM.filtrarAlquiler(f);
+    	verify(f,times(1)).filtrarLista(a);
     }
     
 //    Add more tests
