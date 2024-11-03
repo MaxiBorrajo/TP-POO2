@@ -1,9 +1,13 @@
 package sistema.usuario;
 
+import sistema.enums.RolDeUsuario;
+
 public class Usuario {
 	private String nombre;
 	private String email;
 	private String telefono;
+	private RolDeUsuario rol;
+
 
 	public Usuario(String nombreCompleto, String email, String telefono) {
 		this.nombre = nombreCompleto;
@@ -23,6 +27,17 @@ public class Usuario {
 			return false;
 		Usuario other = (Usuario) obj;
 		return email.equals(other.email);
+	}
+	
+	public String getEmail() {
+		return this.email;
+	}
+	public String getTelefono() {
+		return this.telefono;
+	}
+	
+	public RolDeUsuario getRol(){
+		return this.rol;
 	}
 
 }

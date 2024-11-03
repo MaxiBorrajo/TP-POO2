@@ -11,23 +11,21 @@ import sistema.filtro.FiltroDeSistema;
 
 public class AlquilerManager {
 	private List<Alquiler> alquileres;
-	private int siguienteId;
 
 	public AlquilerManager() {
-		this.siguienteId = 0;
 		this.alquileres = new ArrayList<Alquiler>();
 	}
 	
-	public void darDeAltaAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault) throws InmuebleConAlquilerYaExiste {
+	public Alquiler darDeAltaAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault) throws InmuebleConAlquilerYaExiste {
 		boolean inmuebleYaTieneAlquiler = this.alquileres.stream()
 				.anyMatch(alquiler -> alquiler.getInmueble().equals(inmueble));
 
 		if (inmuebleYaTieneAlquiler) {
 			throw new InmuebleConAlquilerYaExiste("El inmueble ya tiene un alquiler asociado.");
 		}
-		Alquiler alquiler = new Alquiler(inmueble, checkIn, checkOut, precioDefault, siguienteId);
+		Alquiler alquiler = new Alquiler(inmueble, checkIn, checkOut, precioDefault);
 		this.alquileres.add(alquiler);
-		this.siguienteId += 1;
+		return alquiler;
 	}
 
 	public Alquiler obtenerInformacionAlquiler(Alquiler alquiler) {

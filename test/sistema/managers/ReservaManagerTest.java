@@ -1,6 +1,7 @@
 package sistema.managers;
 
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import sistema.Inmueble.Inmueble;
+import sistema.enums.RolDeUsuario;
 import sistema.exceptions.InmuebleYaGuardadoException;
 import sistema.exceptions.UsuarioExistenteException;
 import sistema.usuario.*;
@@ -23,15 +25,15 @@ public class ReservaManagerTest {
 	
 	@BeforeEach
 	public void setUp() throws UsuarioExistenteException, InmuebleYaGuardadoException {
-		this.userManager = new UsuarioManager();
 		this.reservaManager = new ReservaManager();
-		this.alquilerManager = new AlquilerManager();
-        this.propietario = mock(Propietario.class);
-        this.inquilino = mock(Inquilino.class);
+	    this.userManager = mock(UsuarioManager.class);
+		this.alquilerManager = mock(AlquilerManager.class);
         this.inmueble = mock(Inmueble.class);
         
-        userManager.registrarUsuario(propietario);
-        userManager.registrarUsuario(inquilino);
+
+        userManager.registrarUsuario("Juan Perez", "juan@example.com", "123456789",RolDeUsuario.INQUILINO);
+        userManager.registrarUsuario("Ana Gomez", "ana@example.com", "987654321",RolDeUsuario.PROPIETARIO);
+
         propietario.addInmueble(inmueble);
         
 
@@ -42,15 +44,15 @@ public class ReservaManagerTest {
 		
 	}
 
-	@Test
-	public void unPropietarioNoPuedeCrearUnaReserva() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void unInquilinoNoPuedeReservarUnAlquilerSiLaFechaNoEstaDisponible() {
-		fail("Not yet implemented");
-	}
+//	@Test
+//	public void unPropietarioNoPuedeCrearUnaReserva() {
+//		fail("Not yet implemented");
+//	}
+//
+//	@Test
+//	public void unInquilinoNoPuedeReservarUnAlquilerSiLaFechaNoEstaDisponible() {
+//		fail("Not yet implemented");
+//	}
 
 //   Add more tests
 }

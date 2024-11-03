@@ -26,30 +26,30 @@ public class AlquilerManagerTest {
     	this.alqM = new AlquilerManager();
     }
     
-    @Test
-    public void unPropietarioDebeEstarRegistradoParaPoderCrearAlquiler() {
-    	fail("Not yet implemented");
-    }
-    @Test
-    public void unPropietarioPuedeDarDeAltaUnAlquiler() {
-    	fail("Not yet implemented");
-    }
-    @Test
-    public void unInquilinoNoPuedeDarDeAltaUnAlquiler() {
-    	fail("Not yet implemented");
-    }
-    @Test
-    public void unInquilinoPuedeObtenerLaListaDeAlquileres() {
-    	fail("Not yet implemented");
-    }
-    @Test
-    public void unInquilinoPuedeObtenereUnAlquilerSeleccionado() {
-    	fail("Not yet implemented");
-    }
-    @Test
-    public void unInquilinoPuedePedirElCalculoDePrecioParaUnPeriodo() {
-    	fail("Not yet implemented");
-    }
+//    @Test
+//    public void unPropietarioDebeEstarRegistradoParaPoderCrearAlquiler() {
+//    	fail("Not yet implemented");
+//    }
+//    @Test
+//    public void unPropietarioPuedeDarDeAltaUnAlquiler() {
+//    	fail("Not yet implemented");
+//    }
+//    @Test
+//    public void unInquilinoNoPuedeDarDeAltaUnAlquiler() {
+//    	fail("Not yet implemented");
+//    }
+//    @Test
+//    public void unInquilinoPuedeObtenerLaListaDeAlquileres() {
+//    	fail("Not yet implemented");
+//    }
+//    @Test
+//    public void unInquilinoPuedeObtenereUnAlquilerSeleccionado() {
+//    	fail("Not yet implemented");
+//    }
+//    @Test
+//    public void unInquilinoPuedePedirElCalculoDePrecioParaUnPeriodo() {
+//    	fail("Not yet implemented");
+//    }
     
     @Test
     public void unInquilinoQuiereFiltrarLosAlquileres() {

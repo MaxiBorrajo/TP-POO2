@@ -12,7 +12,6 @@ import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.periodo.Periodo;
 
 public class Alquiler {
-	private int id;
 	private Inmueble inmueble;
 	private LocalTime checkIn;
 	private LocalTime checkOut;
@@ -21,8 +20,7 @@ public class Alquiler {
 	private List<Periodo> diasNoDisponibles;
 	private double precioDefault;
 
-	public Alquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault, int id) {
-		this.id = id;
+	public Alquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault) {
 		this.inmueble = inmueble;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -32,9 +30,6 @@ public class Alquiler {
 		this.diasNoDisponibles = new ArrayList<>();
 	}
 
-	public int getId() {
-		return this.id;
-	}
 
 	public void agregarPeriodo(Periodo periodo) {
 		// validar si no existe un periodo que coincida con este, no puede haber
