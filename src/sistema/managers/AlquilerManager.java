@@ -6,6 +6,7 @@ import java.util.List;
 
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
+import sistema.exceptions.AlquilerNoRegistradoException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.filtro.FiltroDeSistema;
 
@@ -14,6 +15,12 @@ public class AlquilerManager {
 
 	public AlquilerManager() {
 		this.alquileres = new ArrayList<Alquiler>();
+	}
+	
+	public void validarAlquiler (Alquiler alquiler) throws AlquilerNoRegistradoException {
+		if (!this.existeAlquiler(alquiler)) {
+			throw new AlquilerNoRegistradoException();
+		}
 	}
 	
 	public boolean existeAlquiler(Alquiler alquiler) {

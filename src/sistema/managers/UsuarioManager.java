@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sistema.enums.RolDeUsuario;
+import sistema.exceptions.PermisoDenegadoException;
 import sistema.exceptions.UsuarioExistenteException;
+import sistema.exceptions.UsuarioNoRegistradoException;
 import sistema.usuario.Inquilino;
 import sistema.usuario.Propietario;
 import sistema.usuario.Usuario;
@@ -22,14 +24,11 @@ public class UsuarioManager {
 			throw new UsuarioExistenteException();
 		} else {
 			Usuario usuario;
-			switch (rol) {
-			case INQUILINO:
+			if (rol == RolDeUsuario.INQUILINO) {
 				usuario = new Inquilino(nombreCompleto, email, telefono);
-				break;
-			case PROPIETARIO:
+			} else {
 				usuario = new Propietario(nombreCompleto, email, telefono);
-			default:
-				throw new Exception();
+
 			}
 
 			this.usuarios.add(usuario);
@@ -43,5 +42,15 @@ public class UsuarioManager {
 
 	public int cantidadDeUsuarios() {
 		return this.usuarios.size();
+	}
+
+	public void validarUsuario(Usuario usuario, RolDeUsuario rol)
+			throws UsuarioNoRegistradoException, PermisoDenegadoException {
+		if (!this.estaRegistrado(usuario.getEmail())) {
+			throw new UsuarioNoRegistradoException();
+		}
+		if (usuario.getRol() != rol) {
+			throw new PermisoDenegadoException();
+		}
 	}
 }

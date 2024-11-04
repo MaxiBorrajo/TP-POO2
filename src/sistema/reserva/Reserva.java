@@ -12,15 +12,17 @@ public class Reserva {
 	private LocalDate fechaFinal;
 	private Alquiler alquiler;
 	private Usuario inquilino;
-	private int id;
 	
-	public Reserva(FormaDePago formaDepago, LocalDate fechaInicio, LocalDate fechaFinal, Alquiler alquiler, Usuario usuario, int id) {
+	public Reserva(FormaDePago formaDepago, LocalDate fechaInicio, LocalDate fechaFinal, Alquiler alquiler, Usuario usuario) {
 	    this.estado = EstadoDeReserva.PENDIENTE;
 	    this.formaDepago = formaDepago;
 	    this.fechaInicio = fechaInicio;
 	    this.fechaFinal = fechaFinal;
 	    this.alquiler = alquiler;
 	    this.inquilino = usuario;
-	    this.id = id;
+	}
+
+	public Usuario getInquilino() {
+		return this.inquilino;
 	}
 }

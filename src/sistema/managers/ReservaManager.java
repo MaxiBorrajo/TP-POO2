@@ -13,11 +13,9 @@ import java.util.List;
 
 public class ReservaManager {
 	private List<Reserva> reservas;
-	private int siguienteId;
 
 	public ReservaManager() {
 		this.reservas = new ArrayList<>();
-		this.siguienteId = 0;
 	}
 
 	private boolean validarReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler) throws FormaDePagoNoAceptadaException, AlquilerNoDisponibleException {
@@ -35,8 +33,7 @@ public class ReservaManager {
 			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 		
 		this.validarReserva(formaDePago, entrada, salida, alquiler);
-		Reserva nuevaReserva = new Reserva(formaDePago, entrada, salida, alquiler, usuario, this.siguienteId);
-		this.siguienteId += 1;
+		Reserva nuevaReserva = new Reserva(formaDePago, entrada, salida, alquiler, usuario);
 		this.reservas.add(nuevaReserva);
 		return nuevaReserva;
 
