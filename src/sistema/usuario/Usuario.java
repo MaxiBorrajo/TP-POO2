@@ -39,4 +39,6 @@ public class Usuario {
 		return this.rol;
 	}
 
+	
+
 }

@@ -16,5 +16,10 @@ public class Ubicacion {
 		// TODO Auto-generated method stub
 		return this.ciudad.equals(ciudad2);
 	}
+
+	public String getCiudad() {
+		// TODO Auto-generated method stub
+		return this.ciudad;
+	}
 	
 }

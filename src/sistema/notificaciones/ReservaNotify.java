@@ -11,7 +11,7 @@ public class ReservaNotify extends EventoNotificador {
 	}
 
 	@Override
-	protected boolean esElMismoEvento(EventoNotificador even2) {
+	public boolean esElMismoEvento(EventoNotificador even2) {
 		// TODO Auto-generated method stub
 		return even2.esReserva();
 	}

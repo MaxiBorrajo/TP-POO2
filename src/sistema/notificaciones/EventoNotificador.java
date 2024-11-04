@@ -19,15 +19,15 @@ public abstract class EventoNotificador {
 
 	public final boolean esIgualA(EventoNotificador even2) {
 		// TODO Auto-generated method stub
-		return even2.esElMismoInmueble(this.alq) & this.esElMismoEvento(even2);
+		return  this.esElMismoEvento(even2) & even2.esElMismoAlquiler(this.alq);
 	}
 
-	private boolean esElMismoInmueble(Alquiler alq) {
+	public boolean esElMismoAlquiler(Alquiler alq) {
 		// TODO Auto-generated method stub
 		return this.alq.tienenElMismoInmueble(alq);
 	}
 
-	protected abstract boolean esElMismoEvento(EventoNotificador even2);
+	public abstract boolean esElMismoEvento(EventoNotificador even2);
 
 	public boolean esCancelacion() {
 		// TODO Auto-generated method stub

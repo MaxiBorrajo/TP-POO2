@@ -25,4 +25,24 @@ public class Reserva {
 	public Usuario getInquilino() {
 		return this.inquilino;
 	}
+
+	public boolean esDeUsuario(Usuario us) {
+		// TODO Auto-generated method stub
+		return this.inquilino == us;
+	}
+
+	public boolean fecahPosteriorA(LocalDate now) {
+		// TODO Auto-generated method stub
+		return this.fechaInicio.isAfter(now);
+	}
+
+	public boolean esDeCiudad(String ciudad) {
+		// TODO Auto-generated method stub
+		return this.alquiler.esDeCiudad(ciudad);
+	}
+
+	public String getCiudad() {
+		// TODO Auto-generated method stub
+		return this.alquiler.getCiudad();
+	}
 }

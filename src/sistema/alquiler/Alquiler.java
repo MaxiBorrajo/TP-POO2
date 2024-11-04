@@ -142,4 +142,9 @@ public class Alquiler {
 		return this.precioDefault;
 	}
 
+	public String getCiudad() {
+		// TODO Auto-generated method stub
+		return this.inmueble.getCiudad();
+	}
+
 }

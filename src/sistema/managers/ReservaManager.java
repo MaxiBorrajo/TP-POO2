@@ -4,6 +4,8 @@ import sistema.alquiler.Alquiler;
 import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
+import sistema.filtro.FiltroReserva;
+import sistema.filtro.FiltroTodasReservas;
 import sistema.reserva.Reserva;
 import sistema.usuario.Usuario;
 
@@ -37,5 +39,16 @@ public class ReservaManager {
 		this.reservas.add(nuevaReserva);
 		return nuevaReserva;
 
+	}
+
+	public List<Reserva> filtrarReservas(FiltroReserva f) {
+		// TODO Auto-generated method stub
+		return f.filtrarReservas(this.reservas);
+	}
+
+	public List<String> todasLasCiudades( Usuario user) {
+		// TODO Auto-generated method stub
+		
+		return (new FiltroTodasReservas(user)).filtrarReservas(this.reservas).stream().map(s ->(String) s.getCiudad()).toList();
 	}
 }

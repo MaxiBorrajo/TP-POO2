@@ -11,7 +11,7 @@ public class CancelacionNotify extends EventoNotificador{
 	}
 
 	@Override
-	protected boolean esElMismoEvento(EventoNotificador even2) {
+	public boolean esElMismoEvento(EventoNotificador even2) {
 		// TODO Auto-generated method stub
 		return even2.esCancelacion();
 	}
@@ -25,7 +25,7 @@ public class CancelacionNotify extends EventoNotificador{
 	
 	@Override
 	public void notificarEspecifica(Suscriptor sus) {
-		sus.publish("El/la" +this.getAlquiler().getTipoDeInmueble() + "que te interesa se ha liberado! Corre a reservarlo!");
+		sus.popUp("El/la " +this.getAlquiler().getTipoDeInmueble() + "que te interesa se ha liberado! Corre a reservarlo!","ROJO",24);
 	}
 	
 	

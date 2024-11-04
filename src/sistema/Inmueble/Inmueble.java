@@ -46,5 +46,10 @@ public class Inmueble {
 		// TODO Auto-generated method stub
 		return this.tipo.getNombre();
 	}
+
+	public String getCiudad() {
+		// TODO Auto-generated method stub
+		return this.ubicacion.getCiudad();
+	}
 	
 }
