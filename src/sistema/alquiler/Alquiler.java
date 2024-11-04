@@ -126,4 +126,25 @@ public class Alquiler {
 		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(salida));
 	}
 
+	public String getTipoDeInmueble() {
+		// TODO Auto-generated method stub
+		return this.inmueble.getTipo();
+	}
+
+	public boolean tienenElMismoInmueble(Alquiler alq) {
+		// TODO Auto-generated method stub
+		// por precondicion de la solucion se podria compara por alquileres
+		return this.inmueble.sonElMismoInmueble(alq.getInmueble());
+	}
+
+	public double getPrecioBase() {
+		// TODO Auto-generated method stub
+		return this.precioDefault;
+	}
+
+	public String getCiudad() {
+		// TODO Auto-generated method stub
+		return this.inmueble.getCiudad();
+	}
+
 }

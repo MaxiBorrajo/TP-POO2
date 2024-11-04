@@ -22,6 +22,7 @@ import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.exceptions.PermisoDenegadoException;
 import sistema.exceptions.UsuarioNoRegistradoException;
 import sistema.filtro.FiltroDeSistema;
+import sistema.filtro.FiltroReserva;
 
 public class Sistema {
 
@@ -29,12 +30,13 @@ public class Sistema {
 	private ReservaManager reservaManager;
 	private CustomEnumManager customEnumManager;
 	private UsuarioManager usuarioManager;
-
+	private NotificadorManager notificadorManager;
 	public Sistema() {
 		this.alquilerManager = new AlquilerManager();
 		this.reservaManager = new ReservaManager();
 		this.customEnumManager = new CustomEnumManager();
 		this.usuarioManager = new UsuarioManager();
+		this.notificadorManager = new NotificadorManager();
 
 	}
 	// usuarios
@@ -64,6 +66,14 @@ public class Sistema {
 
 	public void cancelarReserva(Reserva reserva) throws UsuarioNoRegistradoException, PermisoDenegadoException {
 		this.usuarioManager.validarUsuario(reserva.getInquilino(), RolDeUsuario.INQUILINO);
+	}
+	
+	public List<Reserva> verReservasSegun(FiltroReserva f) {
+		return this.reservaManager.filtrarReservas(f);
+	}
+	
+	public List<String> todasLasCiudadesDeReservas( Usuario user){
+		return this.reservaManager.todasLasCiudades( user);
 	}
 
 	//	public List<Reserva> verTodasLasReservas(Usuario usuario){
