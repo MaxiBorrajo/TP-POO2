@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import sistema.enums.customEnums.*;
+import sistema.exceptions.CustomEnumExistenteException;
 
 public class CustomEnumManager {
 	
@@ -13,7 +14,7 @@ public class CustomEnumManager {
         this.enumMap = new HashMap<>();
     }
     
-    private void updateEnums(CustomEnumType tipo, CustomEnum newEnum) {
+    private void updateEnums(CustomEnumType tipo, CustomEnum newEnum) throws CustomEnumExistenteException {
 	   List<CustomEnum> enumList = enumMap.computeIfAbsent(tipo, k -> new ArrayList<>());
        
 	   boolean exists = enumList.stream()
@@ -22,26 +23,30 @@ public class CustomEnumManager {
 	   if (!exists) {
 		   enumList.add(newEnum);
 	   } else {
-		   System.out.println("Enum duplicado" + newEnum.getNombre());
+		   throw new CustomEnumExistenteException();
 	   }
            
     }
    
-	public Categoria crearCategoria(String nombre) {
-        Categoria nuevaCategoria = new Categoria(nombre);
-        this.updateEnums(nuevaCategoria.getTipo(), nuevaCategoria);
-        return nuevaCategoria;
-    }
-	public Servicio crearServicio(String nombre) {
-        Servicio nuevoServicio = new Servicio(nombre);
-        this.updateEnums(nuevoServicio.getTipo(), nuevoServicio);
-        return nuevoServicio;
-    }
+    public CustomEnum createCustomEnum(String nombre, CustomEnumType tipo) throws CustomEnumExistenteException {
+        CustomEnum newEnum;
+        
+        switch (tipo) {
+            case CATEGORIA:
+                newEnum = new Categoria(nombre);
+                break;
+            case TIPODEINMUEBLE:
+                newEnum = new TipoDeInmueble(nombre);
+                break;
+            case SERVICIO:
+                newEnum = new Servicio(nombre);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid CustomEnumType");
+        }
 
-    public TipoDeInmueble crearTipoDeInmueble(String nombre) {
-        TipoDeInmueble nuevoTipoDeInmueble = new TipoDeInmueble(nombre);
-        this.updateEnums(nuevoTipoDeInmueble.getTipo(), nuevoTipoDeInmueble);
-        return nuevoTipoDeInmueble;
+        updateEnums(tipo, newEnum);
+        return newEnum;
     }
 
 }

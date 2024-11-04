@@ -1,6 +1,7 @@
 package sistema.usuario;
 
 import sistema.Inmueble.Inmueble;
+import sistema.enums.RolDeUsuario;
 import sistema.exceptions.InmuebleYaGuardadoException;
 import sistema.exceptions.UsuarioExistenteException;
 
@@ -13,6 +14,7 @@ public class Propietario extends Usuario{
 	public Propietario(String nombreCompleto, String email, String telefono) {
 		super(nombreCompleto, email, telefono);
 		this.inmuebles = new ArrayList<>();
+		this.rol = RolDeUsuario.PROPIETARIO;
 	}
 
 	public boolean tieneInmueble(Inmueble inmueble) {

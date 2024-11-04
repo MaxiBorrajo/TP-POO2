@@ -3,7 +3,10 @@ package sistema.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import sistema.enums.RolDeUsuario;
 import sistema.exceptions.UsuarioExistenteException;
+import sistema.usuario.Inquilino;
+import sistema.usuario.Propietario;
 import sistema.usuario.Usuario;
 
 public class UsuarioManager {
@@ -13,16 +16,29 @@ public class UsuarioManager {
 		this.usuarios = new ArrayList<Usuario>();
 	}
 
-	public void registrarUsuario(Usuario user) throws UsuarioExistenteException {
-		if (this.usuarios.contains(user)) {
-			throw new UsuarioExistenteException("Usuario already exists: " + user.getNombre());
+	public Usuario registrarUsuario(String nombreCompleto, String email, String telefono, RolDeUsuario rol)
+			throws Exception {
+		if (this.estaRegistrado(email)) {
+			throw new UsuarioExistenteException();
 		} else {
-			this.usuarios.add(user);
+			Usuario usuario;
+			switch (rol) {
+			case INQUILINO:
+				usuario = new Inquilino(nombreCompleto, email, telefono);
+				break;
+			case PROPIETARIO:
+				usuario = new Propietario(nombreCompleto, email, telefono);
+			default:
+				throw new Exception();
+			}
+
+			this.usuarios.add(usuario);
+			return usuario;
 		}
 	}
 
-	public boolean estaRegistrado(Usuario user) {
-		return this.usuarios.contains(user);
+	public boolean estaRegistrado(String email) {
+		return this.usuarios.stream().anyMatch(user -> user.getEmail().equals(email));
 	}
 
 	public int cantidadDeUsuarios() {
