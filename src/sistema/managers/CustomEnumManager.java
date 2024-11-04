@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import sistema.enums.customEnums.*;
 import sistema.exceptions.CustomEnumExistenteException;
-import sistema.exceptions.ExistentCustomEnumException;
 
 public class CustomEnumManager {
 	
@@ -29,7 +28,7 @@ public class CustomEnumManager {
            
     }
    
-    public CustomEnum createCustomEnum(String nombre, CustomEnumType tipo) {
+    public CustomEnum createCustomEnum(String nombre, CustomEnumType tipo) throws CustomEnumExistenteException {
         CustomEnum newEnum;
         
         switch (tipo) {

@@ -11,12 +11,13 @@ import java.util.List;
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
 import sistema.enums.FormaDePago;
+import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.CustomEnum;
 import sistema.enums.customEnums.CustomEnumType;
 import sistema.exceptions.AlquilerNoDisponibleException;
+import sistema.exceptions.CustomEnumExistenteException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
-import sistema.exceptions.UsuarioExistenteException;
 import sistema.filtro.FiltroDeSistema;
 
 public class Sistema {
@@ -36,19 +37,10 @@ public class Sistema {
 
 	// usuarios
 
-	public boolean estaUsuarioRegistrado(Usuario usuario) {
-		return this.usuarioManager.estaRegistrado(usuario.getEmail());
+	public Usuario registrarUsuario(String nombreCompleto, String email, String telefono, RolDeUsuario rol)
+			throws Exception {
+		return this.usuarioManager.registrarUsuario(nombreCompleto, email, telefono, rol);
 	}
-
-	public Usuario registrarUsuario(String nombreCompleto, String email, String telefono)
-			throws UsuarioExistenteException {
-		return this.usuarioManager.registrarUsuario(nombreCompleto, email, telefono);
-	}
-
-	public void validarExistenciaDeUsuario(Usuario usuario) {
-
-	}
-
 	// Alquileres
 	public Alquiler publicarAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault)
 			throws InmuebleConAlquilerYaExiste {
@@ -72,9 +64,12 @@ public class Sistema {
 	//	public List<Reserva> verTodasLasReservas(Usuario usuario){
 	//	return this.reservaManager.verTodasLasReservas(Usuario usuario);
 	//}
+//	public List<Reserva> verReservasDeCiudad
+//	public List<Reserva> verReservasFuturas
+//	public List<Reserva> verCiudadesDeReservas
 
 	// Custom enums
-	public CustomEnum crearCustomEnum(String nombre, CustomEnumType tipo) {
+	public CustomEnum crearCustomEnum(String nombre, CustomEnumType tipo) throws CustomEnumExistenteException {
 		return this.customEnumManager.createCustomEnum(nombre, tipo);
 	}
 }

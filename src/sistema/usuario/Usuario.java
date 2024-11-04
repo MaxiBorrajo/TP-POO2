@@ -6,7 +6,7 @@ public class Usuario {
 	private String nombre;
 	private String email;
 	private String telefono;
-	private RolDeUsuario rol;
+	protected RolDeUsuario rol;
 
 
 	public Usuario(String nombreCompleto, String email, String telefono) {
@@ -35,8 +35,7 @@ public class Usuario {
 	public String getTelefono() {
 		return this.telefono;
 	}
-	
-	public RolDeUsuario getRol(){
+	public RolDeUsuario getRol() {
 		return this.rol;
 	}
 
