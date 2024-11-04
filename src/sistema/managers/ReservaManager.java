@@ -18,7 +18,7 @@ public class ReservaManager {
 		this.reservas = new ArrayList<>();
 	}
 
-	private boolean validarReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler) throws FormaDePagoNoAceptadaException, AlquilerNoDisponibleException {
+	private void validarReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler) throws FormaDePagoNoAceptadaException, AlquilerNoDisponibleException {
 		if (!alquiler.validateFormaDePago(formaDePago)) {
 			throw new FormaDePagoNoAceptadaException("Este alquiler no acepta esta forma de pago");
 		}
@@ -26,7 +26,7 @@ public class ReservaManager {
 		if (!alquiler.puedeCrearReserva(entrada, salida)) {
 			throw new AlquilerNoDisponibleException("El alquiler no esta disponible en estas fechas");
 		}
-		return true;
+		
 	}
 
 	public Reserva crearReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler,

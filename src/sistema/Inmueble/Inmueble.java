@@ -34,5 +34,17 @@ public class Inmueble {
 		// TODO Auto-generated method stub
 		return this.capacidad;
 	}
+
+	public boolean sonElMismoInmueble(Inmueble inm2) {
+		// TODO Auto-generated method stub
+		return this == inm2;
+	}
+	
+	
+
+	public String getTipo() {
+		// TODO Auto-generated method stub
+		return this.tipo.getNombre();
+	}
 	
 }
