@@ -16,10 +16,13 @@ public class AlquilerManager {
 		this.alquileres = new ArrayList<Alquiler>();
 	}
 	
+	public boolean existeAlquiler(Alquiler alquiler) {
+		return this.alquileres.contains(alquiler);
+	}
 	public Alquiler darDeAltaAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault) throws InmuebleConAlquilerYaExiste {
 		boolean inmuebleYaTieneAlquiler = this.alquileres.stream()
 				.anyMatch(alquiler -> alquiler.getInmueble().equals(inmueble));
-
+		
 		if (inmuebleYaTieneAlquiler) {
 			throw new InmuebleConAlquilerYaExiste("El inmueble ya tiene un alquiler asociado.");
 		}

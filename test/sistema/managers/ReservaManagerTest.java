@@ -1,58 +1,78 @@
 package sistema.managers;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doNothing;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
+
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 
-import sistema.Inmueble.Inmueble;
-import sistema.enums.RolDeUsuario;
-import sistema.exceptions.InmuebleYaGuardadoException;
-import sistema.exceptions.UsuarioExistenteException;
+
+import sistema.alquiler.Alquiler;
+import sistema.enums.FormaDePago;
+import sistema.exceptions.AlquilerNoDisponibleException;
+import sistema.exceptions.FormaDePagoNoAceptadaException;
+import sistema.reserva.Reserva;
 import sistema.usuario.*;
-import sistema.usuario.Propietario;
 
 public class ReservaManagerTest {
 	private ReservaManager reservaManager;
-	private Propietario propietario;
 	private Inquilino inquilino;
-	private Inmueble inmueble;
-	private AlquilerManager alquilerManager;
-	private UsuarioManager userManager;
-	
-	@BeforeEach
-	public void setUp() throws UsuarioExistenteException, InmuebleYaGuardadoException {
+	private Alquiler alquiler;
+	private FormaDePago formaDePago;
+	private LocalDate entrada, salida;
+
+	@Before
+	public void setUp() throws Exception {
 		this.reservaManager = new ReservaManager();
-	    this.userManager = mock(UsuarioManager.class);
-		this.alquilerManager = mock(AlquilerManager.class);
-        this.inmueble = mock(Inmueble.class);
-        
+		this.inquilino = mock(Inquilino.class);
+		this.alquiler = mock(Alquiler.class);
 
-        userManager.registrarUsuario("Juan Perez", "juan@example.com", "123456789",RolDeUsuario.INQUILINO);
-        userManager.registrarUsuario("Ana Gomez", "ana@example.com", "987654321",RolDeUsuario.PROPIETARIO);
+		this.formaDePago = mock(FormaDePago.class);
+		this.entrada = mock(LocalDate.class);
+		this.salida = mock(LocalDate.class);
 
-        propietario.addInmueble(inmueble);
-        
 
 	}
-//	ORI: WIP - Toy en eso
+
 	@Test
-	public void unInquilinoPuedeCrearUnaReservaValida() {
+	public void unInquilinoPuedeCrearUnaReservaValida()
+			throws Exception {
 		
+
+		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
+		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
+
+		Reserva reserva = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
+
+		assertNotNull(reserva);
 	}
 
-//	@Test
-//	public void unPropietarioNoPuedeCrearUnaReserva() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	public void unInquilinoNoPuedeReservarUnAlquilerSiLaFechaNoEstaDisponible() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	public void unInquilinooNoPuedeCrearUnaReservaSiNoEstaDisponible() {
 
-//   Add more tests
+
+		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
+		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(false);
+
+		assertThrows(AlquilerNoDisponibleException.class, () -> {
+			reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
+		});
+
+	}
+
+	@Test
+	public void UnInquilinoNoPuedeCrearReservaConFormaDePagoNoAceptada() {
+
+		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(false);
+		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
+
+		assertThrows(FormaDePagoNoAceptadaException.class, () -> {
+			reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
+		});
+	}
+
 }

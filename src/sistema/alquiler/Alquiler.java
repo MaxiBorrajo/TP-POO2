@@ -28,8 +28,8 @@ public class Alquiler {
 		this.formasDePago = new ArrayList<>();
 		this.periodos = new ArrayList<>();
 		this.diasNoDisponibles = new ArrayList<>();
-	}
 
+	}
 
 	public void agregarPeriodo(Periodo periodo) {
 		// validar si no existe un periodo que coincida con este, no puede haber
@@ -42,7 +42,8 @@ public class Alquiler {
 		// fechaFinal)).size() -
 		// - calcularDistanciaFecha(fechaInicio, fechaFinal)) modulo *precioBase + lo
 		// anterior
-		// this.periodos.stream().reduce(((acc, p ) -> acc + p.isEmpty() ? p.get() : 0) ,0)
+		// this.periodos.stream().reduce(((acc, p ) -> acc + p.isEmpty() ? p.get() : 0)
+		// ,0)
 		//
 		double totalPrecio = 0.0;
 		LocalDate currentDate = fechaInicio;
@@ -81,6 +82,11 @@ public class Alquiler {
 		return this.formasDePago.contains(formaDePago);
 	}
 
+	public void agregarFormaDePago(FormaDePago formaDePago) {
+		if (!validateFormaDePago(formaDePago)) {
+			this.formasDePago.add(formaDePago);
+		}
+	}
 
 	public boolean esDeCiudad(String ciudad) {
 		// TODO Auto-generated method stub
@@ -88,7 +94,8 @@ public class Alquiler {
 	}
 
 	public boolean perteneceAAlgunPeriodo(LocalDate entrada, LocalDate salida) {
-		// TODO Auto-generated method stub ver si rompe con algun caso, esto posiblemente ya no se usa
+		// TODO Auto-generated method stub ver si rompe con algun caso, esto
+		// posiblemente ya no se usa
 		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(entrada))
 				&& this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(salida));
 	}
@@ -118,7 +125,5 @@ public class Alquiler {
 		// TODO Auto-generated method stub
 		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(salida));
 	}
-	
-	
 
 }
