@@ -15,9 +15,12 @@ import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.CustomEnum;
 import sistema.enums.customEnums.CustomEnumType;
 import sistema.exceptions.AlquilerNoDisponibleException;
+import sistema.exceptions.AlquilerNoRegistradoException;
 import sistema.exceptions.CustomEnumExistenteException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
+import sistema.exceptions.PermisoDenegadoException;
+import sistema.exceptions.UsuarioNoRegistradoException;
 import sistema.filtro.FiltroDeSistema;
 
 public class Sistema {
@@ -34,7 +37,6 @@ public class Sistema {
 		this.usuarioManager = new UsuarioManager();
 
 	}
-
 	// usuarios
 
 	public Usuario registrarUsuario(String nombreCompleto, String email, String telefono, RolDeUsuario rol)
@@ -42,8 +44,9 @@ public class Sistema {
 		return this.usuarioManager.registrarUsuario(nombreCompleto, email, telefono, rol);
 	}
 	// Alquileres
-	public Alquiler publicarAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault)
-			throws InmuebleConAlquilerYaExiste {
+	public Alquiler publicarAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault, Usuario usuario)
+			throws InmuebleConAlquilerYaExiste, UsuarioNoRegistradoException, PermisoDenegadoException {
+		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.PROPIETARIO);
 		return this.alquilerManager.darDeAltaAlquiler(inmueble, checkIn, checkOut, precioDefault);
 	}
 
@@ -53,12 +56,14 @@ public class Sistema {
 
 	// Reservas
 	public Reserva crearReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler,
-			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, UsuarioNoRegistradoException, AlquilerNoRegistradoException, PermisoDenegadoException {
+		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.INQUILINO);
+		this.alquilerManager.validarAlquiler(alquiler);
 		return this.reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, usuario);
 	}
 
-	public void cancelarReserva(Reserva reserva) {
-
+	public void cancelarReserva(Reserva reserva) throws UsuarioNoRegistradoException, PermisoDenegadoException {
+		this.usuarioManager.validarUsuario(reserva.getInquilino(), RolDeUsuario.INQUILINO);
 	}
 
 	//	public List<Reserva> verTodasLasReservas(Usuario usuario){
