@@ -4,6 +4,7 @@ import sistema.Inmueble.Inmueble;
 import sistema.enums.RolDeUsuario;
 import sistema.exceptions.InmuebleYaGuardadoException;
 import sistema.exceptions.UsuarioExistenteException;
+import sistema.reserva.Reserva;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,12 @@ public class Propietario extends Usuario{
 		} else {
 			this.inmuebles.add(inmueble);
 		}
+	}
+
+	@Override
+	protected boolean esValoracionValida(Usuario ranker, Reserva reserva) {
+		// TODO Auto-generated method stub
+		return reserva.getInquilino().equals(ranker) && reserva.getAlquiler().getInmueble().getPropietario().equals(this);
 	}
 	
 

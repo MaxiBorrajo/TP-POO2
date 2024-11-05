@@ -1,28 +1,45 @@
 package sistema.Inmueble;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import sistema.enums.customEnums.Servicio;
 import sistema.enums.customEnums.TipoDeInmueble;
+import sistema.managers.RankingManager;
+import sistema.ranking.Rankeable;
+import sistema.reserva.Reserva;
+import sistema.usuario.Propietario;
+import sistema.usuario.Usuario;;
 
-import java.util.List;
-;
-
-public class Inmueble {
+public class Inmueble extends Rankeable {
 	private int id;
 	private int superficie;
 	private TipoDeInmueble tipo;
 	private Ubicacion ubicacion;
 	private List<Servicio> servicios;
 	private int capacidad;
+	private List<String> fotos;
+	private Propietario propietario;
+	private RankingManager rankingManager;
 
-	public Inmueble(int superficie, 
-			TipoDeInmueble tipo, 
-			Ubicacion ubi,
-			List<Servicio> servicios,
-			int capacidad) {
-		this.superficie =  superficie;
+	public Inmueble(int superficie, TipoDeInmueble tipo, Ubicacion ubi, List<Servicio> servicios, int capacidad,
+			Propietario propietario) {
+		this.superficie = superficie;
 		this.tipo = tipo;
 		this.ubicacion = ubi;
 		this.servicios = servicios;
 		this.capacidad = capacidad;
+		this.fotos = new ArrayList<String>();
+		this.propietario = propietario;
+		this.rankingManager = new RankingManager();
+	}
+
+	public void añadirFoto(String link) throws CantidadFotosExcedidaException {
+		if (this.fotos.size() < 5) {
+			this.fotos.add(link);
+		} else {
+			throw new CantidadFotosExcedidaException();
+		}
 	}
 
 	public boolean esDeCiudad(String ciudad) {
@@ -39,8 +56,6 @@ public class Inmueble {
 		// TODO Auto-generated method stub
 		return this == inm2;
 	}
-	
-	
 
 	public String getTipo() {
 		// TODO Auto-generated method stub
@@ -51,5 +66,16 @@ public class Inmueble {
 		// TODO Auto-generated method stub
 		return this.ubicacion.getCiudad();
 	}
-	
+
+	public Object getPropietario() {
+		// TODO Auto-generated method stub
+		return this.propietario;
+	}
+
+	@Override
+	public boolean esValoracionValida(Usuario ranker, Reserva reserva) {
+		// TODO Auto-generated method stub
+		return reserva.getAlquiler().getInmueble().equals(this) && reserva.getInquilino().equals(ranker);
+	}
+
 }

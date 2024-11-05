@@ -31,14 +31,24 @@ public class Reserva {
 		return this.inquilino == us;
 	}
 
-	public boolean fecahPosteriorA(LocalDate now) {
+	public boolean fechaPosteriorAInicio(LocalDate date) {
 		// TODO Auto-generated method stub
-		return this.fechaInicio.isAfter(now);
+		return this.fechaInicio.isAfter(date);
 	}
+	
+	public boolean fechaPosteriorAFinal(LocalDate date) {
+		// TODO Auto-generated method stub
+		return date.isAfter(fechaFinal);
+	}
+
 
 	public boolean esDeCiudad(String ciudad) {
 		// TODO Auto-generated method stub
 		return this.alquiler.esDeCiudad(ciudad);
+	}
+
+	public Alquiler getAlquiler() {
+		return alquiler;
 	}
 
 	public String getCiudad() {

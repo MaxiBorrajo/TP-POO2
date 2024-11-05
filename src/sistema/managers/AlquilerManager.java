@@ -9,6 +9,7 @@ import sistema.alquiler.Alquiler;
 import sistema.exceptions.AlquilerNoRegistradoException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.filtro.FiltroDeSistema;
+import sistema.usuario.Propietario;
 
 public class AlquilerManager {
 	private List<Alquiler> alquileres;

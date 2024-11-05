@@ -1,6 +1,8 @@
 package sistema;
 
 import sistema.managers.*;
+import sistema.ranking.Rankeable;
+import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
 import sistema.usuario.Usuario;
 
@@ -12,6 +14,7 @@ import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
 import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
+import sistema.enums.customEnums.Categoria;
 import sistema.enums.customEnums.CustomEnum;
 import sistema.enums.customEnums.CustomEnumType;
 import sistema.exceptions.AlquilerNoDisponibleException;
@@ -20,9 +23,12 @@ import sistema.exceptions.CustomEnumExistenteException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.exceptions.PermisoDenegadoException;
+import sistema.exceptions.ServicioNoTerminadoException;
 import sistema.exceptions.UsuarioNoRegistradoException;
+import sistema.exceptions.ValoracionInvalidaException;
 import sistema.filtro.FiltroDeSistema;
 import sistema.filtro.FiltroReserva;
+import sistema.filtro.FiltroSimple;
 
 public class Sistema {
 
@@ -31,13 +37,13 @@ public class Sistema {
 	private CustomEnumManager customEnumManager;
 	private UsuarioManager usuarioManager;
 	private NotificadorManager notificadorManager;
+
 	public Sistema() {
 		this.alquilerManager = new AlquilerManager();
 		this.reservaManager = new ReservaManager();
 		this.customEnumManager = new CustomEnumManager();
 		this.usuarioManager = new UsuarioManager();
 		this.notificadorManager = new NotificadorManager();
-
 	}
 	// usuarios
 
@@ -45,8 +51,10 @@ public class Sistema {
 			throws Exception {
 		return this.usuarioManager.registrarUsuario(nombreCompleto, email, telefono, rol);
 	}
+
 	// Alquileres
-	public Alquiler publicarAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault, Usuario usuario)
+	public Alquiler publicarAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault,
+			Usuario usuario)
 			throws InmuebleConAlquilerYaExiste, UsuarioNoRegistradoException, PermisoDenegadoException {
 		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.PROPIETARIO);
 		return this.alquilerManager.darDeAltaAlquiler(inmueble, checkIn, checkOut, precioDefault);
@@ -58,7 +66,8 @@ public class Sistema {
 
 	// Reservas
 	public Reserva crearReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler,
-			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, UsuarioNoRegistradoException, AlquilerNoRegistradoException, PermisoDenegadoException {
+			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException,
+			UsuarioNoRegistradoException, AlquilerNoRegistradoException, PermisoDenegadoException {
 		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.INQUILINO);
 		this.alquilerManager.validarAlquiler(alquiler);
 		return this.reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, usuario);
@@ -67,18 +76,18 @@ public class Sistema {
 	public void cancelarReserva(Reserva reserva) throws UsuarioNoRegistradoException, PermisoDenegadoException {
 		this.usuarioManager.validarUsuario(reserva.getInquilino(), RolDeUsuario.INQUILINO);
 	}
-	
+
 	public List<Reserva> verReservasSegun(FiltroReserva f) {
 		return this.reservaManager.filtrarReservas(f);
 	}
-	
-	public List<String> todasLasCiudadesDeReservas( Usuario user){
-		return this.reservaManager.todasLasCiudades( user);
+
+	public List<String> todasLasCiudadesDeReservas(Usuario user) {
+		return this.reservaManager.todasLasCiudades(user);
 	}
 
-	//	public List<Reserva> verTodasLasReservas(Usuario usuario){
-	//	return this.reservaManager.verTodasLasReservas(Usuario usuario);
-	//}
+	// public List<Reserva> verTodasLasReservas(Usuario usuario){
+	// return this.reservaManager.verTodasLasReservas(Usuario usuario);
+	// }
 //	public List<Reserva> verReservasDeCiudad
 //	public List<Reserva> verReservasFuturas
 //	public List<Reserva> verCiudadesDeReservas
@@ -87,4 +96,6 @@ public class Sistema {
 	public CustomEnum crearCustomEnum(String nombre, CustomEnumType tipo) throws CustomEnumExistenteException {
 		return this.customEnumManager.createCustomEnum(nombre, tipo);
 	}
+
+	
 }

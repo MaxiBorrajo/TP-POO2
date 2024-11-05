@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import sistema.reserva.Reserva;
+import sistema.usuario.Propietario;
 import sistema.Inmueble.Inmueble;
 import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
@@ -28,7 +29,6 @@ public class Alquiler {
 		this.formasDePago = new ArrayList<>();
 		this.periodos = new ArrayList<>();
 		this.diasNoDisponibles = new ArrayList<>();
-
 	}
 
 	public void agregarPeriodo(Periodo periodo) {
