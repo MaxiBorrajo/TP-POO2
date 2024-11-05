@@ -28,7 +28,7 @@ public abstract class Rankeable {
 	}
 
 	public double getPromedioValoraciones() {
-	    return this.rankingManager.getPromedioRanking();
+	    return this.rankingManager.getPromedioValoraciones();
 	}
 
 	public double getPromedioValoracionesPorCategoria(Categoria categoria) {

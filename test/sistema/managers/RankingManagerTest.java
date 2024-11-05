@@ -36,7 +36,7 @@ public class RankingManagerTest {
     public void testCalcularPromedioValoraciones() throws RangoValoracionInvalidoException {
         rankingManager.añadirValoracion(new Ranking(1, new Categoria("Limpieza"), "Limpio y ordenado"));
         rankingManager.añadirValoracion(new Ranking(3, new Categoria("Servicio"), "Servicio promedio"));
-        assertEquals(2.0, rankingManager.getPromedioRanking());
+        assertEquals(2.0, rankingManager.getPromedioValoraciones());
     }
 
     @Test

@@ -33,7 +33,7 @@ public class RankingManager {
 		return sumaTotal / cantidadRankings;
 	}
 
-	public double getPromedioRanking() {
+	public double getPromedioValoraciones() {
 		return this.getPromedioDeRankings(this.getValoraciones());
 	}
 
