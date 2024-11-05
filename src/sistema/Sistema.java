@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import sistema.Inmueble.Inmueble;
+import sistema.Inmueble.Visualizacion;
 import sistema.alquiler.Alquiler;
 import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
@@ -83,6 +84,10 @@ public class Sistema {
 
 	public List<String> todasLasCiudadesDeReservas(Usuario user) {
 		return this.reservaManager.todasLasCiudades(user);
+	}
+	
+	public Visualizacion verVisualizacionDeInmueble(Inmueble inmueble) {
+		return new Visualizacion(inmueble);
 	}
 
 	// public List<Reserva> verTodasLasReservas(Usuario usuario){

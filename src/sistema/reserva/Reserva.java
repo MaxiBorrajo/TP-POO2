@@ -1,6 +1,7 @@
 package sistema.reserva;
 import java.time.LocalDate;
 
+import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
 import sistema.enums.*;
 import sistema.managers.ReservaManager;
@@ -20,6 +21,9 @@ public class Reserva {
 	    this.fechaFinal = fechaFinal;
 	    this.alquiler = alquiler;
 	    this.inquilino = usuario;
+	    
+	    Inmueble inmuebleReservado = this.alquiler.getInmueble();
+	    inmuebleReservado.setVecesAlquilado(inmuebleReservado.getVecesAlquilado() + 1);
 	}
 
 	public Usuario getInquilino() {

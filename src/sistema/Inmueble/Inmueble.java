@@ -21,6 +21,7 @@ public class Inmueble extends Rankeable {
 	private List<String> fotos;
 	private Propietario propietario;
 	private RankingManager rankingManager;
+	private int vecesAlquilado;
 
 	public Inmueble(int superficie, TipoDeInmueble tipo, Ubicacion ubi, List<Servicio> servicios, int capacidad,
 			Propietario propietario) {
@@ -32,6 +33,15 @@ public class Inmueble extends Rankeable {
 		this.fotos = new ArrayList<String>();
 		this.propietario = propietario;
 		this.rankingManager = new RankingManager();
+		this.vecesAlquilado = 0;
+	}
+	
+	public int getVecesAlquilado() {
+		return vecesAlquilado;
+	}
+
+	public void setVecesAlquilado(int vecesAlquilado) {
+		this.vecesAlquilado = vecesAlquilado;
 	}
 
 	public void añadirFoto(String link) throws CantidadFotosExcedidaException {
@@ -67,7 +77,7 @@ public class Inmueble extends Rankeable {
 		return this.ubicacion.getCiudad();
 	}
 
-	public Object getPropietario() {
+	public Propietario getPropietario() {
 		// TODO Auto-generated method stub
 		return this.propietario;
 	}

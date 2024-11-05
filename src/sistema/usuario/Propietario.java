@@ -6,16 +6,25 @@ import sistema.exceptions.InmuebleYaGuardadoException;
 import sistema.exceptions.UsuarioExistenteException;
 import sistema.reserva.Reserva;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Propietario extends Usuario{
 	private List<Inmueble> inmuebles;
+	private LocalDate fechaCreacion;
 	
-	public Propietario(String nombreCompleto, String email, String telefono) {
+	public Propietario(String nombreCompleto, String email, String telefono, LocalDate fechaCreacion) {
 		super(nombreCompleto, email, telefono);
 		this.inmuebles = new ArrayList<>();
 		this.rol = RolDeUsuario.PROPIETARIO;
+		this.fechaCreacion = fechaCreacion;
+	}
+	
+	 
+	
+	public LocalDate getFechaCreacion() {
+		return this.fechaCreacion;
 	}
 
 	public boolean tieneInmueble(Inmueble inmueble) {

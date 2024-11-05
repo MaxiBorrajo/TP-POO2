@@ -1,5 +1,6 @@
 package sistema.managers;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class UsuarioManager {
 			if (rol == RolDeUsuario.INQUILINO) {
 				usuario = new Inquilino(nombreCompleto, email, telefono);
 			} else {
-				usuario = new Propietario(nombreCompleto, email, telefono);
+				usuario = new Propietario(nombreCompleto, email, telefono, LocalDate.now());
 
 			}
 

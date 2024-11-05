@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +22,7 @@ public class PropietarioTest {
 
 	@BeforeEach
 	void setUp() {
-		this.propietario = new Propietario("ginebra", "ginebra@gmail.com", "+5401166666666");
+		this.propietario = new Propietario("ginebra", "ginebra@gmail.com", "+5401166666666", LocalDate.now());
 		mockRanker = mock(Usuario.class);
 		mockReserva = mock(Reserva.class);
 		mockInmueble = mock(Inmueble.class);

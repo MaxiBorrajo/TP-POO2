@@ -14,6 +14,7 @@ public class InquilinoTest {
     private Usuario mockRanker;
     private Reserva mockReserva;
     private Inmueble mockInmueble;
+    private Propietario mockPropietario;
 
     @BeforeEach
     public void setUp() {
@@ -21,13 +22,14 @@ public class InquilinoTest {
         mockRanker = mock(Usuario.class);
         mockReserva = mock(Reserva.class);
         mockInmueble = mock(Inmueble.class);
+        mockPropietario = mock(Propietario.class);
 
         Alquiler mockAlquiler = mock(Alquiler.class);
         when(mockAlquiler.getInmueble()).thenReturn(mockInmueble);
 
         when(mockReserva.getAlquiler()).thenReturn(mockAlquiler);
 
-        when(mockInmueble.getPropietario()).thenReturn(mockRanker);
+        when(mockInmueble.getPropietario()).thenReturn(mockPropietario);
 
         when(mockReserva.getInquilino()).thenReturn(inquilino);
     }

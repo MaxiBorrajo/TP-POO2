@@ -25,7 +25,6 @@ public class Periodo {
 		
 	}
 	
-	
 	public boolean precioMinimoEsMenorA(double precioMinimo) {
 		// TODO Auto-generated method stub
 		return precioMinimo >= this.precio;
