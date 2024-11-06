@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Queue;
 
 import sistema.reserva.Reserva;
-import sistema.usuario.Propietario;
+import sistema.reserva.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.Inmueble.Inmueble;
 import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
@@ -26,8 +26,9 @@ public class Alquiler {
 	private List<Periodo> diasNoDisponibles;
 	private double precioDefault;
 	private Queue<Reserva> reservasEncoladas;
+	private PoliticaDeCancelacion politicaDeCancelacion;
 
-	public Alquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault) {
+	public Alquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault, PoliticaDeCancelacion politicaDeCancelacion) {
 		this.inmueble = inmueble;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -36,6 +37,7 @@ public class Alquiler {
 		this.periodos = new ArrayList<>();
 		this.diasNoDisponibles = new ArrayList<>();
 		this.reservasEncoladas = new LinkedList<>();
+		this.politicaDeCancelacion = politicaDeCancelacion;
 	}
 
 	public void agregarPeriodo(Periodo periodo) {
@@ -202,6 +204,11 @@ public class Alquiler {
 				.filtrarLista(this.diasNoDisponibles).stream().findFirst().get();
 		this.diasNoDisponibles.remove(pe);
 		this.agregarPeriodo(pe);
+	}
+
+
+	public double calcularReembolsoPorCancelacion(LocalDate fechaInicio, LocalDate fechaFinal, double precioTotal) {
+		return this.politicaDeCancelacion.calcularReembolso(fechaInicio, fechaFinal, precioTotal);
 	}
 
 }

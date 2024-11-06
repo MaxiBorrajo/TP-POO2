@@ -9,6 +9,7 @@ import sistema.alquiler.Alquiler;
 import sistema.exceptions.AlquilerNoRegistradoException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.filtro.FiltroDeSistema;
+import sistema.reserva.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.usuario.Propietario;
 
 public class AlquilerManager {
@@ -17,24 +18,26 @@ public class AlquilerManager {
 	public AlquilerManager() {
 		this.alquileres = new ArrayList<Alquiler>();
 	}
-	
-	public void validarAlquiler (Alquiler alquiler) throws AlquilerNoRegistradoException {
+
+	public void validarAlquiler(Alquiler alquiler) throws AlquilerNoRegistradoException {
 		if (!this.existeAlquiler(alquiler)) {
 			throw new AlquilerNoRegistradoException();
 		}
 	}
-	
+
 	public boolean existeAlquiler(Alquiler alquiler) {
 		return this.alquileres.contains(alquiler);
 	}
-	public Alquiler darDeAltaAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault) throws InmuebleConAlquilerYaExiste {
+
+	public Alquiler darDeAltaAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault,
+			PoliticaDeCancelacion politicaDeCancelacion) throws InmuebleConAlquilerYaExiste {
 		boolean inmuebleYaTieneAlquiler = this.alquileres.stream()
 				.anyMatch(alquiler -> alquiler.getInmueble().equals(inmueble));
-		
+
 		if (inmuebleYaTieneAlquiler) {
 			throw new InmuebleConAlquilerYaExiste("El inmueble ya tiene un alquiler asociado.");
 		}
-		Alquiler alquiler = new Alquiler(inmueble, checkIn, checkOut, precioDefault);
+		Alquiler alquiler = new Alquiler(inmueble, checkIn, checkOut, precioDefault, politicaDeCancelacion);
 		this.alquileres.add(alquiler);
 		return alquiler;
 	}
@@ -46,8 +49,8 @@ public class AlquilerManager {
 	public List<Alquiler> getAlquileres() {
 		return this.alquileres;
 	}
-	
-	public List<Alquiler> filtrarAlquiler(FiltroDeSistema filtro){
+
+	public List<Alquiler> filtrarAlquiler(FiltroDeSistema filtro) {
 		return filtro.filtrarLista(this.alquileres);
 	}
 
