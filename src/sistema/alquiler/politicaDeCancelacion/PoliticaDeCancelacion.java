@@ -1,4 +1,4 @@
-package sistema.reserva.politicaDeCancelacion;
+package sistema.alquiler.politicaDeCancelacion;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

@@ -25,13 +25,13 @@ import org.junit.jupiter.api.Test;
 
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
+import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.EstadoDeReserva;
 import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.NoExistenteException;
 import sistema.reserva.Reserva;
-import sistema.reserva.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.usuario.*;
 
 public class ReservaManagerTest {

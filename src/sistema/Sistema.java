@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import sistema.Inmueble.Inmueble;
 import sistema.Inmueble.Visualizacion;
 import sistema.alquiler.Alquiler;
+import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Categoria;

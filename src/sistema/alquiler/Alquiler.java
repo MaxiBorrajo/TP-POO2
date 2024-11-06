@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Queue;
 
 import sistema.reserva.Reserva;
-import sistema.reserva.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.Inmueble.Inmueble;
+import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;

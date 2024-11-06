@@ -6,10 +6,10 @@ import java.util.List;
 
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
+import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.exceptions.AlquilerNoRegistradoException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.filtro.FiltroDeSistema;
-import sistema.reserva.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.usuario.Propietario;
 
 public class AlquilerManager {
