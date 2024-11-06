@@ -18,9 +18,10 @@ import java.util.List;
 
 public class ReservaManager {
 	private List<Reserva> reservas;
-
+	private NotificadorManager noti;
 	public ReservaManager() {
 		this.reservas = new ArrayList<>();
+		
 	}
 
 	private void validarReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler)
@@ -66,16 +67,18 @@ public class ReservaManager {
 		return !(fin1.isBefore(inicio2) || fin2.isBefore(inicio1));
 	}
 
-	public void cancelarReserva(Reserva reserva)
+	public void cancelarReserva(Reserva reserva, NotificadorManager notificadorManager)
 			throws NoExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 		this.validarReservaExiste(reserva);
-		reserva.cancelar();
-		Alquiler alquiler = reserva.getAlquiler();
-		if (alquiler.hayReservasEncoladas()) {
-			Reserva reservaEncolada = alquiler.obtenerPrimeroDeReservasEncoladas();
-			this.crearReserva(reservaEncolada.getFormaDepago(), reservaEncolada.getFechaInicio(),
-					reservaEncolada.getFechaFinal(), alquiler, reservaEncolada.getInquilino());
-		}
+		reserva.cancelar(this, notificadorManager);
+		
+	}
+	
+	public void desencoolarReserva(Alquiler alquiler) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+		// TODO Auto-generated method stub
+		Reserva reservaEncolada = alquiler.obtenerPrimeroDeReservasEncoladas();
+		this.crearReserva(reservaEncolada.getFormaDepago(), reservaEncolada.getFechaInicio(),
+				reservaEncolada.getFechaFinal(), alquiler, reservaEncolada.getInquilino());
 	}
 
 	public void finalizarReserva(Reserva reserva) throws NoExistenteException {
@@ -85,11 +88,11 @@ public class ReservaManager {
 
 	public List<Reserva> getReservasActivas() {
 		List<Reserva> reservasActivas = new FiltroSimple<Reserva>(
-				r -> r.getEstado() != EstadoDeReserva.CANCELADA && r.getEstado() != EstadoDeReserva.FINALIZADA)
+				r -> r.estaActiva() )
 				.filtrarLista(reservas);
 		return reservasActivas;
 	}
-
+//r.getEstado() != EstadoDeReserva.CANCELADA && r.getEstado() != EstadoDeReserva.FINALIZADA
 	public List<Reserva> getReservas() {
 		return this.reservas;
 	}
@@ -113,4 +116,16 @@ public class ReservaManager {
 		return (new FiltroTodasReservas(user)).filtrarReservas(this.reservas).stream().map(s -> (String) s.getCiudad())
 				.toList();
 	}
+
+	public void aceptarReserva(Reserva reser, NotificadorManager notificadorManager) {
+		// TODO Auto-generated method stub
+		reser.aceptar(notificadorManager);
+	}
+
+	public void rechazarReserva(Reserva reser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

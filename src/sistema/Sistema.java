@@ -42,10 +42,11 @@ public class Sistema {
 
 	public Sistema() {
 		this.alquilerManager = new AlquilerManager();
+		this.notificadorManager = new NotificadorManager();
 		this.reservaManager = new ReservaManager();
 		this.customEnumManager = new CustomEnumManager();
 		this.usuarioManager = new UsuarioManager();
-		this.notificadorManager = new NotificadorManager();
+		
 	}
 	// usuarios
 
@@ -65,7 +66,15 @@ public class Sistema {
 	public List<Alquiler> buscarAlquiler(FiltroDeSistema filtro) {
 		return this.alquilerManager.filtrarAlquiler(filtro);
 	}
+	
+	public void aceptarReserva(Reserva reser) {
+		this.reservaManager.aceptarReserva(reser, this.notificadorManager);
+	}
 
+	public void rechazarReserva(Reserva reser) {
+		this.reservaManager.rechazarReserva(reser);
+	}
+	
 	// Reservas
 	public Reserva crearReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler,
 			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException,
@@ -78,7 +87,7 @@ public class Sistema {
 	public void cancelarReserva(Reserva reserva) throws UsuarioNoRegistradoException, PermisoDenegadoException,
 			NoExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 		this.usuarioManager.validarUsuario(reserva.getInquilino(), RolDeUsuario.INQUILINO);
-		this.reservaManager.cancelarReserva(reserva);
+		this.reservaManager.cancelarReserva(reserva, this.notificadorManager);
 	}
 
 	public List<Reserva> verReservasSegun(FiltroReserva f) {

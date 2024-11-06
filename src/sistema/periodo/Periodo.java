@@ -34,6 +34,11 @@ public class Periodo {
 		// TODO Auto-generated method stub
 		return precioMaximo <=this.precio;
 	}
+
+	public boolean peridoDeFecha(LocalDate fechaInicio2, LocalDate fechaFinal2) {
+		// TODO Auto-generated method stub
+		return this.fechaInicio.equals(fechaInicio2) & this.fechaFinal.equals(fechaFinal2);
+	}
 	
 
 }
