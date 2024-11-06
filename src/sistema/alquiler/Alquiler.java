@@ -3,7 +3,10 @@ package sistema.alquiler;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+
 import sistema.reserva.Reserva;
 import sistema.usuario.Propietario;
 import sistema.Inmueble.Inmueble;
@@ -20,6 +23,7 @@ public class Alquiler {
 	private List<Periodo> periodos;
 	private List<Periodo> diasNoDisponibles;
 	private double precioDefault;
+	private Queue<Reserva> reservasEncoladas;
 
 	public Alquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault) {
 		this.inmueble = inmueble;
@@ -29,6 +33,7 @@ public class Alquiler {
 		this.formasDePago = new ArrayList<>();
 		this.periodos = new ArrayList<>();
 		this.diasNoDisponibles = new ArrayList<>();
+		this.reservasEncoladas = new LinkedList<>();
 	}
 
 	public void agregarPeriodo(Periodo periodo) {
@@ -37,7 +42,7 @@ public class Alquiler {
 		this.periodos.add(periodo);
 	}
 
-	public double cacularPrecioPeriodo(LocalDate fechaInicio, LocalDate fechaFinal) {
+	public double calcularPrecioPeriodo(LocalDate fechaInicio, LocalDate fechaFinal) {
 		// this.periodos.strea().mapToInt(p -> p.valorParaPeriodo(fechaInicio,
 		// fechaFinal)).size() -
 		// - calcularDistanciaFecha(fechaInicio, fechaFinal)) modulo *precioBase + lo
@@ -108,7 +113,7 @@ public class Alquiler {
 	public boolean cumplePrecioEnPeriodo(double precioMinimo, double precioMaximo, LocalDate entrada,
 			LocalDate salida) {
 		// TODO Auto-generated method stub
-		double precioPorFecha = this.cacularPrecioPeriodo(entrada, salida);
+		double precioPorFecha = this.calcularPrecioPeriodo(entrada, salida);
 		return precioMinimo <= precioPorFecha & precioPorFecha >= precioMaximo;
 	}
 
@@ -145,6 +150,19 @@ public class Alquiler {
 	public String getCiudad() {
 		// TODO Auto-generated method stub
 		return this.inmueble.getCiudad();
+	}
+
+	public void encolarReserva(Reserva nuevaReserva) {
+		this.reservasEncoladas.add(nuevaReserva);
+	}
+	
+	public Reserva obtenerPrimeroDeReservasEncoladas() {
+		return this.reservasEncoladas.poll();
+	}
+
+	public boolean hayReservasEncoladas() {
+		// TODO Auto-generated method stub
+		return !this.reservasEncoladas.isEmpty();
 	}
 
 }

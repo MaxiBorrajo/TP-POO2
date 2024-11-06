@@ -1,4 +1,5 @@
 package sistema.reserva;
+
 import java.time.LocalDate;
 
 import sistema.Inmueble.Inmueble;
@@ -6,6 +7,7 @@ import sistema.alquiler.Alquiler;
 import sistema.enums.*;
 import sistema.managers.ReservaManager;
 import sistema.usuario.Usuario;
+
 public class Reserva {
 	private EstadoDeReserva estado;
 	private FormaDePago formaDepago;
@@ -13,17 +15,34 @@ public class Reserva {
 	private LocalDate fechaFinal;
 	private Alquiler alquiler;
 	private Usuario inquilino;
-	
-	public Reserva(FormaDePago formaDepago, LocalDate fechaInicio, LocalDate fechaFinal, Alquiler alquiler, Usuario usuario) {
-	    this.estado = EstadoDeReserva.PENDIENTE;
-	    this.formaDepago = formaDepago;
-	    this.fechaInicio = fechaInicio;
-	    this.fechaFinal = fechaFinal;
-	    this.alquiler = alquiler;
-	    this.inquilino = usuario;
-	    
-	    Inmueble inmuebleReservado = this.alquiler.getInmueble();
-	    inmuebleReservado.setVecesAlquilado(inmuebleReservado.getVecesAlquilado() + 1);
+
+	public EstadoDeReserva getEstado() {
+		return estado;
+	}
+
+	public Reserva(FormaDePago formaDepago, LocalDate fechaInicio, LocalDate fechaFinal, Alquiler alquiler,
+			Usuario usuario) {
+		this.estado = EstadoDeReserva.PENDIENTE;
+		this.formaDepago = formaDepago;
+		this.fechaInicio = fechaInicio;
+		this.fechaFinal = fechaFinal;
+		this.alquiler = alquiler;
+		this.inquilino = usuario;
+
+		Inmueble inmuebleReservado = this.alquiler.getInmueble();
+		inmuebleReservado.setVecesAlquilado(inmuebleReservado.getVecesAlquilado() + 1);
+	}
+
+	public LocalDate getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public FormaDePago getFormaDepago() {
+		return formaDepago;
+	}
+
+	public LocalDate getFechaFinal() {
+		return fechaFinal;
 	}
 
 	public Usuario getInquilino() {
@@ -39,12 +58,11 @@ public class Reserva {
 		// TODO Auto-generated method stub
 		return this.fechaInicio.isAfter(date);
 	}
-	
+
 	public boolean fechaPosteriorAFinal(LocalDate date) {
 		// TODO Auto-generated method stub
 		return date.isAfter(fechaFinal);
 	}
-
 
 	public boolean esDeCiudad(String ciudad) {
 		// TODO Auto-generated method stub
@@ -58,5 +76,17 @@ public class Reserva {
 	public String getCiudad() {
 		// TODO Auto-generated method stub
 		return this.alquiler.getCiudad();
+	}
+
+	public void cancelar() {
+		this.setEstado(EstadoDeReserva.CANCELADA);
+	}
+
+	public void setEstado(EstadoDeReserva estado) {
+		this.estado = estado;
+	}
+
+	public void finalizar() {
+		this.setEstado(EstadoDeReserva.FINALIZADA);
 	}
 }

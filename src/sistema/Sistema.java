@@ -23,6 +23,7 @@ import sistema.exceptions.AlquilerNoRegistradoException;
 import sistema.exceptions.CustomEnumExistenteException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
+import sistema.exceptions.NoExistenteException;
 import sistema.exceptions.PermisoDenegadoException;
 import sistema.exceptions.ServicioNoTerminadoException;
 import sistema.exceptions.UsuarioNoRegistradoException;
@@ -74,8 +75,10 @@ public class Sistema {
 		return this.reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, usuario);
 	}
 
-	public void cancelarReserva(Reserva reserva) throws UsuarioNoRegistradoException, PermisoDenegadoException {
+	public void cancelarReserva(Reserva reserva) throws UsuarioNoRegistradoException, PermisoDenegadoException,
+			NoExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 		this.usuarioManager.validarUsuario(reserva.getInquilino(), RolDeUsuario.INQUILINO);
+		this.reservaManager.cancelarReserva(reserva);
 	}
 
 	public List<Reserva> verReservasSegun(FiltroReserva f) {
@@ -85,7 +88,7 @@ public class Sistema {
 	public List<String> todasLasCiudadesDeReservas(Usuario user) {
 		return this.reservaManager.todasLasCiudades(user);
 	}
-	
+
 	public Visualizacion verVisualizacionDeInmueble(Inmueble inmueble) {
 		return new Visualizacion(inmueble);
 	}
@@ -102,5 +105,4 @@ public class Sistema {
 		return this.customEnumManager.createCustomEnum(nombre, tipo);
 	}
 
-	
 }
