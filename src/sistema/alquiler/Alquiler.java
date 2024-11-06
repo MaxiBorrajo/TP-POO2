@@ -13,6 +13,8 @@ import sistema.Inmueble.Inmueble;
 import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
+import sistema.filtro.FiltroSimple;
+import sistema.managers.ReservaManager;
 import sistema.periodo.Periodo;
 
 public class Alquiler {
@@ -40,6 +42,11 @@ public class Alquiler {
 		// validar si no existe un periodo que coincida con este, no puede haber
 		// mas de un precio por dia
 		this.periodos.add(periodo);
+	}
+	
+	private void agregarPeriodoNoDisponible(Periodo p) {
+		// TODO Auto-generated method stub
+		this.diasNoDisponibles.add(p);
 	}
 
 	public double calcularPrecioPeriodo(LocalDate fechaInicio, LocalDate fechaFinal) {
@@ -163,6 +170,38 @@ public class Alquiler {
 	public boolean hayReservasEncoladas() {
 		// TODO Auto-generated method stub
 		return !this.reservasEncoladas.isEmpty();
+	}
+
+	
+
+	public void seAceptoReserva(Reserva reserva) {
+		// TODO Auto-generated method stub
+		//ocupar periodos
+		LocalDate fechaInicio = reserva.getFechaInicio();
+		LocalDate fechaFinal = reserva.getFechaFinal();
+		//this.inmueble.setVecesAlquilado(this.inmueble.getVecesAlquilado() + 1); deberia ir aca ya que recien aca en teoria se acepta
+		this.agregarPeriodoNoDisponible(new Periodo(fechaInicio, fechaFinal ,this.calcularPrecioPeriodo(fechaInicio, fechaFinal)));
+	}
+
+	
+
+	public void seCanceloREserva(Reserva reserva, ReservaManager reser) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+		// TODO Auto-generated method stub
+		//estrategia de cancelacion
+		//ver si hay que desencolar
+		if(this.hayReservasEncoladas()) {
+			reser.desencoolarReserva(this);
+		}else {
+			this.desocuparPeriodosDe(reserva.getFechaInicio(), reserva.getFechaFinal());
+		}
+	}
+
+	private void desocuparPeriodosDe(LocalDate fechaInicio, LocalDate fechaFinal) {
+		// TODO Auto-generated method stub
+		Periodo pe = (new FiltroSimple<Periodo>(p -> p.peridoDeFecha(fechaInicio , fechaFinal)))
+				.filtrarLista(this.diasNoDisponibles).stream().findFirst().get();
+		this.diasNoDisponibles.remove(pe);
+		this.agregarPeriodo(pe);
 	}
 
 }
