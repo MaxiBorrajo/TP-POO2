@@ -8,14 +8,14 @@ public class AlquilerTest {
 	
 	
 	
-    @Test
-    public void unPropietarioPuedeCrearUnAlquiler() {
-    	fail("Not yet implemented");
-    }
-    @Test
-    public void unInquilinoPuedeCheckearElPrecioDeUnAlquilerEnUnRangoDeFechas() {
-    	fail("Not yet implemented");
-    }
+//    @Test
+//    public void unPropietarioPuedeCrearUnAlquiler() {
+//    	fail("Not yet implemented");
+//    }
+//    @Test
+//    public void unInquilinoPuedeCheckearElPrecioDeUnAlquilerEnUnRangoDeFechas() {
+//    	fail("Not yet implemented");
+//    }
 	    
 }
 

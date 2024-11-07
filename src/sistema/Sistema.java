@@ -2,10 +2,9 @@ package sistema;
 
 import sistema.managers.*;
 import sistema.podio.Podio;
-import sistema.ranking.Rankeable;
-import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
 import sistema.usuario.Inquilino;
+import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.usuario.Usuario;
 
 import java.time.LocalDate;
@@ -31,12 +30,10 @@ import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.exceptions.NoExistenteException;
 import sistema.exceptions.PermisoDenegadoException;
-import sistema.exceptions.ServicioNoTerminadoException;
+import sistema.exceptions.ReservaNoCancelableException;
 import sistema.exceptions.UsuarioNoRegistradoException;
-import sistema.exceptions.ValoracionInvalidaException;
 import sistema.filtro.FiltroDeSistema;
 import sistema.filtro.FiltroReserva;
-import sistema.filtro.FiltroSimple;
 
 public class Sistema {
 
@@ -62,10 +59,10 @@ public class Sistema {
 
 	// Alquileres
 	public Alquiler publicarAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault,
-			Usuario usuario)
+			Usuario usuario, PoliticaDeCancelacion politicaDeCancelacion)
 			throws InmuebleConAlquilerYaExiste, UsuarioNoRegistradoException, PermisoDenegadoException {
 		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.PROPIETARIO);
-		return this.alquilerManager.darDeAltaAlquiler(inmueble, checkIn, checkOut, precioDefault);
+		return this.alquilerManager.darDeAltaAlquiler(inmueble, checkIn, checkOut, precioDefault, politicaDeCancelacion);
 	}
 
 	public List<Alquiler> buscarAlquiler(FiltroDeSistema filtro) {
@@ -90,7 +87,7 @@ public class Sistema {
 	}
 
 	public void cancelarReserva(Reserva reserva) throws UsuarioNoRegistradoException, PermisoDenegadoException,
-			NoExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+			NoExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
 		this.usuarioManager.validarUsuario(reserva.getInquilino(), RolDeUsuario.INQUILINO);
 		this.reservaManager.cancelarReserva(reserva, this.notificadorManager);
 	}

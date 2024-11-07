@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
+import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.EstadoDeReserva;
 import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
@@ -105,8 +106,8 @@ public class ReservaManagerTest {
 	public void testCrearReservaEncolaSiExisteConflictoDeFechas() throws Exception {
 
 		Inmueble inmueble = mock(Inmueble.class);
-
-		Alquiler alquiler = new Alquiler(inmueble, LocalTime.of(14, 0), LocalTime.of(10, 0), 100.0);
+		PoliticaDeCancelacion politicaDeCancelacion = mock(PoliticaDeCancelacion.class);
+		Alquiler alquiler = new Alquiler(inmueble, LocalTime.of(14, 0), LocalTime.of(10, 0), 100.0, politicaDeCancelacion);
 
 		alquiler.agregarFormaDePago(formaDePago);
 
@@ -128,7 +129,7 @@ public class ReservaManagerTest {
 		reservaManager.aceptarReserva(reservaActiva, mock(NotificadorManager.class));
 		assertTrue(reservaManager.getReservas().contains(reservaActiva));
 		
-		Reserva reservaEncolada = new Reserva(formaDePago, entrada, salida, alquiler, inquilino);
+		Reserva reservaEncolada = new Reserva(formaDePago, entrada, salida, alquiler, inquilino, 100);
 
 		when(alquiler.hayReservasEncoladas()).thenReturn(true);
 		
@@ -162,7 +163,7 @@ public class ReservaManagerTest {
 
 		Reserva r = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
 		reservaManager.aceptarReserva(r,mock(NotificadorManager.class));
-		Reserva nuevaReserva = new Reserva(formaDePago, entrada, salida, alquiler, inquilino);
+		Reserva nuevaReserva = new Reserva(formaDePago, entrada, salida, alquiler, inquilino, 100);
 
 		assertTrue(reservaManager.hayReservaExistenteParaElPeriodoDado(alquiler, nuevaReserva));
 	}
@@ -176,7 +177,7 @@ public class ReservaManagerTest {
 		reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
 
 		Reserva nuevaReserva = new Reserva(formaDePago, LocalDate.of(2023, 2, 1), LocalDate.of(2023, 2, 10), alquiler,
-				inquilino);
+				inquilino, 100);
 
 		assertFalse(reservaManager.hayReservaExistenteParaElPeriodoDado(alquiler, nuevaReserva));
 	}

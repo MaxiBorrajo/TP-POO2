@@ -11,8 +11,5 @@ public class Pendiente extends EstadoReserva{
 	public void rechazar(Reserva re) {
 		re.setEstado(new Rechazada());
 	}
-	
-	public boolean estaAceptada() {
-		return true;
-	}
+
 }

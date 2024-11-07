@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import sistema.*;
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
+import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
 import sistema.exceptions.*;
@@ -31,7 +32,7 @@ public class SistemaTest {
 	private Usuario admin;
 	private Inquilino noAdmin;
 	private Propietario propietario;
-	
+
 	@BeforeEach
 	public void setUp() {
 		sistema = new Sistema();
@@ -41,7 +42,8 @@ public class SistemaTest {
 		try {
 			sistema.registrarUsuario(admin.getNombre(), admin.getEmail(), admin.getTelefono(), admin.getRol());
 			sistema.registrarUsuario(noAdmin.getNombre(), noAdmin.getEmail(), noAdmin.getTelefono(), noAdmin.getRol());
-			sistema.registrarUsuario(propietario.getNombre(), propietario.getEmail(), propietario.getTelefono(), propietario.getRol());
+			sistema.registrarUsuario(propietario.getNombre(), propietario.getEmail(), propietario.getTelefono(),
+					propietario.getRol());
 		} catch (Exception e) {
 			fail("Error al registrar usuarios: " + e.getMessage());
 		}
@@ -93,9 +95,9 @@ public class SistemaTest {
 		Inmueble inmueble2 = mock(Inmueble.class);
 
 		Alquiler alquiler1 = sistema.publicarAlquiler(inmueble2, LocalTime.of(9, 0), LocalTime.of(17, 0), 400,
-				propietario);
+				propietario, mock(PoliticaDeCancelacion.class));
 		Alquiler alquiler2 = sistema.publicarAlquiler(inmueble1, LocalTime.of(10, 0), LocalTime.of(18, 0), 500,
-				propietario);
+				propietario, mock(PoliticaDeCancelacion.class));
 
 		alquiler1.agregarFormaDePago(FormaDePago.CREDITO);
 		alquiler2.agregarFormaDePago(FormaDePago.CREDITO);
@@ -111,53 +113,57 @@ public class SistemaTest {
 		assertEquals(inquilino1.getEmail(), topInquilinos.get(0).getInquilino().getEmail());
 	}
 
-    @Test
-    public void testObtenerTop10InquilinosQueMasAlquilanConNoAdmin() {
-        assertThrows(PermisoDenegadoException.class, () -> sistema.obtenerTop10InquilinosQueMasAlquilan(noAdmin));
-    }
+	@Test
+	public void testObtenerTop10InquilinosQueMasAlquilanConNoAdmin() {
+		assertThrows(PermisoDenegadoException.class, () -> sistema.obtenerTop10InquilinosQueMasAlquilan(noAdmin));
+	}
 
-    @Test
-    public void testObtenerTodosLosInmueblesLibresConAdmin() throws Exception {
-        Inmueble inmueble1 = mock(Inmueble.class);
-        Inmueble inmueble2 = mock(Inmueble.class);
+	@Test
+	public void testObtenerTodosLosInmueblesLibresConAdmin() throws Exception {
+		Inmueble inmueble1 = mock(Inmueble.class);
+		Inmueble inmueble2 = mock(Inmueble.class);
 
-        Alquiler alquiler1 = sistema.publicarAlquiler(inmueble1, LocalTime.of(10, 0), LocalTime.of(18, 0), 500, propietario);
-        Alquiler alquiler2 = sistema.publicarAlquiler(inmueble2, LocalTime.of(9, 0), LocalTime.of(17, 0), 400, propietario);
-        
-        alquiler1.agregarFormaDePago(FormaDePago.CREDITO);
+		Alquiler alquiler1 = sistema.publicarAlquiler(inmueble1, LocalTime.of(10, 0), LocalTime.of(18, 0), 500,
+				propietario, mock(PoliticaDeCancelacion.class));
+		Alquiler alquiler2 = sistema.publicarAlquiler(inmueble2, LocalTime.of(9, 0), LocalTime.of(17, 0), 400,
+				propietario, mock(PoliticaDeCancelacion.class));
 
-        sistema.crearReserva(FormaDePago.CREDITO, LocalDate.now(), LocalDate.now().plusDays(5), alquiler1, noAdmin);
+		alquiler1.agregarFormaDePago(FormaDePago.CREDITO);
 
-        List<Inmueble> inmueblesLibres = sistema.obtenerTodosLosInmueblesLibres(admin);
-        assertEquals(1, inmueblesLibres.size());
-        assertEquals(inmueble2, inmueblesLibres.get(0));
-        assertFalse(inmueblesLibres.contains(inmueble1));
-    }
+		sistema.crearReserva(FormaDePago.CREDITO, LocalDate.now(), LocalDate.now().plusDays(5), alquiler1, noAdmin);
 
-    @Test
-    public void testObtenerTodosLosInmueblesLibresConUsuarioNoAdmin() {
-        assertThrows(PermisoDenegadoException.class, () -> sistema.obtenerTodosLosInmueblesLibres(noAdmin));
-    }
+		List<Inmueble> inmueblesLibres = sistema.obtenerTodosLosInmueblesLibres(admin);
+		assertEquals(1, inmueblesLibres.size());
+		assertEquals(inmueble2, inmueblesLibres.get(0));
+		assertFalse(inmueblesLibres.contains(inmueble1));
+	}
 
-    @Test
-    public void testTasaDeOcupacionConAdmin() throws Exception {
-        Inmueble inmueble1 = mock(Inmueble.class);
-        Inmueble inmueble2 = mock(Inmueble.class);
+	@Test
+	public void testObtenerTodosLosInmueblesLibresConUsuarioNoAdmin() {
+		assertThrows(PermisoDenegadoException.class, () -> sistema.obtenerTodosLosInmueblesLibres(noAdmin));
+	}
 
-        Alquiler alquiler1 = sistema.publicarAlquiler(inmueble1, LocalTime.of(10, 0), LocalTime.of(18, 0), 500, propietario);
-        Alquiler alquiler2 = sistema.publicarAlquiler(inmueble2, LocalTime.of(9, 0), LocalTime.of(17, 0), 400, propietario);
+	@Test
+	public void testTasaDeOcupacionConAdmin() throws Exception {
+		Inmueble inmueble1 = mock(Inmueble.class);
+		Inmueble inmueble2 = mock(Inmueble.class);
 
-        alquiler1.agregarFormaDePago(FormaDePago.CREDITO);
+		Alquiler alquiler1 = sistema.publicarAlquiler(inmueble1, LocalTime.of(10, 0), LocalTime.of(18, 0), 500,
+				propietario, mock(PoliticaDeCancelacion.class));
+		Alquiler alquiler2 = sistema.publicarAlquiler(inmueble2, LocalTime.of(9, 0), LocalTime.of(17, 0), 400,
+				propietario, mock(PoliticaDeCancelacion.class));
 
-        sistema.crearReserva(FormaDePago.CREDITO, LocalDate.now(), LocalDate.now().plusDays(5), alquiler1, noAdmin);
+		alquiler1.agregarFormaDePago(FormaDePago.CREDITO);
 
-        double tasaOcupacion = sistema.tasaDeOcupacion(admin);
+		sistema.crearReserva(FormaDePago.CREDITO, LocalDate.now(), LocalDate.now().plusDays(5), alquiler1, noAdmin);
 
-        assertEquals(0.5, tasaOcupacion);
-    }
-    
-    @Test
-    public void testTasaDeOcupacionConUsuarioNoAdmin() {
-        assertThrows(PermisoDenegadoException.class, () -> sistema.tasaDeOcupacion(noAdmin));
-    }
+		double tasaOcupacion = sistema.tasaDeOcupacion(admin);
+
+		assertEquals(0.5, tasaOcupacion);
+	}
+
+	@Test
+	public void testTasaDeOcupacionConUsuarioNoAdmin() {
+		assertThrows(PermisoDenegadoException.class, () -> sistema.tasaDeOcupacion(noAdmin));
+	}
 }

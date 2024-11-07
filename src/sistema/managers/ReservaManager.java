@@ -6,6 +6,7 @@ import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.NoExistenteException;
+import sistema.exceptions.ReservaNoCancelableException;
 import sistema.filtro.FiltroReserva;
 import sistema.filtro.FiltroSimple;
 import sistema.filtro.FiltroTodasReservas;
@@ -20,9 +21,10 @@ import java.util.List;
 public class ReservaManager {
 	private List<Reserva> reservas;
 	private NotificadorManager noti;
+
 	public ReservaManager() {
 		this.reservas = new ArrayList<>();
-		
+
 	}
 
 	private void validarReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler)
@@ -42,7 +44,8 @@ public class ReservaManager {
 
 		this.validarReserva(formaDePago, entrada, salida, alquiler);
 
-		Reserva nuevaReserva = new Reserva(formaDePago, entrada, salida, alquiler, usuario);
+		double precioTotal = alquiler.calcularPrecioPeriodo(entrada, salida);
+		Reserva nuevaReserva = new Reserva(formaDePago, entrada, salida, alquiler, usuario, precioTotal);
 
 		if (this.hayReservaExistenteParaElPeriodoDado(alquiler, nuevaReserva)) {
 			alquiler.encolarReserva(nuevaReserva);
@@ -69,10 +72,10 @@ public class ReservaManager {
 	}
 
 	public void cancelarReserva(Reserva reserva, NotificadorManager notificadorManager)
-			throws NoExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+			throws NoExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
 		this.validarReservaExiste(reserva);
 		reserva.cancelar(this, notificadorManager);
-		
+
 	}
 	
 	public void desencolarReserva(Alquiler alquiler) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
@@ -89,9 +92,7 @@ public class ReservaManager {
 
 	//r.getEstado() != EstadoDeReserva.CANCELADA && r.getEstado() != EstadoDeReserva.FINALIZADA
 	public List<Reserva> getReservasActivas() {
-		List<Reserva> reservasActivas = new FiltroSimple<Reserva>(
-				r -> r.estaActiva() )
-				.filtrarLista(reservas);
+		List<Reserva> reservasActivas = new FiltroSimple<Reserva>(r -> r.estaActiva()).filtrarLista(reservas);
 		return reservasActivas;
 	}
 
@@ -100,7 +101,7 @@ public class ReservaManager {
 	}
 
 	private void validarReservaExiste(Reserva reserva) throws NoExistenteException {
-		
+
 		if (!this.getReservasActivas().contains(reserva)) {
 			throw new NoExistenteException("Reserva");
 		}
@@ -126,8 +127,7 @@ public class ReservaManager {
 
 	public void rechazarReserva(Reserva reser) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 }
