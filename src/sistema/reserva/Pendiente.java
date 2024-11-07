@@ -12,5 +12,7 @@ public class Pendiente extends EstadoReserva{
 		re.setEstado(new Rechazada());
 	}
 	
-	
+	public boolean estaAceptada() {
+		return true;
+	}
 }

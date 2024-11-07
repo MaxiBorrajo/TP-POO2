@@ -16,14 +16,14 @@ import sistema.reserva.Reserva;
 
 public class PropietarioTest {
 	private Propietario propietario;
-	private Usuario mockRanker;
+	private Inquilino mockRanker;
 	private Reserva mockReserva;
 	private Inmueble mockInmueble;
 
 	@BeforeEach
 	void setUp() {
 		this.propietario = new Propietario("ginebra", "ginebra@gmail.com", "+5401166666666", LocalDate.now());
-		mockRanker = mock(Usuario.class);
+		mockRanker = mock(Inquilino.class);
 		mockReserva = mock(Reserva.class);
 		mockInmueble = mock(Inmueble.class);
 		Alquiler mockAlquiler = mock(Alquiler.class);
@@ -62,7 +62,7 @@ public class PropietarioTest {
 
 	@Test
 	public void testEsValoracionValidaCasoInvalido() {
-		Usuario otroRanker = mock(Usuario.class);
+		Inquilino otroRanker = mock(Inquilino.class);
 		when(mockReserva.getInquilino()).thenReturn(otroRanker);
 
 		boolean resultado = propietario.esValoracionValida(mockRanker, mockReserva);

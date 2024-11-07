@@ -11,6 +11,7 @@ import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
 import sistema.notificaciones.CancelacionNotify;
 import sistema.notificaciones.ReservaNotify;
+import sistema.usuario.Inquilino;
 import sistema.usuario.Usuario;
 
 public class Reserva {
@@ -19,7 +20,7 @@ public class Reserva {
 	private LocalDate fechaInicio;
 	private LocalDate fechaFinal;
 	private Alquiler alquiler;
-	private Usuario inquilino;
+	private Inquilino inquilino;
 	private NotificadorManager noti;
 
 	public EstadoReserva getEstado() {
@@ -27,7 +28,7 @@ public class Reserva {
 	}
 
 	public Reserva(FormaDePago formaDepago, LocalDate fechaInicio, LocalDate fechaFinal, Alquiler alquiler,
-			Usuario usuario) {
+			Inquilino usuario) {
 		this.estado = new Pendiente();
 		this.formaDepago = formaDepago;
 		this.fechaInicio = fechaInicio;
@@ -51,7 +52,7 @@ public class Reserva {
 		return fechaFinal;
 	}
 
-	public Usuario getInquilino() {
+	public Inquilino getInquilino() {
 		return this.inquilino;
 	}
 
@@ -117,7 +118,7 @@ public class Reserva {
 		// TODO Auto-generated method stub
 		noti2.notify(new CancelacionNotify(this.alquiler));
 		this.setEstado(new Cancelada());
-		this.alquiler.seCanceloREserva(this, reser);
+		this.alquiler.seCanceloReserva(this, reser);
 		
 	}
 

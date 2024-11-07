@@ -10,6 +10,7 @@ import sistema.filtro.FiltroReserva;
 import sistema.filtro.FiltroSimple;
 import sistema.filtro.FiltroTodasReservas;
 import sistema.reserva.Reserva;
+import sistema.usuario.Inquilino;
 import sistema.usuario.Usuario;
 
 import java.time.LocalDate;
@@ -37,7 +38,7 @@ public class ReservaManager {
 	}
 
 	public Reserva crearReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler,
-			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+			Inquilino usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 
 		this.validarReserva(formaDePago, entrada, salida, alquiler);
 
@@ -74,7 +75,7 @@ public class ReservaManager {
 		
 	}
 	
-	public void desencoolarReserva(Alquiler alquiler) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+	public void desencolarReserva(Alquiler alquiler) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 		// TODO Auto-generated method stub
 		Reserva reservaEncolada = alquiler.obtenerPrimeroDeReservasEncoladas();
 		this.crearReserva(reservaEncolada.getFormaDepago(), reservaEncolada.getFechaInicio(),
@@ -86,13 +87,14 @@ public class ReservaManager {
 		reserva.finalizar();
 	}
 
+	//r.getEstado() != EstadoDeReserva.CANCELADA && r.getEstado() != EstadoDeReserva.FINALIZADA
 	public List<Reserva> getReservasActivas() {
 		List<Reserva> reservasActivas = new FiltroSimple<Reserva>(
 				r -> r.estaActiva() )
 				.filtrarLista(reservas);
 		return reservasActivas;
 	}
-//r.getEstado() != EstadoDeReserva.CANCELADA && r.getEstado() != EstadoDeReserva.FINALIZADA
+
 	public List<Reserva> getReservas() {
 		return this.reservas;
 	}

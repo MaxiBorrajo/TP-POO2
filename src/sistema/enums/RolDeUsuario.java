@@ -1,5 +1,5 @@
 package sistema.enums;
 
 public enum RolDeUsuario {
-		PROPIETARIO, INQUILINO
+		PROPIETARIO, INQUILINO, ADMINISTRADOR
 }

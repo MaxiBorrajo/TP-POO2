@@ -218,7 +218,7 @@ public class ReservaManagerTest {
 
 	@Test
 	public void testTodasLasCiudades() {
-		Usuario usuario = mock(Usuario.class);
+		Inquilino usuario = mock(Inquilino.class);
 		Reserva reserva1 = mock(Reserva.class);
 		Reserva reserva2 = mock(Reserva.class);
 

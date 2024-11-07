@@ -12,7 +12,7 @@ import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
 
-public abstract class Usuario extends Rankeable {
+public abstract class Usuario extends Rankeable{
 	private String nombre;
 	private String email;
 	private String telefono;

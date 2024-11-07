@@ -185,12 +185,12 @@ public class Alquiler {
 
 	
 
-	public void seCanceloREserva(Reserva reserva, ReservaManager reser) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+	public void seCanceloReserva(Reserva reserva, ReservaManager reser) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 		// TODO Auto-generated method stub
 		//estrategia de cancelacion
 		//ver si hay que desencolar
 		if(this.hayReservasEncoladas()) {
-			reser.desencoolarReserva(this);
+			reser.desencolarReserva(this);
 		}else {
 			this.desocuparPeriodosDe(reserva.getFechaInicio(), reserva.getFechaFinal());
 		}

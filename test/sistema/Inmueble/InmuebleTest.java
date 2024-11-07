@@ -11,6 +11,7 @@ import sistema.reserva.Reserva;
 import sistema.alquiler.Alquiler;
 import sistema.enums.customEnums.Servicio;
 import sistema.enums.customEnums.TipoDeInmueble;
+import sistema.usuario.Inquilino;
 import sistema.usuario.Propietario;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 public class InmuebleTest {
 
     private Inmueble inmueble;
-    private Usuario mockRanker;
+    private Inquilino mockRanker;
     private Reserva mockReserva;
     private Alquiler mockAlquiler;
 
@@ -28,7 +29,7 @@ public class InmuebleTest {
         Ubicacion ubicacion = mock(Ubicacion.class);
         inmueble = new Inmueble(100, new TipoDeInmueble("Casa"), ubicacion, List.of(new Servicio("Limpieza")), 4, propietario);
 
-        mockRanker = mock(Usuario.class);
+        mockRanker = mock(Inquilino.class);
         mockReserva = mock(Reserva.class);
         mockAlquiler = mock(Alquiler.class);
 
@@ -48,7 +49,7 @@ public class InmuebleTest {
 
     @Test
     public void testEsValoracionValidaCasoInvalido() {
-        Usuario otroInquilino = mock(Usuario.class);
+    	Inquilino otroInquilino = mock(Inquilino.class);
         when(mockReserva.getInquilino()).thenReturn(otroInquilino);
         
         boolean resultado = inmueble.esValoracionValida(mockRanker, mockReserva);

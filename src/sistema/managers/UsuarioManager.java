@@ -19,6 +19,10 @@ public class UsuarioManager {
 		this.usuarios = new ArrayList<Usuario>();
 	}
 
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
 	public Usuario registrarUsuario(String nombreCompleto, String email, String telefono, RolDeUsuario rol)
 			throws Exception {
 		if (this.estaRegistrado(email)) {

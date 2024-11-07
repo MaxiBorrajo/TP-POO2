@@ -1,14 +1,20 @@
 package sistema;
 
 import sistema.managers.*;
+import sistema.podio.Podio;
 import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
+import sistema.usuario.Inquilino;
 import sistema.usuario.Usuario;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import sistema.Inmueble.Inmueble;
 import sistema.Inmueble.Visualizacion;
@@ -46,7 +52,6 @@ public class Sistema {
 		this.reservaManager = new ReservaManager();
 		this.customEnumManager = new CustomEnumManager();
 		this.usuarioManager = new UsuarioManager();
-		
 	}
 	// usuarios
 
@@ -66,18 +71,18 @@ public class Sistema {
 	public List<Alquiler> buscarAlquiler(FiltroDeSistema filtro) {
 		return this.alquilerManager.filtrarAlquiler(filtro);
 	}
-	
-	public void aceptarReserva(Reserva reser) {
-		this.reservaManager.aceptarReserva(reser, this.notificadorManager);
+
+	public void aceptarReserva(Reserva reserva) {
+		this.reservaManager.aceptarReserva(reserva, this.notificadorManager);
 	}
 
-	public void rechazarReserva(Reserva reser) {
-		this.reservaManager.rechazarReserva(reser);
+	public void rechazarReserva(Reserva reserva) {
+		this.reservaManager.rechazarReserva(reserva);
 	}
-	
+
 	// Reservas
 	public Reserva crearReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler,
-			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException,
+			Inquilino usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException,
 			UsuarioNoRegistradoException, AlquilerNoRegistradoException, PermisoDenegadoException {
 		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.INQUILINO);
 		this.alquilerManager.validarAlquiler(alquiler);
@@ -109,9 +114,66 @@ public class Sistema {
 //	public List<Reserva> verReservasFuturas
 //	public List<Reserva> verCiudadesDeReservas
 
-	// Custom enums
-	public CustomEnum crearCustomEnum(String nombre, CustomEnumType tipo) throws CustomEnumExistenteException {
+	private CustomEnum crearCustomEnum(String nombre, CustomEnumType tipo, Usuario admin)
+			throws CustomEnumExistenteException, UsuarioNoRegistradoException, PermisoDenegadoException {
+		this.usuarioManager.validarUsuario(admin, RolDeUsuario.ADMINISTRADOR);
 		return this.customEnumManager.createCustomEnum(nombre, tipo);
+	}
+
+	public void darAltaCategoria(String nombre, Usuario admin)
+			throws CustomEnumExistenteException, UsuarioNoRegistradoException, PermisoDenegadoException {
+		this.crearCustomEnum(nombre, CustomEnumType.CATEGORIA, admin);
+	}
+
+	public void darAltaTipoInmueble(String nombre, Usuario admin)
+			throws CustomEnumExistenteException, UsuarioNoRegistradoException, PermisoDenegadoException {
+		this.crearCustomEnum(nombre, CustomEnumType.TIPODEINMUEBLE, admin);
+	}
+
+	public void darAltaServicio(String nombre, Usuario admin)
+			throws CustomEnumExistenteException, UsuarioNoRegistradoException, PermisoDenegadoException {
+		this.crearCustomEnum(nombre, CustomEnumType.SERVICIO, admin);
+	}
+
+	public List<Podio> obtenerTop10InquilinosQueMasAlquilan(Usuario admin)
+			throws UsuarioNoRegistradoException, PermisoDenegadoException {
+		validarAdmin(admin);
+		return this.reservaManager.getReservas().stream()
+				.collect(Collectors.groupingBy(Reserva::getInquilino, Collectors.counting())).entrySet().stream()
+				.map(entry -> new Podio(entry.getKey(), entry.getValue()))
+				.sorted((a, b) -> Long.compare(b.getCantidadReservas(), a.getCantidadReservas())).limit(10)
+				.collect(Collectors.toList());
+	}
+
+	public List<Inmueble> obtenerTodosLosInmueblesLibres(Usuario admin)
+			throws UsuarioNoRegistradoException, PermisoDenegadoException {
+		validarAdmin(admin);
+
+		List<Inmueble> inmueblesOcupados = this.reservaManager.getReservasActivas().stream()
+				.map(r -> r.getAlquiler().getInmueble()).toList();
+
+		List<Inmueble> todosLosInmuebles = new ArrayList<>(
+				this.alquilerManager.getAlquileres().stream().map(a -> a.getInmueble()).toList());
+
+		todosLosInmuebles.removeAll(inmueblesOcupados);
+
+		return todosLosInmuebles;
+	}
+
+	public double tasaDeOcupacion(Usuario admin) throws UsuarioNoRegistradoException, PermisoDenegadoException {
+		validarAdmin(admin);
+
+		int inmueblesOcupadosCant = (int) this.reservaManager.getReservasActivas().stream()
+				.map(r -> r.getAlquiler().getInmueble()).distinct().count();
+
+		int todosLosInmueblesCant = (int) this.alquilerManager.getAlquileres().stream().map(a -> a.getInmueble())
+				.distinct().count();
+
+		return (double) inmueblesOcupadosCant / todosLosInmueblesCant;
+	}
+
+	private void validarAdmin(Usuario usuario) throws UsuarioNoRegistradoException, PermisoDenegadoException {
+		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.ADMINISTRADOR);
 	}
 
 }

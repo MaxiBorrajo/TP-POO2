@@ -35,7 +35,7 @@ public class Inmueble extends Rankeable {
 		this.rankingManager = new RankingManager();
 		this.vecesAlquilado = 0;
 	}
-	
+
 	public int getVecesAlquilado() {
 		return vecesAlquilado;
 	}

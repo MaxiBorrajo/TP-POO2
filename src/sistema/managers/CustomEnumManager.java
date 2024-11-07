@@ -29,22 +29,7 @@ public class CustomEnumManager {
     }
    
     public CustomEnum createCustomEnum(String nombre, CustomEnumType tipo) throws CustomEnumExistenteException {
-        CustomEnum newEnum;
-        
-        switch (tipo) {
-            case CATEGORIA:
-                newEnum = new Categoria(nombre);
-                break;
-            case TIPODEINMUEBLE:
-                newEnum = new TipoDeInmueble(nombre);
-                break;
-            case SERVICIO:
-                newEnum = new Servicio(nombre);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid CustomEnumType");
-        }
-
+        CustomEnum newEnum = tipo.crearInstancia(nombre);
         updateEnums(tipo, newEnum);
         return newEnum;
     }
