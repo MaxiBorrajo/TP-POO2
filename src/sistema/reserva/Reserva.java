@@ -36,7 +36,7 @@ public class Reserva {
 		this.fechaInicio = fechaInicio;
 		this.fechaFinal = fechaFinal;
 		this.alquiler = alquiler;
-		this.inquilino = usuario;
+		this.inquilino = (Inquilino) usuario;
 		this.precioTotal = precioTotal;
 
 		Inmueble inmuebleReservado = this.alquiler.getInmueble();

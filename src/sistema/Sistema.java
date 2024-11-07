@@ -2,11 +2,9 @@ package sistema;
 
 import sistema.managers.*;
 import sistema.podio.Podio;
-import sistema.ranking.Rankeable;
-import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
 import sistema.usuario.Inquilino;
-import sistema.reserva.politicaDeCancelacion.PoliticaDeCancelacion;
+import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.usuario.Usuario;
 
 import java.time.LocalDate;
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
 import sistema.Inmueble.Inmueble;
 import sistema.Inmueble.Visualizacion;
 import sistema.alquiler.Alquiler;
-import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Categoria;
@@ -34,12 +31,9 @@ import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.exceptions.NoExistenteException;
 import sistema.exceptions.PermisoDenegadoException;
 import sistema.exceptions.ReservaNoCancelableException;
-import sistema.exceptions.ServicioNoTerminadoException;
 import sistema.exceptions.UsuarioNoRegistradoException;
-import sistema.exceptions.ValoracionInvalidaException;
 import sistema.filtro.FiltroDeSistema;
 import sistema.filtro.FiltroReserva;
-import sistema.filtro.FiltroSimple;
 
 public class Sistema {
 
