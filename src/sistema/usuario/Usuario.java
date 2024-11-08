@@ -1,5 +1,6 @@
 package sistema.usuario;
 
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,17 +13,24 @@ import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
 
-public abstract class Usuario extends Rankeable{
+public class Usuario implements Rankeable{
 	private String nombre;
 	private String email;
 	private String telefono;
-	protected RolDeUsuario rol;
+	private RolDeUsuario rol;
+	private LocalDate fechaCreacion;
 
-	public Usuario(String nombreCompleto, String email, String telefono) {
+	public Usuario(String nombreCompleto, String email, String telefono, RolDeUsuario rol) {
 		super();
 		this.nombre = nombreCompleto;
 		this.email = email;
 		this.telefono = telefono;
+		this.rol = rol;
+		this.fechaCreacion = LocalDate.now();
+	}
+
+	public LocalDate getFechaCreacion() {
+		return fechaCreacion;
 	}
 
 	public String getNombre() {
@@ -49,5 +57,15 @@ public abstract class Usuario extends Rankeable{
 
 	public RolDeUsuario getRol() {
 		return this.rol;
+	}
+
+	/*
+	 * Si soy inquilino solo me valora un propietari
+	 * Si soy propietario solo me valora un inquilino
+	 * */
+	@Override
+	public boolean mePuedeValorar(Usuario usuario) {
+		return (usuario.getRol().equals(RolDeUsuario.INQUILINO) && this.getRol().equals(RolDeUsuario.PROPIETARIO)) ||
+				(usuario.getRol().equals(RolDeUsuario.PROPIETARIO) && this.getRol().equals(RolDeUsuario.INQUILINO));
 	}
 }

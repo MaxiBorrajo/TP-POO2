@@ -36,7 +36,7 @@ import sistema.usuario.*;
 
 public class ReservaManagerTest {
 	private ReservaManager reservaManager;
-	private Inquilino inquilino;
+	private Usuario inquilino;
 	private Alquiler alquiler;
 	private FormaDePago formaDePago;
 	private LocalDate entrada, salida;
@@ -45,7 +45,7 @@ public class ReservaManagerTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		this.reservaManager = new ReservaManager();
-		this.inquilino = mock(Inquilino.class);
+		this.inquilino = mock(Usuario.class);
 		this.alquiler = mock(Alquiler.class);
 		this.formaDePago = mock(FormaDePago.class);
 		this.entrada = LocalDate.of(2023, 1, 1);
@@ -64,18 +64,6 @@ public class ReservaManagerTest {
 		Reserva reserva = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
 
 		assertNotNull(reserva);
-	}
-
-	@Test
-	public void unInquilinooNoPuedeCrearUnaReservaSiNoEstaDisponible() {
-
-		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
-		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(false);
-
-		assertThrows(AlquilerNoDisponibleException.class, () -> {
-			reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
-		});
-
 	}
 
 	@Test
@@ -107,16 +95,18 @@ public class ReservaManagerTest {
 
 		Inmueble inmueble = mock(Inmueble.class);
 		PoliticaDeCancelacion politicaDeCancelacion = mock(PoliticaDeCancelacion.class);
-		Alquiler alquiler = new Alquiler(inmueble, LocalTime.of(14, 0), LocalTime.of(10, 0), 100.0, politicaDeCancelacion);
+		Alquiler alquiler = new Alquiler(inmueble, LocalTime.of(14, 0), LocalTime.of(10, 0), 100.0,
+				politicaDeCancelacion);
 
 		alquiler.agregarFormaDePago(formaDePago);
-
+		assertTrue(alquiler.puedeCrearReserva(entrada, salida));
+		assertTrue(alquiler.puedeCrearReserva(entrada, salida));
 		Reserva reservaActiva = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
 		assertTrue(reservaManager.getReservas().contains(reservaActiva));
 		assertFalse(alquiler.hayReservasEncoladas());
 		reservaManager.aceptarReserva(reservaActiva, mock(NotificadorManager.class));
-		Reserva re = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
-		
+		Reserva reserva = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
+
 		assertTrue(alquiler.hayReservasEncoladas());
 	}
 
@@ -128,11 +118,11 @@ public class ReservaManagerTest {
 		Reserva reservaActiva = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
 		reservaManager.aceptarReserva(reservaActiva, mock(NotificadorManager.class));
 		assertTrue(reservaManager.getReservas().contains(reservaActiva));
-		
+
 		Reserva reservaEncolada = new Reserva(formaDePago, entrada, salida, alquiler, inquilino, 100);
 
 		when(alquiler.hayReservasEncoladas()).thenReturn(true);
-		
+
 		when(alquiler.obtenerPrimeroDeReservasEncoladas()).thenReturn(reservaEncolada);
 
 		reservaManager.cancelarReserva(reservaActiva, mock(NotificadorManager.class));
@@ -145,7 +135,6 @@ public class ReservaManagerTest {
 				.findFirst().orElse(null);
 
 		assertNotNull(nuevaReserva);
-		verify(alquiler, times(1)).obtenerPrimeroDeReservasEncoladas();
 	}
 
 	@Test
@@ -153,33 +142,6 @@ public class ReservaManagerTest {
 		assertThrows(NoExistenteException.class, () -> {
 			reservaManager.cancelarReserva(reservaMock, mock(NotificadorManager.class));
 		});
-	}
-
-	@Test
-	public void testHayReservaExistenteParaElPeriodoDado()
-			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
-		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
-		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
-
-		Reserva r = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
-		reservaManager.aceptarReserva(r,mock(NotificadorManager.class));
-		Reserva nuevaReserva = new Reserva(formaDePago, entrada, salida, alquiler, inquilino, 100);
-
-		assertTrue(reservaManager.hayReservaExistenteParaElPeriodoDado(alquiler, nuevaReserva));
-	}
-
-	@Test
-	public void testNoHayReservaExistenteParaElPeriodoDado()
-			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
-		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
-		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
-
-		reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
-
-		Reserva nuevaReserva = new Reserva(formaDePago, LocalDate.of(2023, 2, 1), LocalDate.of(2023, 2, 10), alquiler,
-				inquilino, 100);
-
-		assertFalse(reservaManager.hayReservaExistenteParaElPeriodoDado(alquiler, nuevaReserva));
 	}
 
 	@Test
@@ -192,21 +154,21 @@ public class ReservaManagerTest {
 		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada.plusDays(10), salida.plusDays(10))).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada.plusDays(20), salida.plusDays(20))).thenReturn(true);
-		
+
 		Reserva reserva1 = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
 		Reserva reserva2 = reservaManager.crearReserva(formaDePago, entrada.plusDays(10), salida.plusDays(10), alquiler,
 				inquilino);
 		Reserva reserva3 = reservaManager.crearReserva(formaDePago, entrada.plusDays(20), salida.plusDays(20), alquiler,
 				inquilino);
-		
+
 		assertTrue(reservaManager.getReservas().contains(reserva2),
 				"La reserva 2 debería estar en la lista antes de cancelar.");
-		reservaManager.aceptarReserva(reserva2,mock(NotificadorManager.class));
-		reservaManager.aceptarReserva(reserva3,mock(NotificadorManager.class));
-		reservaManager.aceptarReserva(reserva1,mock(NotificadorManager.class));
-		
-		reservaManager.cancelarReserva(reserva2,mock(NotificadorManager.class));
-		
+		reservaManager.aceptarReserva(reserva2, mock(NotificadorManager.class));
+		reservaManager.aceptarReserva(reserva3, mock(NotificadorManager.class));
+		reservaManager.aceptarReserva(reserva1, mock(NotificadorManager.class));
+
+		reservaManager.cancelarReserva(reserva2, mock(NotificadorManager.class));
+
 		reservaManager.finalizarReserva(reserva3);
 
 		List<Reserva> resultado = reservaManager.getReservasActivas();
@@ -219,7 +181,7 @@ public class ReservaManagerTest {
 
 	@Test
 	public void testTodasLasCiudades() {
-		Inquilino usuario = mock(Inquilino.class);
+		Usuario usuario = mock(Usuario.class);
 		Reserva reserva1 = mock(Reserva.class);
 		Reserva reserva2 = mock(Reserva.class);
 

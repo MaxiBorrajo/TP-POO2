@@ -15,7 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import sistema.alquiler.Alquiler;
 import sistema.filtro.FiltroDeSistema;
-import sistema.usuario.Inquilino;
 
 public class AlquilerManagerTest {
 

@@ -2,7 +2,6 @@ package sistema.reserva;
 
 import java.time.LocalDate;
 
-import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
 import sistema.enums.*;
 import sistema.exceptions.AlquilerNoDisponibleException;
@@ -12,7 +11,6 @@ import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
 import sistema.notificaciones.CancelacionNotify;
 import sistema.notificaciones.ReservaNotify;
-import sistema.usuario.Inquilino;
 import sistema.usuario.Usuario;
 
 public class Reserva {
@@ -21,7 +19,7 @@ public class Reserva {
 	private LocalDate fechaInicio;
 	private LocalDate fechaFinal;
 	private Alquiler alquiler;
-	private Inquilino inquilino;
+	private Usuario inquilino;
 	private NotificadorManager noti;
 	private double precioTotal;
 
@@ -36,11 +34,8 @@ public class Reserva {
 		this.fechaInicio = fechaInicio;
 		this.fechaFinal = fechaFinal;
 		this.alquiler = alquiler;
-		this.inquilino = (Inquilino) usuario;
+		this.inquilino = usuario;
 		this.precioTotal = precioTotal;
-
-		Inmueble inmuebleReservado = this.alquiler.getInmueble();
-		inmuebleReservado.setVecesAlquilado(inmuebleReservado.getVecesAlquilado() + 1);
 	}
 
 	public LocalDate getFechaInicio() {
@@ -55,7 +50,7 @@ public class Reserva {
 		return fechaFinal;
 	}
 
-	public Inquilino getInquilino() {
+	public Usuario getInquilino() {
 		return this.inquilino;
 	}
 

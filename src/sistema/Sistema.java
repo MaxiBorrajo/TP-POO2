@@ -2,14 +2,15 @@ package sistema;
 
 import sistema.managers.*;
 import sistema.podio.Podio;
+import sistema.ranking.Rankeable;
+import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
-import sistema.usuario.Inquilino;
-import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.usuario.Usuario;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import sistema.Inmueble.Inmueble;
 import sistema.Inmueble.Visualizacion;
 import sistema.alquiler.Alquiler;
+import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Categoria;
@@ -31,7 +33,9 @@ import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.exceptions.NoExistenteException;
 import sistema.exceptions.PermisoDenegadoException;
 import sistema.exceptions.ReservaNoCancelableException;
+import sistema.exceptions.ServicioNoTerminadoException;
 import sistema.exceptions.UsuarioNoRegistradoException;
+import sistema.exceptions.ValoracionInvalidaException;
 import sistema.filtro.FiltroDeSistema;
 import sistema.filtro.FiltroReserva;
 
@@ -42,15 +46,46 @@ public class Sistema {
 	private CustomEnumManager customEnumManager;
 	private UsuarioManager usuarioManager;
 	private NotificadorManager notificadorManager;
-
+	private RankingManager rankingManager;
+	
 	public Sistema() {
 		this.alquilerManager = new AlquilerManager();
 		this.notificadorManager = new NotificadorManager();
 		this.reservaManager = new ReservaManager();
 		this.customEnumManager = new CustomEnumManager();
 		this.usuarioManager = new UsuarioManager();
+		this.rankingManager = new RankingManager();
 	}
-	// usuarios
+
+	
+	public List<Ranking> getValoraciones(Rankeable rankeable) {
+		// TODO Auto-generated method stub
+		return this.rankingManager.getValoraciones(rankeable);
+	}
+
+
+	public List<Ranking> getValoracionesPorCategoria(Rankeable rankeable, Categoria categoria) {
+	    return this.rankingManager.getValoracionesPorCategoria(rankeable, categoria);
+	}
+
+	public double getPromedioValoraciones(Rankeable rankeable) {
+	    return this.rankingManager.getPromedioValoraciones(rankeable);
+	}
+
+	public double getPromedioValoracionesPorCategoria(Rankeable rankeable, Categoria categoria) {
+	    return this.rankingManager.getPromedioValoracionesPorCategoria(rankeable, categoria);
+	}
+
+
+	public void añadirValoracion(Ranking valoracion) throws ServicioNoTerminadoException, ValoracionInvalidaException {
+		this.rankingManager.añadirValoracion(valoracion);
+	}
+	
+
+	public List<String> getComentarios(Rankeable rankeable) {
+		// TODO Auto-generated method stub
+		return this.rankingManager.getComentarios(rankeable);
+	}
 
 	public Usuario registrarUsuario(String nombreCompleto, String email, String telefono, RolDeUsuario rol)
 			throws Exception {
@@ -61,6 +96,7 @@ public class Sistema {
 	public Alquiler publicarAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault,
 			Usuario usuario, PoliticaDeCancelacion politicaDeCancelacion)
 			throws InmuebleConAlquilerYaExiste, UsuarioNoRegistradoException, PermisoDenegadoException {
+		
 		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.PROPIETARIO);
 		return this.alquilerManager.darDeAltaAlquiler(inmueble, checkIn, checkOut, precioDefault, politicaDeCancelacion);
 	}
@@ -79,15 +115,15 @@ public class Sistema {
 
 	// Reservas
 	public Reserva crearReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler,
-			Inquilino usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException,
+			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException,
 			UsuarioNoRegistradoException, AlquilerNoRegistradoException, PermisoDenegadoException {
+		
 		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.INQUILINO);
 		this.alquilerManager.validarAlquiler(alquiler);
 		return this.reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, usuario);
 	}
 
-	public void cancelarReserva(Reserva reserva) throws UsuarioNoRegistradoException, PermisoDenegadoException,
-			NoExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
+	public void cancelarReserva(Reserva reserva) throws UsuarioNoRegistradoException, PermisoDenegadoException, NoExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException{
 		this.usuarioManager.validarUsuario(reserva.getInquilino(), RolDeUsuario.INQUILINO);
 		this.reservaManager.cancelarReserva(reserva, this.notificadorManager);
 	}
@@ -101,7 +137,7 @@ public class Sistema {
 	}
 
 	public Visualizacion verVisualizacionDeInmueble(Inmueble inmueble) {
-		return new Visualizacion(inmueble);
+		return new Visualizacion(inmueble, this);
 	}
 
 	// public List<Reserva> verTodasLasReservas(Usuario usuario){
@@ -171,6 +207,12 @@ public class Sistema {
 
 	private void validarAdmin(Usuario usuario) throws UsuarioNoRegistradoException, PermisoDenegadoException {
 		this.usuarioManager.validarUsuario(usuario, RolDeUsuario.ADMINISTRADOR);
+	}
+
+
+	public List<Inmueble> getInmuebles(Usuario propietario) {
+		// TODO Auto-generated method stub
+		return this.alquilerManager.getAlquileres(propietario).stream().map(a -> a.getInmueble()).toList();
 	}
 
 }

@@ -11,6 +11,7 @@ import sistema.filtro.FiltroSimple;
 import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
+import sistema.usuario.Usuario;
 
 public class RankingManager {
 	private List<Ranking> rankings;
@@ -19,12 +20,13 @@ public class RankingManager {
 		this.rankings = new ArrayList<Ranking>();
 	}
 
-	public List<Ranking> getValoraciones() {
-		return this.rankings;
+	public List<Ranking> getValoraciones(Rankeable rankeable) {
+		return new FiltroSimple<Ranking>(r -> r.getRankeable().equals(rankeable)).filtrarLista(rankings);
 	};
 
-	public List<Ranking> getValoracionesPorCategoria(Categoria categoria) {
-		return new FiltroSimple<Ranking>(r -> r.getCategoria().equals(categoria)).filtrarLista(this.getValoraciones());
+	public List<Ranking> getValoracionesPorCategoria(Rankeable rankeable, Categoria categoria) {
+		return new FiltroSimple<Ranking>(r -> r.getCategoria().equals(categoria))
+				.filtrarLista(this.getValoraciones(rankeable));
 	};
 
 	private double getPromedioDeRankings(List<Ranking> rankings) {
@@ -33,19 +35,32 @@ public class RankingManager {
 		return sumaTotal / cantidadRankings;
 	}
 
-	public double getPromedioValoraciones() {
-		return this.getPromedioDeRankings(this.getValoraciones());
+	public double getPromedioValoraciones(Rankeable rankeable) {
+		return this.getPromedioDeRankings(this.getValoraciones(rankeable));
 	}
 
-	public double getPromedioValoracionesPorCategoria(Categoria categoria) {
-		return this.getPromedioDeRankings(this.getValoracionesPorCategoria(categoria));
+	public double getPromedioValoracionesPorCategoria(Rankeable rankeable, Categoria categoria) {
+		return this.getPromedioDeRankings(this.getValoracionesPorCategoria(rankeable, categoria));
 	}
 
-	public List<String> getComentarios() {
-		return this.getValoraciones().stream().map(v -> v.getComentario()).toList();
+	public List<String> getComentarios(Rankeable rankeable) {
+		return this.getValoraciones(rankeable).stream().map(v -> v.getComentario()).toList();
 	}
 
-	public void añadirValoracion(Ranking valoracion) {
+	public void validarPuedeAñadirValoracion(Ranking valoracion)
+			throws ServicioNoTerminadoException, ValoracionInvalidaException {
+		if (!valoracion.getReserva().fechaPosteriorAFinal(LocalDate.now())) {
+			throw new ServicioNoTerminadoException();
+		}
+
+		if (!valoracion.getRankeable().mePuedeValorar(valoracion.getRanker())) {
+			throw new ValoracionInvalidaException();
+		}
+	};
+
+	public void añadirValoracion(Ranking valoracion) throws ServicioNoTerminadoException, ValoracionInvalidaException {
+		// TODO Auto-generated method stub
+		this.validarPuedeAñadirValoracion(valoracion);
 		this.rankings.add(valoracion);
 	}
 

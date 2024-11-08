@@ -14,23 +14,26 @@ import sistema.Inmueble.Visualizacion;
 import sistema.alquiler.Alquiler;
 import sistema.enums.customEnums.Categoria;
 import sistema.ranking.Ranking;
-import sistema.usuario.Propietario;
+import sistema.usuario.Usuario;
+import sistema.Sistema;
 import sistema.Inmueble.Inmueble;
 
 public class VisualizacionTest {
     
     private Visualizacion visualizacion;
     private Inmueble inmuebleMock;
-    private Propietario propietarioMock;
+    private Usuario propietarioMock;
+    private Sistema sistemaMock;
 
     @BeforeEach
     public void setUp() {
         inmuebleMock = mock(Inmueble.class);
-        propietarioMock = mock(Propietario.class);
+        propietarioMock = mock(Usuario.class);
+        sistemaMock = mock(Sistema.class);
 
         when(inmuebleMock.getPropietario()).thenReturn(propietarioMock);
 
-        visualizacion = new Visualizacion(inmuebleMock);
+        visualizacion = new Visualizacion(inmuebleMock, sistemaMock);
     }
 
     @Test
@@ -46,7 +49,7 @@ public class VisualizacionTest {
     @Test
     public void testGetComentarios() {
         List<String> comentarios = Arrays.asList("Buen lugar", "Mal mantenimiento");
-        when(inmuebleMock.getComentarios()).thenReturn(comentarios);
+        when(sistemaMock.getComentarios(inmuebleMock)).thenReturn(comentarios);
         
         assertEquals(comentarios, visualizacion.getComentarios());
     }
@@ -56,7 +59,7 @@ public class VisualizacionTest {
         Categoria categoriaMock = new Categoria("Limpieza");
         List<Ranking> rankings = Arrays.asList(mock(Ranking.class), mock(Ranking.class));
         
-        when(inmuebleMock.getValoracionesPorCategoria(categoriaMock)).thenReturn(rankings);
+        when(sistemaMock.getValoracionesPorCategoria(inmuebleMock, categoriaMock)).thenReturn(rankings);
         
         assertEquals(rankings, visualizacion.getPuntajesEnCategoria(categoriaMock));
     }
@@ -65,21 +68,21 @@ public class VisualizacionTest {
     public void testGetPuntajesDePropietario() {
         List<Ranking> puntajesPropietario = Arrays.asList(mock(Ranking.class), mock(Ranking.class));
         
-        when(propietarioMock.getValoraciones()).thenReturn(puntajesPropietario);
+        when(sistemaMock.getValoraciones(propietarioMock)).thenReturn(puntajesPropietario);
         
         assertEquals(puntajesPropietario, visualizacion.getPuntajesDePropietario());
     }
 
     @Test
     public void testGetPuntajePromedioDePropietario() { 
-        when(propietarioMock.getPromedioValoraciones()).thenReturn(4.5);
+        when(sistemaMock.getPromedioValoraciones(propietarioMock)).thenReturn(4.5);
         
         assertEquals(4.5, visualizacion.getPuntajePromedioDePropietario());
     }
 
     @Test
     public void testGetPuntajePromedio() {
-    	when(inmuebleMock.getPromedioValoraciones()).thenReturn(4.2);
+    	when(sistemaMock.getPromedioValoraciones(inmuebleMock)).thenReturn(4.2);
         
         assertEquals(4.2, visualizacion.getPuntajePromedio());
     }
@@ -88,7 +91,7 @@ public class VisualizacionTest {
     public void testGetPuntajePromedioPorCategoria() {
         Categoria categoriaMock = new Categoria("Limpieza");
         
-        when(inmuebleMock.getPromedioValoracionesPorCategoria(categoriaMock)).thenReturn(3.8);
+        when(sistemaMock.getPromedioValoracionesPorCategoria(inmuebleMock,categoriaMock)).thenReturn(3.8);
         
         assertEquals(3.8, visualizacion.getPuntajePromedioPorCategoria(categoriaMock));
     }
@@ -117,7 +120,7 @@ public class VisualizacionTest {
         when(inmueble2.getVecesAlquilado()).thenReturn(2);
         
         List<Inmueble> inmuebles = Arrays.asList(inmueble1, inmueble2);
-        when(propietarioMock.getInmuebles()).thenReturn(inmuebles);
+        when(sistemaMock.getInmuebles(propietarioMock)).thenReturn(inmuebles);
         
         assertEquals(5, visualizacion.getVecesPropietarioAlquiloInmuebles());
     }
@@ -131,7 +134,7 @@ public class VisualizacionTest {
         when(inmueble2.getVecesAlquilado()).thenReturn(0);
         
         List<Inmueble> inmuebles = Arrays.asList(inmueble1, inmueble2);
-        when(propietarioMock.getInmuebles()).thenReturn(inmuebles);
+        when(sistemaMock.getInmuebles(propietarioMock)).thenReturn(inmuebles);
         
         List<Inmueble> result = visualizacion.getPropietarioInmueblesAlquilados();
         

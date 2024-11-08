@@ -1,17 +1,17 @@
 package sistema.podio;
 
-import sistema.usuario.Inquilino;
+import sistema.usuario.Usuario;
 
 public class Podio {
-    private Inquilino inquilino;
+    private Usuario inquilino;
     private long cantidadReservas;
 
-    public Podio(Inquilino inquilino, long cantidadReservas) {
+    public Podio(Usuario inquilino, long cantidadReservas) {
         this.inquilino = inquilino;
         this.cantidadReservas = cantidadReservas;
     }
 
-    public Inquilino getInquilino() {
+    public Usuario getInquilino() {
         return inquilino;
     }
 

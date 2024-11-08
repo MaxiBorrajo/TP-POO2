@@ -1,6 +1,5 @@
 package sistema.managers;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +7,6 @@ import sistema.enums.RolDeUsuario;
 import sistema.exceptions.PermisoDenegadoException;
 import sistema.exceptions.UsuarioExistenteException;
 import sistema.exceptions.UsuarioNoRegistradoException;
-import sistema.usuario.Inquilino;
-import sistema.usuario.Propietario;
 import sistema.usuario.Usuario;
 
 public class UsuarioManager {
@@ -28,13 +25,7 @@ public class UsuarioManager {
 		if (this.estaRegistrado(email)) {
 			throw new UsuarioExistenteException();
 		} else {
-			Usuario usuario;
-			if (rol == RolDeUsuario.INQUILINO) {
-				usuario = new Inquilino(nombreCompleto, email, telefono);
-			} else {
-				usuario = new Propietario(nombreCompleto, email, telefono, LocalDate.now());
-
-			}
+			Usuario usuario = new Usuario(nombreCompleto, email, telefono, rol);
 
 			this.usuarios.add(usuario);
 			return usuario;
@@ -51,9 +42,11 @@ public class UsuarioManager {
 
 	public void validarUsuario(Usuario usuario, RolDeUsuario rol)
 			throws UsuarioNoRegistradoException, PermisoDenegadoException {
+
 		if (!this.estaRegistrado(usuario.getEmail())) {
 			throw new UsuarioNoRegistradoException();
 		}
+
 		if (usuario.getRol() != rol) {
 			throw new PermisoDenegadoException();
 		}

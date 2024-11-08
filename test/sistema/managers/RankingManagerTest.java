@@ -1,58 +1,103 @@
 package sistema.managers;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import sistema.Inmueble.Inmueble;
 import sistema.enums.customEnums.Categoria;
 import sistema.exceptions.RangoValoracionInvalidoException;
+import sistema.exceptions.ServicioNoTerminadoException;
+import sistema.exceptions.ValoracionInvalidaException;
+import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
+import sistema.reserva.Reserva;
+import sistema.usuario.Usuario;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class RankingManagerTest {
-    private RankingManager rankingManager;
+	private RankingManager rankingManager;
+	private Usuario usuario;
+	private Rankeable rankeable;
+	private Reserva reserva;
 
-    @BeforeEach
-    public void setUp() {
-        rankingManager = new RankingManager();
-    }
+	@BeforeEach
+	public void setUp() {
+		rankingManager = new RankingManager();
+		usuario = mock(Usuario.class);
+		rankeable = mock(Inmueble.class);
+		reserva = mock(Reserva.class);
+		
+		when(reserva.fechaPosteriorAFinal(any(LocalDate.class))).thenReturn(true);
+		when(rankeable.mePuedeValorar(usuario)).thenReturn(true);
+	}
 
-    @Test
-    public void testAñadirValoracion() throws RangoValoracionInvalidoException {
-        Ranking ranking = new Ranking(4, new Categoria("Servicio"), "Muy buen servicio");
-        rankingManager.añadirValoracion(ranking);
-        assertEquals(1, rankingManager.getValoraciones().size());
-    }
+	@Test
+	public void testAñadirValoracion()
+			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+		Ranking ranking = new Ranking(4, new Categoria("Servicio"), "Muy buen servicio", reserva, rankeable, usuario);
+		rankingManager.añadirValoracion(ranking);
+		assertEquals(1, rankingManager.getValoraciones(rankeable).size());
+	}
+	
+	@Test
+	public void testNoSePuedeAñadirValoracionPorPermisoInvalido() throws RangoValoracionInvalidoException {
+	    when(rankeable.mePuedeValorar(usuario)).thenReturn(false);
 
-    @Test
-    public void testGetValoracionesPorCategoria() throws RangoValoracionInvalidoException {
-        rankingManager.añadirValoracion(new Ranking(5, new Categoria("Limpieza"), "Limpio y ordenado"));
-        rankingManager.añadirValoracion(new Ranking(3, new Categoria("Servicio"), "Servicio promedio"));
-        rankingManager.añadirValoracion(new Ranking(1, new Categoria("Limpieza"), "Mugroso"));
-        assertEquals(2, rankingManager.getValoracionesPorCategoria(new Categoria("Limpieza")).size());
-    }
+	    Ranking ranking = new Ranking(4, new Categoria("Servicio"), "Muy buen servicio", reserva, rankeable, usuario);
 
-    @Test
-    public void testCalcularPromedioValoraciones() throws RangoValoracionInvalidoException {
-        rankingManager.añadirValoracion(new Ranking(1, new Categoria("Limpieza"), "Limpio y ordenado"));
-        rankingManager.añadirValoracion(new Ranking(3, new Categoria("Servicio"), "Servicio promedio"));
-        assertEquals(2.0, rankingManager.getPromedioValoraciones());
-    }
+	    assertThrows(ValoracionInvalidaException.class, () -> rankingManager.añadirValoracion(ranking));
+	}
 
-    @Test
-    public void testCalcularPromedioPorCategoria() throws RangoValoracionInvalidoException {
-        rankingManager.añadirValoracion(new Ranking(5, new Categoria("Limpieza"), "Excelente limpieza"));
-        rankingManager.añadirValoracion(new Ranking(4, new Categoria("Limpieza"), "Buena limpieza"));
-        assertEquals(4.5, rankingManager.getPromedioValoracionesPorCategoria(new Categoria("Limpieza")));
-    }
 
-    @Test
-    public void testGetComentarios() throws RangoValoracionInvalidoException {
-        rankingManager.añadirValoracion(new Ranking(5, new Categoria("Limpieza"), "Muy limpio"));
-        rankingManager.añadirValoracion(new Ranking(4, new Categoria("Servicio"), "Buen servicio"));
-        List<String> comentarios = rankingManager.getComentarios();
-        assertEquals(2, comentarios.size());
-        assertTrue(comentarios.contains("Muy limpio"));
-        assertTrue(comentarios.contains("Buen servicio"));
-    }
+	@Test
+	public void testGetValoracionesPorCategoria()
+			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+		rankingManager.añadirValoracion(
+				new Ranking(5, new Categoria("Limpieza"), "Limpio y ordenado", reserva, rankeable, usuario));
+		rankingManager.añadirValoracion(
+				new Ranking(3, new Categoria("Servicio"), "Servicio promedio", reserva, rankeable, usuario));
+		rankingManager
+				.añadirValoracion(new Ranking(1, new Categoria("Limpieza"), "Mugroso", reserva, rankeable, usuario));
+		assertEquals(2, rankingManager.getValoracionesPorCategoria(rankeable, new Categoria("Limpieza")).size());
+	}
+
+	@Test
+	public void testCalcularPromedioValoraciones()
+			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+		rankingManager.añadirValoracion(
+				new Ranking(1, new Categoria("Limpieza"), "Limpio y ordenado", reserva, rankeable, usuario));
+		rankingManager.añadirValoracion(
+				new Ranking(3, new Categoria("Servicio"), "Servicio promedio", reserva, rankeable, usuario));
+		assertEquals(2.0, rankingManager.getPromedioValoraciones(rankeable));
+	}
+
+	@Test
+	public void testCalcularPromedioPorCategoria()
+			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+		rankingManager.añadirValoracion(
+				new Ranking(5, new Categoria("Limpieza"), "Excelente limpieza", reserva, rankeable, usuario));
+		rankingManager.añadirValoracion(
+				new Ranking(4, new Categoria("Limpieza"), "Buena limpieza", reserva, rankeable, usuario));
+		assertEquals(4.5, rankingManager.getPromedioValoracionesPorCategoria(rankeable, new Categoria("Limpieza")));
+	}
+
+	@Test
+	public void testGetComentarios()
+			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+		rankingManager
+				.añadirValoracion(new Ranking(5, new Categoria("Limpieza"), "Muy limpio", reserva, rankeable, usuario));
+		rankingManager.añadirValoracion(
+				new Ranking(4, new Categoria("Servicio"), "Buen servicio", reserva, rankeable, usuario));
+		List<String> comentarios = rankingManager.getComentarios(rankeable);
+		assertEquals(2, comentarios.size());
+		assertTrue(comentarios.contains("Muy limpio"));
+		assertTrue(comentarios.contains("Buen servicio"));
+	}
 }

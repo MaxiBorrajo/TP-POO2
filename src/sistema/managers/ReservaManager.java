@@ -1,7 +1,6 @@
 package sistema.managers;
 
 import sistema.alquiler.Alquiler;
-import sistema.enums.EstadoDeReserva;
 import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
@@ -11,7 +10,6 @@ import sistema.filtro.FiltroReserva;
 import sistema.filtro.FiltroSimple;
 import sistema.filtro.FiltroTodasReservas;
 import sistema.reserva.Reserva;
-import sistema.usuario.Inquilino;
 import sistema.usuario.Usuario;
 
 import java.time.LocalDate;
@@ -33,21 +31,17 @@ public class ReservaManager {
 			throw new FormaDePagoNoAceptadaException("Este alquiler no acepta esta forma de pago");
 		}
 
-		if (!alquiler.puedeCrearReserva(entrada, salida)) {
-			throw new AlquilerNoDisponibleException("Alquiler no disponible para las fechas seleccionadas");
-		}
-
 	}
 
 	public Reserva crearReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler,
-			Inquilino usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+			Usuario usuario) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 
 		this.validarReserva(formaDePago, entrada, salida, alquiler);
 
 		double precioTotal = alquiler.calcularPrecioPeriodo(entrada, salida);
 		Reserva nuevaReserva = new Reserva(formaDePago, entrada, salida, alquiler, usuario, precioTotal);
 
-		if (this.hayReservaExistenteParaElPeriodoDado(alquiler, nuevaReserva)) {
+		if (!alquiler.puedeCrearReserva(entrada, salida)) {
 			alquiler.encolarReserva(nuevaReserva);
 		} else {
 			this.reservas.add(nuevaReserva);
@@ -55,20 +49,6 @@ public class ReservaManager {
 
 		return nuevaReserva;
 
-	}
-
-	boolean hayReservaExistenteParaElPeriodoDado(Alquiler alquiler, Reserva reservaDeAlquiler) {
-		for (Reserva reserva : this.getReservasActivas()) {
-			if (reserva.getAlquiler().equals(alquiler) && fechasSeSolapan(reserva.getFechaInicio(),
-					reserva.getFechaFinal(), reservaDeAlquiler.getFechaInicio(), reservaDeAlquiler.getFechaFinal())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean fechasSeSolapan(LocalDate inicio1, LocalDate fin1, LocalDate inicio2, LocalDate fin2) {
-		return !(fin1.isBefore(inicio2) || fin2.isBefore(inicio1));
 	}
 
 	public void cancelarReserva(Reserva reserva, NotificadorManager notificadorManager)

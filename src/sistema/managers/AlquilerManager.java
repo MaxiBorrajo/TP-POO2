@@ -10,7 +10,8 @@ import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.exceptions.AlquilerNoRegistradoException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.filtro.FiltroDeSistema;
-import sistema.usuario.Propietario;
+import sistema.filtro.FiltroSimple;
+import sistema.usuario.Usuario;
 
 public class AlquilerManager {
 	private List<Alquiler> alquileres;
@@ -52,6 +53,12 @@ public class AlquilerManager {
 
 	public List<Alquiler> filtrarAlquiler(FiltroDeSistema filtro) {
 		return filtro.filtrarLista(this.alquileres);
+	}
+
+	public List<Alquiler> getAlquileres(Usuario propietario) {
+		// TODO Auto-generated method stub
+		return new FiltroSimple<Alquiler>(a -> a.getInmueble().getPropietario().equals(propietario))
+				.filtrarLista(alquileres);
 	}
 
 //	

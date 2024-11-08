@@ -4,49 +4,52 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
+import sistema.Sistema;
 import sistema.alquiler.Alquiler;
 import sistema.enums.customEnums.Categoria;
 import sistema.filtro.FiltroSimple;
 import sistema.ranking.Ranking;
-import sistema.usuario.Propietario;
+import sistema.usuario.Usuario;
 
 public class Visualizacion {
 	Inmueble inmueble;
+	Sistema sistema;
 
-	public Visualizacion(Inmueble inmueble) {
+	public Visualizacion(Inmueble inmueble, Sistema sistema) {
 		this.inmueble = inmueble;
+		this.sistema = sistema;
 	}
 
 	public Inmueble getInmueble() {
 		return this.inmueble;
 	}
 
-	public Propietario getPropietario() {
+	public Usuario getPropietario() {
 		return this.getInmueble().getPropietario();
 	}
 
 	public List<String> getComentarios() {
-		return this.getInmueble().getComentarios();
+		return this.sistema.getComentarios(this.getInmueble());
 	}
 
 	public List<Ranking> getPuntajesEnCategoria(Categoria categoria) {
-		return this.getInmueble().getValoracionesPorCategoria(categoria);
+		return this.sistema.getValoracionesPorCategoria(this.getInmueble(), categoria);
 	}
 
 	public List<Ranking> getPuntajesDePropietario() {
-		return this.getPropietario().getValoraciones();
+		return this.sistema.getValoraciones(getPropietario());
 	}
 
 	public double getPuntajePromedioDePropietario() {
-		return this.getPropietario().getPromedioValoraciones();
+		return this.sistema.getPromedioValoraciones(getPropietario());
 	}
 
 	public double getPuntajePromedio() {
-		return this.getInmueble().getPromedioValoraciones();
+		return this.sistema.getPromedioValoraciones(getInmueble());
 	}
 
 	public double getPuntajePromedioPorCategoria(Categoria categoria) {
-		return this.getInmueble().getPromedioValoracionesPorCategoria(categoria);
+		return this.sistema.getPromedioValoracionesPorCategoria(getInmueble(), categoria);
 	}
 
 	public String getPropietarioAntiguedad() {
@@ -65,11 +68,11 @@ public class Visualizacion {
 	}
 
 	public int getVecesPropietarioAlquiloInmuebles() {
-		return this.getPropietario().getInmuebles().stream().mapToInt(i -> i.getVecesAlquilado()).sum();
+		return this.sistema.getInmuebles(getPropietario()).stream().mapToInt(i -> i.getVecesAlquilado()).sum();
 	}
 
 	public List<Inmueble> getPropietarioInmueblesAlquilados() {
 		return new FiltroSimple<Inmueble>(i -> i.getVecesAlquilado() > 0)
-				.filtrarLista(this.getPropietario().getInmuebles());
+				.filtrarLista(this.sistema.getInmuebles(getPropietario()));
 	}
 }

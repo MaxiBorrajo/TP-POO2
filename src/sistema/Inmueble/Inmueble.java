@@ -3,15 +3,14 @@ package sistema.Inmueble;
 import java.util.ArrayList;
 import java.util.List;
 
+import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Servicio;
 import sistema.enums.customEnums.TipoDeInmueble;
-import sistema.managers.RankingManager;
+import sistema.exceptions.PermisoDenegadoException;
 import sistema.ranking.Rankeable;
-import sistema.reserva.Reserva;
-import sistema.usuario.Propietario;
-import sistema.usuario.Usuario;;
+import sistema.usuario.Usuario;
 
-public class Inmueble extends Rankeable {
+public class Inmueble implements Rankeable {
 	private int id;
 	private int superficie;
 	private TipoDeInmueble tipo;
@@ -19,12 +18,14 @@ public class Inmueble extends Rankeable {
 	private List<Servicio> servicios;
 	private int capacidad;
 	private List<String> fotos;
-	private Propietario propietario;
-	private RankingManager rankingManager;
+	private Usuario propietario;
 	private int vecesAlquilado;
 
 	public Inmueble(int superficie, TipoDeInmueble tipo, Ubicacion ubi, List<Servicio> servicios, int capacidad,
-			Propietario propietario) {
+			Usuario propietario) {
+		if(!this.propietario.getRol().equals(RolDeUsuario.PROPIETARIO)) {
+			new PermisoDenegadoException();
+		}
 		this.superficie = superficie;
 		this.tipo = tipo;
 		this.ubicacion = ubi;
@@ -32,7 +33,6 @@ public class Inmueble extends Rankeable {
 		this.capacidad = capacidad;
 		this.fotos = new ArrayList<String>();
 		this.propietario = propietario;
-		this.rankingManager = new RankingManager();
 		this.vecesAlquilado = 0;
 	}
 
@@ -77,15 +77,16 @@ public class Inmueble extends Rankeable {
 		return this.ubicacion.getCiudad();
 	}
 
-	public Propietario getPropietario() {
+	public Usuario getPropietario() {
 		// TODO Auto-generated method stub
 		return this.propietario;
 	}
 
+
 	@Override
-	public boolean esValoracionValida(Usuario ranker, Reserva reserva) {
+	public boolean mePuedeValorar(Usuario usuario) {
 		// TODO Auto-generated method stub
-		return reserva.getAlquiler().getInmueble().equals(this) && reserva.getInquilino().equals(ranker);
+		return usuario.getRol().equals(RolDeUsuario.INQUILINO);
 	}
 
 }

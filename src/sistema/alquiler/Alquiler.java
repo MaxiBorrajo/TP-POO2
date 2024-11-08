@@ -18,6 +18,11 @@ import sistema.managers.ReservaManager;
 import sistema.periodo.Periodo;
 
 public class Alquiler {
+	public PoliticaDeCancelacion getPoliticaDeCancelacion() {
+		return politicaDeCancelacion;
+	}
+
+
 	private Inmueble inmueble;
 	private LocalTime checkIn;
 	private LocalTime checkOut;
@@ -181,7 +186,7 @@ public class Alquiler {
 		//ocupar periodos
 		LocalDate fechaInicio = reserva.getFechaInicio();
 		LocalDate fechaFinal = reserva.getFechaFinal();
-		//this.inmueble.setVecesAlquilado(this.inmueble.getVecesAlquilado() + 1); deberia ir aca ya que recien aca en teoria se acepta
+		this.inmueble.setVecesAlquilado(this.inmueble.getVecesAlquilado() + 1); 
 		this.agregarPeriodoNoDisponible(new Periodo(fechaInicio, fechaFinal ,this.calcularPrecioPeriodo(fechaInicio, fechaFinal)));
 	}
 
