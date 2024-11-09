@@ -11,6 +11,8 @@ import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Categoria;
 import sistema.exceptions.*;
+import sistema.filtro.FiltroReserva;
+import sistema.filtro.FiltroReservasFuturas;
 import sistema.filtro.FiltroSimple;
 import sistema.podio.Podio;
 import sistema.ranking.Rankeable;
@@ -25,6 +27,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class SistemaTest {
@@ -360,5 +364,7 @@ public class SistemaTest {
 		assertNotNull(visualizacion);
 		assertEquals(inmueble, visualizacion.getInmueble());
 	}
+	
+	
 
 }

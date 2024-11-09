@@ -31,6 +31,8 @@ import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.NoExistenteException;
+import sistema.filtro.FiltroReserva;
+import sistema.filtro.FiltroReservasFuturas;
 import sistema.reserva.Reserva;
 import sistema.usuario.*;
 
@@ -200,5 +202,15 @@ public class ReservaManagerTest {
 		assertEquals(2, ciudades.size());
 		assertTrue(ciudades.contains("Ciudad A"));
 		assertTrue(ciudades.contains("Ciudad B"));
+	}
+	@Test
+	public void testSeFiltranReservas() throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+		FiltroReserva fr = mock(FiltroReservasFuturas.class);
+		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
+		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
+		Reserva re = this.reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino);
+		
+		this.reservaManager.filtrarReservas(fr);
+		verify(fr,times(1)).filtrarReservas(Arrays.asList(re));
 	}
 }

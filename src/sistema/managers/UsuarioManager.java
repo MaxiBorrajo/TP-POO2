@@ -24,12 +24,13 @@ public class UsuarioManager {
 			throws Exception {
 		if (this.estaRegistrado(email)) {
 			throw new UsuarioExistenteException();
-		} else {
-			Usuario usuario = new Usuario(nombreCompleto, email, telefono, rol);
+		} 
+	
+		Usuario usuario = new Usuario(nombreCompleto, email, telefono, rol);
 
-			this.usuarios.add(usuario);
-			return usuario;
-		}
+		this.usuarios.add(usuario);
+		return usuario;
+		
 	}
 
 	public boolean estaRegistrado(String email) {
