@@ -135,6 +135,9 @@ public class ReservaManagerTest {
 
 		when(alquiler.obtenerPrimeroDeReservasEncoladas()).thenReturn(reservaEncolada);
 
+
+		
+
 		reservaManager.cancelarReserva(reservaActiva, inquilino, mock(NotificadorManager.class), mailSender);
 
 		Reserva nuevaReserva = reservaManager.getReservas().stream()

@@ -24,8 +24,9 @@ public class Inmueble implements Rankeable {
 
 	public Inmueble(int superficie, TipoDeInmueble tipo, Ubicacion ubi, List<Servicio> servicios, int capacidad,
 			Usuario propietario) {
-		
-		if (!this.propietario.getRol().equals(RolDeUsuario.PROPIETARIO)) {
+
+		if(!propietario.getRol().equals(RolDeUsuario.PROPIETARIO)) {
+
 			new PermisoDenegadoException();
 		}
 		 
@@ -51,12 +52,10 @@ public class Inmueble implements Rankeable {
 		this.vecesAlquilado = vecesAlquilado;
 	}
 
-	public void añadirFoto(String link) throws CantidadFotosExcedidaException {
+	public void añadirFoto(String link)  {
 		if (this.fotos.size() < 5) {
 			this.fotos.add(link);
-		} else {
-			throw new CantidadFotosExcedidaException();
-		}
+		} 
 	}
 
 	public boolean esDeCiudad(String ciudad) {
@@ -75,9 +74,11 @@ public class Inmueble implements Rankeable {
 		return this.tipo.getNombre();
 	}
 
+
 	public String getCiudad() {
 		return this.ubicacion.getCiudad();
 	}
+
 
 	public Usuario getPropietario() {
 		return this.propietario;
@@ -86,6 +87,21 @@ public class Inmueble implements Rankeable {
 	@Override
 	public boolean mePuedeValorar(Usuario usuario) {
 		return usuario.getRol().equals(RolDeUsuario.INQUILINO);
+	}
+
+	public int getSuperficie() {
+		// TODO Auto-generated method stub
+		return this.superficie;
+	}
+
+	public String getCiudad() {
+		// TODO Auto-generated method stub
+		return this.ubicacion.getCiudad();
+	}
+
+	public List<String> fotos() {
+		// TODO Auto-generated method stub
+		return this.fotos;
 	}
 
 }

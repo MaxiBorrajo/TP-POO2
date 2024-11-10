@@ -21,7 +21,9 @@ public class NotificadorManager {
 		this.sus.stream().filter(x -> x.esEventoPara(even)).findFirst().ifPresent(x -> x.notificar());
 	}
 
+
 	public void addSuscriptor(Suscriptor sus, EventoNotificador even) {
+
 		Listener l = this.sus.stream().filter(x -> x.esEventoPara(even)).findFirst().orElse(new Listener(even));
 
 		this.sus.add(l);
