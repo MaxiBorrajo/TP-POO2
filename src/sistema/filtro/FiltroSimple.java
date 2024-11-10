@@ -13,7 +13,5 @@ public class FiltroSimple<A> extends Filtro<A>{
 		// TODO Auto-generated method stub
 		return this.predicado.test(elem);
 	}
-	
-	
-	
+
 }

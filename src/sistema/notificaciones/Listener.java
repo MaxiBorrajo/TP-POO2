@@ -14,7 +14,7 @@ public class Listener {
 		this.sus = new HashSet<Suscriptor>();
 		this.even = even;
 	}
-	
+
 	public void add(Suscriptor sus) {
 		this.sus.add(sus);
 	}
