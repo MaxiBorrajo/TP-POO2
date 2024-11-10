@@ -1,6 +1,5 @@
 package sistema.usuario;
 
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
 
-public class Usuario implements Rankeable{
+public class Usuario implements Rankeable {
 	private String nombre;
 	private String email;
 	private String telefono;
@@ -60,12 +59,19 @@ public class Usuario implements Rankeable{
 	}
 
 	/*
-	 * Si soy inquilino solo me valora un propietari
-	 * Si soy propietario solo me valora un inquilino
-	 * */
+	 * Si soy inquilino solo me valora un propietari0. Si soy propietario solo me
+	 * valora un inquilino.
+	 */
 	@Override
 	public boolean mePuedeValorar(Usuario usuario) {
-		return (usuario.getRol().equals(RolDeUsuario.INQUILINO) && this.getRol().equals(RolDeUsuario.PROPIETARIO)) ||
-				(usuario.getRol().equals(RolDeUsuario.PROPIETARIO) && this.getRol().equals(RolDeUsuario.INQUILINO));
+		return this.mePuedeValorarSiendoInquilino(usuario) || this.mePuedeValorarSiendoPropietario(usuario);
+	}
+
+	private boolean mePuedeValorarSiendoPropietario(Usuario usuario) {
+		return usuario.getRol().equals(RolDeUsuario.PROPIETARIO) && this.getRol().equals(RolDeUsuario.INQUILINO);
+	}
+
+	private boolean mePuedeValorarSiendoInquilino(Usuario usuario) {
+		return (usuario.getRol().equals(RolDeUsuario.INQUILINO) && this.getRol().equals(RolDeUsuario.PROPIETARIO));
 	}
 }

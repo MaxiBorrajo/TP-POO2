@@ -7,6 +7,7 @@ import java.util.List;
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
 import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
+import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoRegistradoException;
 import sistema.exceptions.InmuebleConAlquilerYaExiste;
 import sistema.filtro.FiltroDeSistema;
@@ -31,14 +32,17 @@ public class AlquilerManager {
 	}
 
 	public Alquiler darDeAltaAlquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault,
-			PoliticaDeCancelacion politicaDeCancelacion) throws InmuebleConAlquilerYaExiste {
+			PoliticaDeCancelacion politicaDeCancelacion, List<FormaDePago> formasDePago)
+			throws InmuebleConAlquilerYaExiste {
 		boolean inmuebleYaTieneAlquiler = this.alquileres.stream()
 				.anyMatch(alquiler -> alquiler.getInmueble().equals(inmueble));
 
 		if (inmuebleYaTieneAlquiler) {
 			throw new InmuebleConAlquilerYaExiste("El inmueble ya tiene un alquiler asociado.");
 		}
-		Alquiler alquiler = new Alquiler(inmueble, checkIn, checkOut, precioDefault, politicaDeCancelacion);
+
+		Alquiler alquiler = new Alquiler(inmueble, checkIn, checkOut, precioDefault, politicaDeCancelacion,
+				formasDePago);
 		this.alquileres.add(alquiler);
 		return alquiler;
 	}
@@ -61,17 +65,4 @@ public class AlquilerManager {
 				.filtrarLista(alquileres);
 	}
 
-//	
-//}
-//
-//public List<Alquiler> filtrarAlquileres(Filtro filtro){
-//	this.validarFiltro(filtro);
-//	return filtro.filtrar(this.alquileres.stream().filter(x->x.estaDisponible()));
-//}
-//
-//public void validarFiltro(Filtro filtro) {
-//	if(!filtro.esFiltroValido()) {
-//		throw new Error("Filtro no valido");
-//	}
-//}
 }

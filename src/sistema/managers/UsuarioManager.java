@@ -14,7 +14,7 @@ public class UsuarioManager {
 
 	public UsuarioManager() {
 		this.usuarios = new ArrayList<Usuario>();
-	}
+	} 
 
 	public List<Usuario> getUsuarios() {
 		return usuarios;

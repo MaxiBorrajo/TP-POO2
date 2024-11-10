@@ -1,4 +1,4 @@
-package sistema.Inmueble;
+package sistema.exceptions;
 
 public class CantidadFotosExcedidaException extends Exception {
 

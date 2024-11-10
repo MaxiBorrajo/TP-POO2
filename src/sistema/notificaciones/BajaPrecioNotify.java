@@ -1,9 +1,8 @@
 package sistema.notificaciones;
 
-
 import sistema.alquiler.Alquiler;
 
-public class BajaPrecioNotify extends EventoNotificador{
+public class BajaPrecioNotify extends EventoNotificador {
 
 	public BajaPrecioNotify(Alquiler alq) {
 		super(alq);
@@ -15,7 +14,7 @@ public class BajaPrecioNotify extends EventoNotificador{
 		// TODO Auto-generated method stub
 		return even2.esBajaDePrecio();
 	}
-	
+ 
 	@Override
 	public boolean esBajaDePrecio() {
 		return true;
@@ -24,7 +23,8 @@ public class BajaPrecioNotify extends EventoNotificador{
 	@Override
 	public void notificarEspecifica(Suscriptor sus) {
 		Alquiler alq = this.getAlquiler();
-		sus.publish("No te pierdas esta oferta: Un inmueble "+ alq.getTipoDeInmueble() + " a tan solo " + alq.getPrecioBase() +  " pesos ");
+		sus.publish("No te pierdas esta oferta: Un inmueble " + alq.getTipoDeInmueble() + " a tan solo "
+				+ alq.getPrecioBase() + " pesos ");
 	}
-	
+
 }

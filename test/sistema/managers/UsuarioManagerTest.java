@@ -20,7 +20,7 @@ public class UsuarioManagerTest {
 	public void setUp() {
 		this.usuarioManager = new UsuarioManager();
 	}
-
+ 
 	@Test
 	public void testUsuarioManagerPuedeGuardarUnUsuario() throws Exception {
 		String nombreCompleto = "John Doe";

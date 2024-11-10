@@ -9,10 +9,11 @@ public abstract class CustomEnum {
 	public String getNombre() {
 		return this.nombre;
 	}
+
 	public CustomEnumType getTipo() {
 		return this.tipo;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

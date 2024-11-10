@@ -12,7 +12,7 @@ public class Periodo {
 	public Periodo(LocalDate fechaInicio, LocalDate fechaFinal, double precio){
 		this.fechaInicio = fechaInicio;
 		this.fechaFinal = fechaFinal;
-		this.precio = precio;
+		this.precio = precio; 
 	}
 
     public boolean perteneceAPeriodo(LocalDate fecha) {
@@ -26,17 +26,14 @@ public class Periodo {
 	}
 	
 	public boolean precioMinimoEsMenorA(double precioMinimo) {
-		// TODO Auto-generated method stub
 		return precioMinimo >= this.precio;
 	}
 
 	public boolean precioMayorA(double precioMaximo) {
-		// TODO Auto-generated method stub
 		return precioMaximo <=this.precio;
 	}
 
 	public boolean peridoDeFecha(LocalDate fechaInicio2, LocalDate fechaFinal2) {
-		// TODO Auto-generated method stub
 		return this.fechaInicio.equals(fechaInicio2) & this.fechaFinal.equals(fechaFinal2);
 	}
 	

@@ -117,7 +117,7 @@ public class Reserva {
 
 	public void cancelarReserva(ReservaManager reser, NotificadorManager noti2)
 			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
-		// TODO Auto-generated method stub
+
 		noti2.notify(new CancelacionNotify(this.alquiler));
 		this.setEstado(new Cancelada());
 		this.alquiler.seCanceloReserva(this, reser);
@@ -129,10 +129,7 @@ public class Reserva {
 	}
 
 	public boolean estaActiva() {
-		// TODO Auto-generated method stub
 		return this.estado.estaAceptada();
 	}
-	// r.getEstado() != EstadoDeReserva.CANCELADA && r.getEstado() !=
-	// EstadoDeReserva.FINALIZADA
 
 }

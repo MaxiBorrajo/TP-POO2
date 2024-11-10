@@ -7,6 +7,7 @@ import java.util.List;
 import sistema.Sistema;
 import sistema.alquiler.Alquiler;
 import sistema.enums.customEnums.Categoria;
+import sistema.exceptions.NoExistenteException;
 import sistema.filtro.FiltroSimple;
 import sistema.ranking.Ranking;
 import sistema.usuario.Usuario;
@@ -16,7 +17,7 @@ public class Visualizacion {
 	Sistema sistema;
 
 	public Visualizacion(Inmueble inmueble, Sistema sistema) {
-		this.inmueble = inmueble;
+		this.inmueble = inmueble; 
 		this.sistema = sistema;
 	}
 
@@ -32,7 +33,7 @@ public class Visualizacion {
 		return this.sistema.getComentarios(this.getInmueble());
 	}
 
-	public List<Ranking> getPuntajesEnCategoria(Categoria categoria) {
+	public List<Ranking> getPuntajesEnCategoria(Categoria categoria) throws NoExistenteException {
 		return this.sistema.getValoracionesPorCategoria(this.getInmueble(), categoria);
 	}
 
@@ -48,7 +49,7 @@ public class Visualizacion {
 		return this.sistema.getPromedioValoraciones(getInmueble());
 	}
 
-	public double getPuntajePromedioPorCategoria(Categoria categoria) {
+	public double getPuntajePromedioPorCategoria(Categoria categoria) throws NoExistenteException {
 		return this.sistema.getPromedioValoracionesPorCategoria(getInmueble(), categoria);
 	}
 
