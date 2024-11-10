@@ -6,6 +6,7 @@ import java.util.List;
 import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Servicio;
 import sistema.enums.customEnums.TipoDeInmueble;
+import sistema.exceptions.CantidadFotosExcedidaException;
 import sistema.exceptions.PermisoDenegadoException;
 import sistema.ranking.Rankeable;
 import sistema.usuario.Usuario;
@@ -23,9 +24,12 @@ public class Inmueble implements Rankeable {
 
 	public Inmueble(int superficie, TipoDeInmueble tipo, Ubicacion ubi, List<Servicio> servicios, int capacidad,
 			Usuario propietario) {
+
 		if(!propietario.getRol().equals(RolDeUsuario.PROPIETARIO)) {
+
 			new PermisoDenegadoException();
 		}
+		 
 		this.superficie = superficie;
 		this.tipo = tipo;
 		this.ubicacion = ubi;
@@ -34,6 +38,10 @@ public class Inmueble implements Rankeable {
 		this.fotos = new ArrayList<String>();
 		this.propietario = propietario;
 		this.vecesAlquilado = 0;
+	}
+
+	public List<Servicio> getServicios() {
+		return servicios;
 	}
 
 	public int getVecesAlquilado() {
@@ -51,36 +59,33 @@ public class Inmueble implements Rankeable {
 	}
 
 	public boolean esDeCiudad(String ciudad) {
-		// TODO Auto-generated method stub
 		return this.ubicacion.estaEnCiudad(ciudad);
 	}
 
 	public int getCapacidad() {
-		// TODO Auto-generated method stub
 		return this.capacidad;
 	}
 
 	public boolean sonElMismoInmueble(Inmueble inm2) {
-		// TODO Auto-generated method stub
 		return this == inm2;
 	}
 
 	public String getTipo() {
-		// TODO Auto-generated method stub
 		return this.tipo.getNombre();
 	}
 
-	
 
-	public Usuario getPropietario() {
-		// TODO Auto-generated method stub
-		return this.propietario;
+	public String getCiudad() {
+		return this.ubicacion.getCiudad();
 	}
 
 
+	public Usuario getPropietario() {
+		return this.propietario;
+	}
+
 	@Override
 	public boolean mePuedeValorar(Usuario usuario) {
-		// TODO Auto-generated method stub
 		return usuario.getRol().equals(RolDeUsuario.INQUILINO);
 	}
 

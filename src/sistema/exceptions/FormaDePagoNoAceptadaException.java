@@ -4,5 +4,4 @@ public class FormaDePagoNoAceptadaException extends Exception {
 	public FormaDePagoNoAceptadaException(String message) {
 		super(message);
 	}
-
 }

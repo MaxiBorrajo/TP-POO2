@@ -1,15 +1,14 @@
 package sistema.notificaciones;
 
-
 import java.util.HashSet;
 
 import java.util.Set;
 
 public class Listener {
-	
+
 	private Set<Suscriptor> sus;
 	private EventoNotificador even;
-	
+
 	public Listener(EventoNotificador even) {
 		this.sus = new HashSet<Suscriptor>();
 		this.even = even;
@@ -18,7 +17,7 @@ public class Listener {
 	public void add(Suscriptor sus) {
 		this.sus.add(sus);
 	}
-	
+
 	public void remove(Suscriptor sus) {
 		this.sus.remove(sus);
 	}
@@ -28,17 +27,14 @@ public class Listener {
 	}
 
 	public boolean esEventoPara(EventoNotificador even2) {
-		// TODO Auto-generated method stub
 		return this.even.esIgualA(even2);
 	}
 
 	public int cantidadSuscriptos() {
-		// TODO Auto-generated method stub
 		return this.sus.size();
 	}
 
 	public boolean contieneA(Suscriptor s) {
-		// TODO Auto-generated method stub
 		return this.sus.contains(s);
 	}
 }

@@ -13,9 +13,11 @@ public class Ranking {
 	private Rankeable rankeable;
 	private Usuario ranker;
 
-	public Ranking(int valoracion, Categoria categoria, String comentario, Reserva reserva, Rankeable rankeable, Usuario ranker) throws RangoValoracionInvalidoException {
+	public Ranking(int valoracion, Categoria categoria, String comentario, Reserva reserva, Rankeable rankeable,
+			Usuario ranker) throws RangoValoracionInvalidoException {
+		
 		if (valoracion < 1 || valoracion > 5) {
-		    throw new RangoValoracionInvalidoException();
+			throw new RangoValoracionInvalidoException();
 		}
 
 		this.valoracion = valoracion;

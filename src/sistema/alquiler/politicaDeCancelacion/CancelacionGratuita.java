@@ -9,7 +9,7 @@ public class CancelacionGratuita extends PoliticaDeCancelacion {
 		if (diasAlComienzo <= 0) {
 			return 0;
 		}
-		if (diasAlComienzo > 10) {
+		if (diasAlComienzo > 10) { 
 			return precioTotal;
 		} else {
 			int diasReservados = (int) (fechaFinal.toEpochDay() - fechaInicio.toEpochDay());

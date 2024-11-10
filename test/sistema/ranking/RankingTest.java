@@ -38,7 +38,7 @@ public class RankingTest {
     public void testValoracionInvalidaMuyBaja() {
         assertThrows(RangoValoracionInvalidoException.class, () -> {
             new Ranking(0, new Categoria("Limpieza"), "Comentario", reserva, rankeable, ranker);
-        });
+        }); 
     }
 
     @Test

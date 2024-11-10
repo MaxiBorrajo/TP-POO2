@@ -20,7 +20,7 @@ public class PoliticaDeCancelacionGratuitaTest {
 	@BeforeEach
 	public void setUp() {
 		gratuita = new CancelacionGratuita();
-	}
+	} 
 
 	@Test
 	public void testCancelacionGratuitaDevuelveTodoElDinero() {

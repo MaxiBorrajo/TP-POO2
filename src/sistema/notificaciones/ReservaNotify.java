@@ -7,20 +7,16 @@ public class ReservaNotify extends EventoNotificador {
 
 	public ReservaNotify(Alquiler alq) {
 		super(alq);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public boolean esElMismoEvento(EventoNotificador even2) {
-		// TODO Auto-generated method stub
 		return even2.esReserva();
 	}
 
-	
 	@Override
 	public boolean esReserva() {
 		return true;
 	}
-	
-	
+
 }

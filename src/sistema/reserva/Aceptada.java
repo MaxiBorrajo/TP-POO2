@@ -8,19 +8,20 @@ import sistema.exceptions.ReservaNoCancelableException;
 import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
 
-public class Aceptada  extends EstadoReserva{
-	
-	public void  cancelar(Reserva re, ReservaManager reser, NotificadorManager noti ) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
-		if(LocalDate.now().isBefore(re.getFechaInicio())) {
+public class Aceptada extends EstadoReserva {
+
+	public void cancelar(Reserva re, ReservaManager reser, NotificadorManager noti)
+			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
+		if (LocalDate.now().isBefore(re.getFechaInicio())) {
 			throw new ReservaNoCancelableException();
 		}
 		re.cancelarReserva(reser, noti);
 	}
-	
+
 	public void finalizar(Reserva re) {
 		re.setEstado(new Finalizada());
 	}
-	
+
 	public boolean estaAceptada() {
 		return true;
 	}

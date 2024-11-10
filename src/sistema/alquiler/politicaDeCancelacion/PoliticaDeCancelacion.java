@@ -9,4 +9,4 @@ public abstract class PoliticaDeCancelacion {
 	}
 
 	public abstract double calcularReembolso(LocalDate fechaInicio, LocalDate fechaFinal, double precioTotal);
-}
+} 

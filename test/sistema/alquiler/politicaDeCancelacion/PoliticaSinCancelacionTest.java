@@ -12,7 +12,7 @@ public class PoliticaSinCancelacionTest {
 	@BeforeEach
 	public void setUp() {
 		sinCancelacion = new SinCancelacion();
-	}
+	} 
 
 	@Test
 	public void testSinCancelacionDevuelveCeroSiempre() {

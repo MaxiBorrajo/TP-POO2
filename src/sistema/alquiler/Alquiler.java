@@ -18,10 +18,6 @@ import sistema.managers.ReservaManager;
 import sistema.periodo.Periodo;
 
 public class Alquiler {
-	public PoliticaDeCancelacion getPoliticaDeCancelacion() {
-		return politicaDeCancelacion;
-	}
-
 
 	private Inmueble inmueble;
 	private LocalTime checkIn;
@@ -33,15 +29,20 @@ public class Alquiler {
 	private Queue<Reserva> reservasEncoladas;
 	private PoliticaDeCancelacion politicaDeCancelacion;
 
-	public Alquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault, PoliticaDeCancelacion politicaDeCancelacion) {
+	public Alquiler(Inmueble inmueble, LocalTime checkIn, LocalTime checkOut, double precioDefault,
+			PoliticaDeCancelacion politicaDeCancelacion, List<FormaDePago> formasDePago) {
 		this.inmueble = inmueble;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
 		this.precioDefault = precioDefault;
-		this.formasDePago = new ArrayList<>();
+		this.formasDePago = formasDePago;
 		this.periodos = new ArrayList<>();
 		this.diasNoDisponibles = new ArrayList<>();
 		this.reservasEncoladas = new LinkedList<>();
+		this.politicaDeCancelacion = politicaDeCancelacion;
+	}
+
+	public void setPoliticaDeCancelacion(PoliticaDeCancelacion politicaDeCancelacion) {
 		this.politicaDeCancelacion = politicaDeCancelacion;
 	}
 
@@ -50,7 +51,7 @@ public class Alquiler {
 		// mas de un precio por dia
 		this.periodos.add(periodo);
 	}
-	
+
 	private void agregarPeriodoNoDisponible(Periodo p) {
 		// TODO Auto-generated method stub
 		this.diasNoDisponibles.add(p);
@@ -169,7 +170,7 @@ public class Alquiler {
 	public void encolarReserva(Reserva nuevaReserva) {
 		this.reservasEncoladas.add(nuevaReserva);
 	}
-	
+
 	public Reserva obtenerPrimeroDeReservasEncoladas() {
 		return this.reservasEncoladas.poll();
 	}
@@ -179,38 +180,35 @@ public class Alquiler {
 		return !this.reservasEncoladas.isEmpty();
 	}
 
-	
-
 	public void seAceptoReserva(Reserva reserva) {
 		// TODO Auto-generated method stub
-		//ocupar periodos
+		// ocupar periodos
 		LocalDate fechaInicio = reserva.getFechaInicio();
 		LocalDate fechaFinal = reserva.getFechaFinal();
-		this.inmueble.setVecesAlquilado(this.inmueble.getVecesAlquilado() + 1); 
-		this.agregarPeriodoNoDisponible(new Periodo(fechaInicio, fechaFinal ,this.calcularPrecioPeriodo(fechaInicio, fechaFinal)));
+		this.inmueble.setVecesAlquilado(this.inmueble.getVecesAlquilado() + 1);
+		this.agregarPeriodoNoDisponible(
+				new Periodo(fechaInicio, fechaFinal, this.calcularPrecioPeriodo(fechaInicio, fechaFinal)));
 	}
 
-	
-
-	public void seCanceloReserva(Reserva reserva, ReservaManager reser) throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+	public void seCanceloReserva(Reserva reserva, ReservaManager reser)
+			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 		// TODO Auto-generated method stub
-		//estrategia de cancelacion
-		//ver si hay que desencolar
-		if(this.hayReservasEncoladas()) {
+		// estrategia de cancelacion
+		// ver si hay que desencolar
+		if (this.hayReservasEncoladas()) {
 			reser.desencolarReserva(this);
-		}else {
+		} else {
 			this.desocuparPeriodosDe(reserva.getFechaInicio(), reserva.getFechaFinal());
 		}
 	}
 
 	private void desocuparPeriodosDe(LocalDate fechaInicio, LocalDate fechaFinal) {
 		// TODO Auto-generated method stub
-		Periodo pe = (new FiltroSimple<Periodo>(p -> p.peridoDeFecha(fechaInicio , fechaFinal)))
+		Periodo pe = (new FiltroSimple<Periodo>(p -> p.peridoDeFecha(fechaInicio, fechaFinal)))
 				.filtrarLista(this.diasNoDisponibles).stream().findFirst().get();
 		this.diasNoDisponibles.remove(pe);
 		this.agregarPeriodo(pe);
 	}
-
 
 	public double calcularReembolsoPorCancelacion(LocalDate fechaInicio, LocalDate fechaFinal, double precioTotal) {
 		return this.politicaDeCancelacion.calcularReembolso(fechaInicio, fechaFinal, precioTotal);

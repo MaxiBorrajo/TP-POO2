@@ -5,13 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import sistema.alquiler.Alquiler;
+
 //La funcion de este clase es para obligar los tipos anden en el sistem para el filtro obligatorio
 public class FiltroDeSistema {
 
-	private  FiltroCompuesto<Alquiler> filtroSistema;
+	private FiltroCompuesto<Alquiler> filtroSistema;
 	private LocalDate entrada;
 	private LocalDate salida;
-	
+
 	public FiltroDeSistema(String ciudad, LocalDate entrada, LocalDate salida) {
 		this.entrada = entrada;
 		this.salida = salida;
@@ -19,35 +20,32 @@ public class FiltroDeSistema {
 		this.filtroSistema.agregarFiltro(this.filtroPorCiudad(ciudad));
 		this.filtroSistema.agregarFiltro(this.filtroCompuestoFechas(entrada, salida));
 	}
-	
-	private Filtro<Alquiler> filtroPorCiudad(String ciudad){
-		return new FiltroSimple<Alquiler>((a -> a.esDeCiudad(ciudad) ));
+
+	private Filtro<Alquiler> filtroPorCiudad(String ciudad) {
+		return new FiltroSimple<Alquiler>((a -> a.esDeCiudad(ciudad)));
 	}
-	
-	private Filtro<Alquiler> filtroCompuestoFechas(LocalDate entrada, LocalDate salida){
+
+	private Filtro<Alquiler> filtroCompuestoFechas(LocalDate entrada, LocalDate salida) {
 		Filtro<Alquiler> f = new FiltroSimple<Alquiler>((a -> a.estaDisponibleLuego(entrada)));
 		Filtro<Alquiler> g = new FiltroSimple<Alquiler>((a -> a.estaDisponibleAntes(salida)));
-		return new FiltroCompuesto<Alquiler>(Arrays.asList(f,g));
+		return new FiltroCompuesto<Alquiler>(Arrays.asList(f, g));
 	}
-	
+
 	private void agregarFiltro(Filtro<Alquiler> filtro) {
 		this.filtroSistema.agregarFiltro(filtro);
 	}
-	
-	public void agregarFiltroPorPrecio(double min, double max ) {
-		this.agregarFiltro(new FiltroSimple<Alquiler>(a -> a.cumplePrecioEnPeriodo(min, max, this.entrada, this.salida)));
+
+	public void agregarFiltroPorPrecio(double min, double max) {
+		this.agregarFiltro(
+				new FiltroSimple<Alquiler>(a -> a.cumplePrecioEnPeriodo(min, max, this.entrada, this.salida)));
 	}
-	
-	public   void agregarFiltroPorHuespedes(int cant) {
-		this.agregarFiltro(new FiltroSimple<Alquiler>(a -> a .aceptaCantidadHuespedes(cant)));
+
+	public void agregarFiltroPorHuespedes(int cant) {
+		this.agregarFiltro(new FiltroSimple<Alquiler>(a -> a.aceptaCantidadHuespedes(cant)));
 	}
-	
-	public List<Alquiler> filtrarLista(List<Alquiler> lista){
+
+	public List<Alquiler> filtrarLista(List<Alquiler> lista) {
 		return this.filtroSistema.filtrarLista(lista);
 	}
-	
-	
-	
-	
-	
+
 }

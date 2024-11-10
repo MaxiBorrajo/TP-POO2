@@ -38,7 +38,7 @@ public class RankingManagerTest {
 		when(rankeable.mePuedeValorar(usuario)).thenReturn(true);
 	}
 
-	@Test
+	@Test 
 	public void testAñadirValoracion()
 			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
 		Ranking ranking = new Ranking(4, new Categoria("Servicio"), "Muy buen servicio", reserva, rankeable, usuario);

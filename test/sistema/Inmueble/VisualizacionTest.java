@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import sistema.Inmueble.Visualizacion;
 import sistema.alquiler.Alquiler;
 import sistema.enums.customEnums.Categoria;
+import sistema.exceptions.NoExistenteException;
 import sistema.ranking.Ranking;
 import sistema.usuario.Usuario;
 import sistema.Sistema;
@@ -25,7 +26,7 @@ public class VisualizacionTest {
     private Usuario propietarioMock;
     private Sistema sistemaMock;
 
-    @BeforeEach
+    @BeforeEach 
     public void setUp() {
         inmuebleMock = mock(Inmueble.class);
         propietarioMock = mock(Usuario.class);
@@ -55,7 +56,7 @@ public class VisualizacionTest {
     }
 
     @Test
-    public void testGetPuntajesEnCategoria() {
+    public void testGetPuntajesEnCategoria() throws NoExistenteException {
         Categoria categoriaMock = new Categoria("Limpieza");
         List<Ranking> rankings = Arrays.asList(mock(Ranking.class), mock(Ranking.class));
         
@@ -88,7 +89,7 @@ public class VisualizacionTest {
     }
 
     @Test
-    public void testGetPuntajePromedioPorCategoria() {
+    public void testGetPuntajePromedioPorCategoria() throws NoExistenteException {
         Categoria categoriaMock = new Categoria("Limpieza");
         
         when(sistemaMock.getPromedioValoracionesPorCategoria(inmuebleMock,categoriaMock)).thenReturn(3.8);

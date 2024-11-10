@@ -1,5 +1,5 @@
 package sistema.reserva;
 
-public class Finalizada extends EstadoReserva{
+public class Finalizada extends EstadoReserva {
 
 }

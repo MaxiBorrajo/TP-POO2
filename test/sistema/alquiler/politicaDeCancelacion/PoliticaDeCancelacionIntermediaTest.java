@@ -9,7 +9,7 @@ public class PoliticaDeCancelacionIntermediaTest {
 
 	private PoliticaDeCancelacion intermedia;
 
-	@BeforeEach
+	@BeforeEach 
 	public void setUp() {
 		intermedia = new CancelacionIntermedia();
 	}
