@@ -117,7 +117,8 @@ public class ReservaManager {
 
 	public void aceptarReserva(Reserva reserva, Usuario propietarioAcepta, NotificadorManager notificadorManager,
 			MailSender mailSender) throws NoExistenteException, PermisoDenegadoException {
-		validarAccionSobreReserva(reserva, propietarioAcepta);
+	//	validarAccionSobreReserva(reserva, propietarioAcepta);
+	// no se puede usar la misma validacion que la cancelacion	
 		reserva.aceptar(notificadorManager);
 		mailSender.sendEmail("hola@sistema.com", reserva.getInquilino().getEmail(), "Reserva aprobada",
 				"El propietario ha aceptado tu reserva del alquiler");

@@ -317,6 +317,7 @@ public class SistemaTest {
 	@Test
 	public void testCancelarReserva() throws Exception {
 		Inmueble inmueble = mock(Inmueble.class);
+		
 		Alquiler alquiler = sistema.publicarAlquiler(inmueble, LocalTime.of(10, 0), LocalTime.of(18, 0), 500.0,
 				propietario, mock(PoliticaDeCancelacion.class), Arrays.asList(FormaDePago.CREDITO));
 

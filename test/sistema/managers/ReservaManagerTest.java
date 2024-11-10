@@ -163,7 +163,7 @@ public class ReservaManagerTest {
 		when(alquiler.getInmueble()).thenReturn(inmuebleMock);
 		when(inmuebleMock.getPropietario()).thenReturn(propietario);
 		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
-
+	
 		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada.plusDays(10), salida.plusDays(10))).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada.plusDays(20), salida.plusDays(20))).thenReturn(true);

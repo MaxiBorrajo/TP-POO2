@@ -75,10 +75,7 @@ public class Inmueble implements Rankeable {
 	}
 
 
-	public String getCiudad() {
-		return this.ubicacion.getCiudad();
-	}
-
+	
 
 	public Usuario getPropietario() {
 		return this.propietario;
