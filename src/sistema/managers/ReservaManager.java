@@ -62,14 +62,15 @@ public class ReservaManager {
 	public void cancelarReserva(Reserva reserva, Usuario inquilinoCancela, NotificadorManager notificadorManager,
 			MailSender mailSender) throws NoExistenteException, AlquilerNoDisponibleException,
 			FormaDePagoNoAceptadaException, ReservaNoCancelableException, PermisoDenegadoException {
-		validarAccionSobreReserva(reserva, inquilinoCancela);
+		this.validarReservaActiveExiste(reserva);
+		this.verificarPermiso(reserva.getInquilino(), inquilinoCancela);
 		reserva.cancelar(this, notificadorManager);
 		mailSender.sendEmail("hola@sistema.com", reserva.getAlquiler().getInmueble().getPropietario().getEmail(),
 				"Reserva cancelada", "El inquilino ha cancelado la reserva del alquiler");
 	}
 
 	private void verificarPermiso(Usuario usuarioEsperado, Usuario usuarioActual) throws PermisoDenegadoException {
-		if (usuarioEsperado.equals(usuarioActual)) {
+		if (!usuarioEsperado.equals(usuarioActual)) {
 			throw new PermisoDenegadoException();
 		}
 	}
@@ -82,7 +83,7 @@ public class ReservaManager {
 	}
 
 	public void finalizarReserva(Reserva reserva) throws NoExistenteException {
-		this.validarReservaExiste(reserva);
+		this.validarReservaActiveExiste(reserva);
 		reserva.finalizar();
 	}
 
@@ -95,8 +96,7 @@ public class ReservaManager {
 		return this.reservas;
 	}
 
-	private void validarReservaExiste(Reserva reserva) throws NoExistenteException {
-
+	private void validarReservaActiveExiste(Reserva reserva) throws NoExistenteException {
 		if (!this.getReservasActivas().contains(reserva)) {
 			throw new NoExistenteException("Reserva");
 		}
@@ -104,35 +104,26 @@ public class ReservaManager {
 	}
 
 	public List<Reserva> filtrarReservas(FiltroReserva f) {
-		// TODO Auto-generated method stub
 		return f.filtrarReservas(this.reservas);
 	}
 
 	public List<String> todasLasCiudades(Usuario user) {
-		// TODO Auto-generated method stub
-
 		return (new FiltroTodasReservas(user)).filtrarReservas(this.reservas).stream().map(s -> (String) s.getCiudad())
 				.toList();
 	}
 
 	public void aceptarReserva(Reserva reserva, Usuario propietarioAcepta, NotificadorManager notificadorManager,
 			MailSender mailSender) throws NoExistenteException, PermisoDenegadoException {
-	//	validarAccionSobreReserva(reserva, propietarioAcepta);
-	// no se puede usar la misma validacion que la cancelacion	
+		this.verificarPermiso(reserva.getAlquiler().getInmueble().getPropietario(), propietarioAcepta);
 		reserva.aceptar(notificadorManager);
 		mailSender.sendEmail("hola@sistema.com", reserva.getInquilino().getEmail(), "Reserva aprobada",
 				"El propietario ha aceptado tu reserva del alquiler");
 	}
 
-	private void validarAccionSobreReserva(Reserva reserva, Usuario propietarioAcepta)
-			throws NoExistenteException, PermisoDenegadoException {
-		this.validarReservaExiste(reserva);
-		this.verificarPermiso(reserva.getAlquiler().getInmueble().getPropietario(), propietarioAcepta);
-	}
-
 	public void rechazarReserva(Reserva reserva, Usuario propietarioRechaza)
 			throws NoExistenteException, PermisoDenegadoException {
-		validarAccionSobreReserva(reserva, propietarioRechaza);
+		this.verificarPermiso(reserva.getAlquiler().getInmueble().getPropietario(), propietarioRechaza);
+		reserva.rechazar();
 	}
 
 }

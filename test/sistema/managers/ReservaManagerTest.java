@@ -91,6 +91,7 @@ public class ReservaManagerTest {
 	public void testCancelarReserva() throws Exception {
 		when(reservaMock.estaActiva()).thenReturn(true);
 		when(reservaMock.getAlquiler()).thenReturn(alquiler);
+		when(reservaMock.getInquilino()).thenReturn(inquilino);
 		NotificadorManager n = mock(NotificadorManager.class);
 
 		reservaManager.getReservas().add(reservaMock);

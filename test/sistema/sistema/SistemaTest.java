@@ -10,6 +10,7 @@ import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Categoria;
+import sistema.enums.customEnums.TipoDeInmueble;
 import sistema.exceptions.*;
 import sistema.filtro.FiltroReserva;
 import sistema.filtro.FiltroReservasFuturas;
@@ -48,6 +49,9 @@ public class SistemaTest {
 			noAdmin = sistema.registrarUsuario("User", "user@example.com", "654321", RolDeUsuario.INQUILINO);
 			propietario = sistema.registrarUsuario("Propietario", "propietario@example.com", "789012",
 					RolDeUsuario.PROPIETARIO);
+			sistema.darAltaTipoInmueble("Casa", admin);
+			sistema.darAltaCategoria("Limpieza", admin);
+			sistema.darAltaCategoria("Servicio", admin);
 		} catch (Exception e) {
 			fail("Error al registrar usuarios: " + e.getMessage());
 		}
@@ -60,7 +64,7 @@ public class SistemaTest {
 		Usuario usuario = mock(Usuario.class);
 		Categoria categoria = new Categoria("Limpieza");
 		Reserva reserva = mock(Reserva.class);
-		when(reserva.fechaPosteriorAFinal(any(LocalDate.class))).thenReturn(true);
+		when(reserva.estaFinalizada()).thenReturn(true);
 		when(rankeable.mePuedeValorar(usuario)).thenReturn(true);
 
 		Ranking valoracion = new Ranking(5, categoria, "Excelente", reserva, rankeable, usuario);
@@ -79,7 +83,7 @@ public class SistemaTest {
 		Categoria categoriaDiferente = new Categoria("Limpieza");
 		Reserva reserva = mock(Reserva.class);
 
-		when(reserva.fechaPosteriorAFinal(any(LocalDate.class))).thenReturn(true);
+		when(reserva.estaFinalizada()).thenReturn(true);
 		when(rankeable.mePuedeValorar(usuario)).thenReturn(true);
 
 		Ranking valoracion1 = new Ranking(4, categoria, "Buen servicio", reserva, rankeable, usuario);
@@ -102,7 +106,7 @@ public class SistemaTest {
 		Categoria categoria = new Categoria("Servicio");
 		Reserva reserva = mock(Reserva.class);
 
-		when(reserva.fechaPosteriorAFinal(any(LocalDate.class))).thenReturn(true);
+		when(reserva.estaFinalizada()).thenReturn(true);
 		when(rankeable.mePuedeValorar(usuario)).thenReturn(true);
 
 		Ranking valoracion1 = new Ranking(3, categoria, "Regular", reserva, rankeable, usuario);
@@ -124,7 +128,7 @@ public class SistemaTest {
 		Categoria categoriaLimpieza = new Categoria("Limpieza");
 		Reserva reserva = mock(Reserva.class);
 
-		when(reserva.fechaPosteriorAFinal(any(LocalDate.class))).thenReturn(true);
+		when(reserva.estaFinalizada()).thenReturn(true);
 		when(rankeable.mePuedeValorar(usuario)).thenReturn(true);
 
 		Ranking valoracion1 = new Ranking(5, categoriaServicio, "Excelente servicio", reserva, rankeable, usuario);
@@ -147,7 +151,7 @@ public class SistemaTest {
 		Categoria categoria = new Categoria("Servicio");
 		Reserva reserva = mock(Reserva.class);
 
-		when(reserva.fechaPosteriorAFinal(any(LocalDate.class))).thenReturn(true);
+		when(reserva.estaFinalizada()).thenReturn(true);
 		when(rankeable.mePuedeValorar(usuario)).thenReturn(true);
 
 		Ranking valoracion1 = new Ranking(4, categoria, "Buen servicio", reserva, rankeable, usuario);
@@ -225,14 +229,14 @@ public class SistemaTest {
 
 		Inmueble inmueble1 = mock(Inmueble.class);
 		Inmueble inmueble2 = mock(Inmueble.class);
-
+		when(inmueble1.getTipo()).thenReturn("Casa");
+		when(inmueble2.getTipo()).thenReturn("Casa");
+		when(inmueble1.getPropietario()).thenReturn(propietario);
+		when(inmueble2.getPropietario()).thenReturn(propietario);
 		Alquiler alquiler1 = sistema.publicarAlquiler(inmueble2, LocalTime.of(9, 0), LocalTime.of(17, 0), 400,
-				propietario, mock(PoliticaDeCancelacion.class), null);
+				propietario, mock(PoliticaDeCancelacion.class), Arrays.asList(FormaDePago.CREDITO));
 		Alquiler alquiler2 = sistema.publicarAlquiler(inmueble1, LocalTime.of(10, 0), LocalTime.of(18, 0), 500,
-				propietario, mock(PoliticaDeCancelacion.class), null);
-
-		alquiler1.agregarFormaDePago(FormaDePago.CREDITO);
-		alquiler2.agregarFormaDePago(FormaDePago.CREDITO);
+				propietario, mock(PoliticaDeCancelacion.class), Arrays.asList(FormaDePago.CREDITO));
 
 		sistema.crearReserva(FormaDePago.CREDITO, LocalDate.now(), LocalDate.now().plusDays(5), alquiler1, inquilino1,
 				false);
@@ -257,12 +261,15 @@ public class SistemaTest {
 		Inmueble inmueble1 = mock(Inmueble.class);
 		Inmueble inmueble2 = mock(Inmueble.class);
 
-		Alquiler alquiler1 = sistema.publicarAlquiler(inmueble1, LocalTime.of(10, 0), LocalTime.of(18, 0), 500,
-				propietario, mock(PoliticaDeCancelacion.class), null);
-		Alquiler alquiler2 = sistema.publicarAlquiler(inmueble2, LocalTime.of(9, 0), LocalTime.of(17, 0), 400,
-				propietario, mock(PoliticaDeCancelacion.class), null);
+		when(inmueble1.getTipo()).thenReturn("Casa");
+		when(inmueble2.getTipo()).thenReturn("Casa");
+		when(inmueble1.getPropietario()).thenReturn(propietario);
+		when(inmueble2.getPropietario()).thenReturn(propietario);
 
-		alquiler1.agregarFormaDePago(FormaDePago.CREDITO);
+		Alquiler alquiler1 = sistema.publicarAlquiler(inmueble1, LocalTime.of(10, 0), LocalTime.of(18, 0), 500,
+				propietario, mock(PoliticaDeCancelacion.class), Arrays.asList(FormaDePago.CREDITO));
+		Alquiler alquiler2 = sistema.publicarAlquiler(inmueble2, LocalTime.of(9, 0), LocalTime.of(17, 0), 400,
+				propietario, mock(PoliticaDeCancelacion.class), Arrays.asList(FormaDePago.CREDITO));
 
 		Reserva reserva = sistema.crearReserva(FormaDePago.CREDITO, LocalDate.now(), LocalDate.now().plusDays(5),
 				alquiler1, noAdmin, false);
@@ -283,7 +290,10 @@ public class SistemaTest {
 	public void testTasaDeOcupacionConAdmin() throws Exception {
 		Inmueble inmueble1 = mock(Inmueble.class);
 		Inmueble inmueble2 = mock(Inmueble.class);
-
+		when(inmueble1.getTipo()).thenReturn("Casa");
+		when(inmueble2.getTipo()).thenReturn("Casa");
+		when(inmueble1.getPropietario()).thenReturn(propietario);
+		when(inmueble2.getPropietario()).thenReturn(propietario);
 		Alquiler alquiler1 = sistema.publicarAlquiler(inmueble1, LocalTime.of(10, 0), LocalTime.of(18, 0), 500,
 				propietario, mock(PoliticaDeCancelacion.class), Arrays.asList(FormaDePago.CREDITO));
 		Alquiler alquiler2 = sistema.publicarAlquiler(inmueble2, LocalTime.of(9, 0), LocalTime.of(17, 0), 400,
@@ -305,6 +315,8 @@ public class SistemaTest {
 	@Test
 	public void testPublicarAlquiler() throws Exception {
 		Inmueble inmueble = mock(Inmueble.class);
+		when(inmueble.getTipo()).thenReturn("Casa");
+		when(inmueble.getPropietario()).thenReturn(propietario);
 		PoliticaDeCancelacion politica = mock(PoliticaDeCancelacion.class);
 		Alquiler alquiler = sistema.publicarAlquiler(inmueble, LocalTime.of(10, 0), LocalTime.of(18, 0), 500.0,
 				propietario, politica, Arrays.asList(FormaDePago.CREDITO));
@@ -317,7 +329,9 @@ public class SistemaTest {
 	@Test
 	public void testCancelarReserva() throws Exception {
 		Inmueble inmueble = mock(Inmueble.class);
-		
+		when(inmueble.getTipo()).thenReturn("Casa");
+		when(inmueble.getPropietario()).thenReturn(propietario);
+
 		Alquiler alquiler = sistema.publicarAlquiler(inmueble, LocalTime.of(10, 0), LocalTime.of(18, 0), 500.0,
 				propietario, mock(PoliticaDeCancelacion.class), Arrays.asList(FormaDePago.CREDITO));
 
@@ -348,6 +362,8 @@ public class SistemaTest {
 	@Test
 	public void testCrearReservaConFormaDePagoNoAceptada() throws Exception {
 		Inmueble inmueble = mock(Inmueble.class);
+		when(inmueble.getTipo()).thenReturn("Casa");
+		when(inmueble.getPropietario()).thenReturn(propietario);
 		Alquiler alquiler = sistema.publicarAlquiler(inmueble, LocalTime.of(10, 0), LocalTime.of(18, 0), 500.0,
 				propietario, mock(PoliticaDeCancelacion.class), Arrays.asList(FormaDePago.CREDITO));
 
