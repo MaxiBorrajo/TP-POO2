@@ -3,14 +3,14 @@ package sistema.notificaciones;
 import sistema.alquiler.Alquiler;
 
 public abstract class EventoNotificador {
-	private Alquiler alq;
+	private Observable alq;
 
-	public EventoNotificador(Alquiler alq) {
+	public EventoNotificador(Observable alq) {
 		this.alq = alq;
 	}
 
 	protected Alquiler getAlquiler() {
-		return this.alq;
+		return this.alq.getAlquiler();
 	}
 
 	public void notificarEspecifica(Suscriptor sus) {
@@ -18,11 +18,11 @@ public abstract class EventoNotificador {
 	}
 
 	public final boolean esIgualA(EventoNotificador even2) {
-		return this.esElMismoEvento(even2) & even2.esElMismoAlquiler(this.alq);
+		return this.esElMismoEvento(even2) && even2.esElMismoObservable(this.alq);
 	}
 
-	public boolean esElMismoAlquiler(Alquiler alq) {
-		return this.alq.tienenElMismoInmueble(alq);
+	public boolean esElMismoObservable(Observable alq2) {
+		return this.alq.equals(alq2);
 	}
 
 	public abstract boolean esElMismoEvento(EventoNotificador even2);

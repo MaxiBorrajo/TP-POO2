@@ -47,6 +47,7 @@ public class BajaPrecioNotifyTest {
 	@Test
 	void testMandaUnUpdateAlSuscriptorAlSerNotificada() {
 		Suscriptor sus = mock(Suscriptor.class);
+		when(this.alq.getAlquiler()).thenReturn(this.alq);
 		when(this.alq.getTipoDeInmueble()).thenReturn("Inmueble");
 		when(this.alq.getPrecioBase()).thenReturn(200d);
 		this.can.notificarEspecifica(sus);

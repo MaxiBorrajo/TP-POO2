@@ -14,17 +14,18 @@ import sistema.alquiler.Alquiler;
 import sistema.notificaciones.CancelacionNotify;
 import sistema.notificaciones.EventoNotificador;
 import sistema.notificaciones.ReservaNotify;
+import sistema.reserva.Reserva;
 
 public class EventoNotificadorTest {
 	private EventoNotificador even;
 	private EventoNotificador even2;
-	private Alquiler alq;
+	private Reserva re;
 	
 	@BeforeEach
 	void setUp() {
-		this.alq = mock(Alquiler.class);
-		this.even = new CancelacionNotify(alq);
-		this.even2 = new ReservaNotify(alq);
+		this.re = mock(Reserva.class);
+		this.even = new CancelacionNotify(re);
+		this.even2 = new ReservaNotify(re);
 	}
 	
 	
@@ -38,17 +39,17 @@ public class EventoNotificadorTest {
 	
 	
 	@Test
-	void testSabeSiEsElMismoAlquiler() {
+	void testSabeSiEsElMismoObservable() {
 		
-		when(this.alq.tienenElMismoInmueble(alq)).thenReturn(true);
+	
 		
-		assertTrue(even2.esElMismoAlquiler(this.alq));
+		assertTrue(even2.esElMismoObservable(this.re));
 	
 	}
 	
 	@Test
-	void testSabeSiNoEsElMismoEventoPeroMismoInmueble() {
-		when(this.alq.tienenElMismoInmueble(alq)).thenReturn(true);
+	void testSabeSiNoEsElMismoEventoPeroMismoObservable() {
+		
 		
 		
 		assertFalse(this.even.esIgualA(this.even2));
@@ -60,10 +61,10 @@ public class EventoNotificadorTest {
 	@Test
 	void testSabeSiEsElMismoEventoMismoInmueble() {
 		
-		Alquiler a1 = mock(Alquiler.class);
-		EventoNotificador even1 =  new CancelacionNotify(a1);
 		
-		when(a1.tienenElMismoInmueble(this.alq)).thenReturn(true);
+		EventoNotificador even1 =  new CancelacionNotify(this.re);
+		
+	
 		
 		assertTrue(this.even.esIgualA(even1));
 		
@@ -72,12 +73,12 @@ public class EventoNotificadorTest {
 	}
 	
 	@Test
-	void testSabeSiEsElMismoEventoDistintoInmueble() {
+	void testSabeSiEsElMismoEventoDistintoObservable() {
 		
-		Alquiler a1 = mock(Alquiler.class);
-		EventoNotificador even1 =  new CancelacionNotify(a1);
+		Reserva r1 = mock(Reserva.class);
+		EventoNotificador even1 =  new CancelacionNotify(r1);
 		
-		when(this.alq.tienenElMismoInmueble(a1)).thenReturn(false);
+		
 		
 		assertFalse(this.even.esIgualA(even1));
 		

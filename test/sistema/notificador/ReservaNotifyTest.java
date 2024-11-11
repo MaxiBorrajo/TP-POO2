@@ -15,14 +15,15 @@ import sistema.notificaciones.CancelacionNotify;
 import sistema.notificaciones.EventoNotificador;
 import sistema.notificaciones.ReservaNotify;
 import sistema.notificaciones.Suscriptor;
+import sistema.reserva.Reserva;
 
 public class ReservaNotifyTest {
 	private ReservaNotify can;
-	private Alquiler alq;
+	private Reserva re;
 	@BeforeEach
 	void setUp() {
-		this.alq = mock(Alquiler.class);
-		this.can = new ReservaNotify(alq);
+		this.re = mock(Reserva.class);
+		this.can = new ReservaNotify(re);
 	}
 	
 	@Test

@@ -10,10 +10,11 @@ import sistema.exceptions.ReservaNoCancelableException;
 import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
 import sistema.notificaciones.CancelacionNotify;
+import sistema.notificaciones.Observable;
 import sistema.notificaciones.ReservaNotify;
 import sistema.usuario.Usuario;
 
-public class Reserva {
+public class Reserva implements Observable {
 	private EstadoReserva estado;
 	private FormaDePago formaDepago;
 	private LocalDate fechaInicio;
