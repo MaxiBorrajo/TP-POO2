@@ -24,9 +24,7 @@ public class Reserva implements Observable {
 	private NotificadorManager noti;
 	private double precioTotal;
 
-	public EstadoReserva getEstado() {
-		return estado;
-	}
+	
 
 	public Reserva(FormaDePago formaDepago, LocalDate fechaInicio, LocalDate fechaFinal, Alquiler alquiler,
 			Usuario usuario, double precioTotal) {
@@ -62,7 +60,7 @@ public class Reserva implements Observable {
 
 	public boolean fechaPosteriorAInicio(LocalDate date) {
 		// TODO Auto-generated method stub
-		return this.fechaInicio.isAfter(date);
+		return this.fechaInicio.isBefore(date);
 	}
 
 	public boolean fechaPosteriorAFinal(LocalDate date) {
@@ -105,12 +103,12 @@ public class Reserva implements Observable {
 
 	public void finalizar() {
 		this.estado.finalizar(this);
-		;
+		
 	}
 
 	public void aceptarReserva(NotificadorManager noti2) {
 		// TODO Auto-generated method stub
-		noti2.notify(new ReservaNotify(this.alquiler));
+		noti2.notify(new ReservaNotify(this));
 		this.setEstado(new Aceptada());
 		;
 		this.alquiler.seAceptoReserva(this);
@@ -119,12 +117,12 @@ public class Reserva implements Observable {
 	public void cancelarReserva(ReservaManager reser, NotificadorManager noti2)
 			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
 
-		noti2.notify(new CancelacionNotify(this.alquiler));
+		noti2.notify(new CancelacionNotify(this));
 		this.setEstado(new Cancelada());
 		this.alquiler.seCanceloReserva(this, reser);
 
 	}
-
+	
 	public double calcularReembolsoPorCancelacion() {
 		return this.alquiler.calcularReembolsoPorCancelacion(this.fechaInicio, this.fechaFinal, this.precioTotal);
 	}
@@ -133,6 +131,17 @@ public class Reserva implements Observable {
 		return this.estado.estaAceptada();
 	}
 
+	public boolean estaRechazada() {
+		// TODO Auto-generated method stub
+		return this.estado.estaRechazada();
+	}
+
+	public boolean estaFinalizada() {
+		// TODO Auto-generated method stub
+		return this.estado.estaFinalizada();
+	}
+
+	
 
 
 }
