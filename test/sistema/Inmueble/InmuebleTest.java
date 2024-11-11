@@ -25,6 +25,7 @@ public class InmuebleTest {
     	this.propietario = mock(Usuario.class);
     	when(propietario.getRol()).thenReturn(RolDeUsuario.PROPIETARIO);
     	Ubicacion ubi = mock(Ubicacion.class);
+    	when(ubi.getCiudad()).thenReturn("Quilmes");
     	when(ubi.estaEnCiudad("Quilmes")).thenReturn(true);
     	when(ubi.estaEnCiudad("Bernal")).thenReturn(false);
     	TipoDeInmueble inm = mock(TipoDeInmueble.class);
@@ -40,7 +41,17 @@ public class InmuebleTest {
     public void testSePuedeSaberLaSuperficeiDeUnInmueble() {
     	assertEquals(200, this.inmueble.getSuperficie());
     }
+    
+    @Test
+    public void testSePuedeSaberLaCiudadDeUnInmueble() {
+    	
+    	assertEquals("Quilmes", this.inmueble.getCiudad());
+    }
 
+    @Test
+    public void testDevuelveLaListaDeServicios() {
+    	assertEquals(1, this.inmueble.getServicios().size());
+    }
    
     @Test
     public  void testSabenSIEsDeCiudad() {
@@ -92,5 +103,7 @@ public class InmuebleTest {
     	
     	
     }
+    
+    
 	
 }
