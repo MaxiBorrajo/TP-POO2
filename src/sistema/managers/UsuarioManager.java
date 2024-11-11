@@ -14,7 +14,7 @@ public class UsuarioManager {
 
 	public UsuarioManager() {
 		this.usuarios = new ArrayList<Usuario>();
-	} 
+	}
 
 	public List<Usuario> getUsuarios() {
 		return usuarios;
@@ -24,13 +24,13 @@ public class UsuarioManager {
 			throws Exception {
 		if (this.estaRegistrado(email)) {
 			throw new UsuarioExistenteException();
-		} 
-	
+		}
+
 		Usuario usuario = new Usuario(nombreCompleto, email, telefono, rol);
 
 		this.usuarios.add(usuario);
 		return usuario;
-		
+
 	}
 
 	public boolean estaRegistrado(String email) {

@@ -12,7 +12,7 @@ public class Aceptada extends EstadoReserva {
 
 	public void cancelar(Reserva re, ReservaManager reser, NotificadorManager noti)
 			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
-		
+
 		re.cancelarReserva(reser, noti);
 	}
 

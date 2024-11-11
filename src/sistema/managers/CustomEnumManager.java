@@ -12,17 +12,15 @@ public class CustomEnumManager {
 
 	public CustomEnumManager() {
 		this.enumMap = new HashMap<>();
-	} 
-	
-	public boolean existeCustomEnum(String nombre, CustomEnumType tipo) {
-	    List<CustomEnum> enumList = enumMap.get(tipo);
-	    if (enumList == null) {
-	        return false;
-	    }
-	    return enumList.stream()
-	            .anyMatch(existingEnum -> existingEnum.getNombre().equals(nombre));
 	}
 
+	public boolean existeCustomEnum(String nombre, CustomEnumType tipo) {
+		List<CustomEnum> enumList = enumMap.get(tipo);
+		if (enumList == null) {
+			return false;
+		}
+		return enumList.stream().anyMatch(existingEnum -> existingEnum.getNombre().equals(nombre));
+	}
 
 	private void updateEnums(CustomEnumType tipo, CustomEnum newEnum) throws CustomEnumExistenteException {
 		List<CustomEnum> enumList = enumMap.computeIfAbsent(tipo, k -> new ArrayList<>());

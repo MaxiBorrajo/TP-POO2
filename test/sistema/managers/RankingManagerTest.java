@@ -33,28 +33,27 @@ public class RankingManagerTest {
 		usuario = mock(Usuario.class);
 		rankeable = mock(Inmueble.class);
 		reserva = mock(Reserva.class);
-		
+
 		when(reserva.estaFinalizada()).thenReturn(true);
 		when(rankeable.mePuedeValorar(usuario)).thenReturn(true);
 	}
 
-	@Test 
+	@Test
 	public void testAñadirValoracion()
 			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
 		Ranking ranking = new Ranking(4, new Categoria("Servicio"), "Muy buen servicio", reserva, rankeable, usuario);
 		rankingManager.añadirValoracion(ranking);
 		assertEquals(1, rankingManager.getValoraciones(rankeable).size());
 	}
-	
+
 	@Test
 	public void testNoSePuedeAñadirValoracionPorPermisoInvalido() throws RangoValoracionInvalidoException {
-	    when(rankeable.mePuedeValorar(usuario)).thenReturn(false);
-	    
-	    Ranking ranking = new Ranking(4, new Categoria("Servicio"), "Muy buen servicio", reserva, rankeable, usuario);
+		when(rankeable.mePuedeValorar(usuario)).thenReturn(false);
 
-	    assertThrows(ValoracionInvalidaException.class, () -> rankingManager.añadirValoracion(ranking));
+		Ranking ranking = new Ranking(4, new Categoria("Servicio"), "Muy buen servicio", reserva, rankeable, usuario);
+
+		assertThrows(ValoracionInvalidaException.class, () -> rankingManager.añadirValoracion(ranking));
 	}
-
 
 	@Test
 	public void testGetValoracionesPorCategoria()

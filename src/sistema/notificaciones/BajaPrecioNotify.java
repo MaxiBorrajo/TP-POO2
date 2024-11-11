@@ -14,7 +14,7 @@ public class BajaPrecioNotify extends EventoNotificador {
 		// TODO Auto-generated method stub
 		return even2.esBajaDePrecio();
 	}
- 
+
 	@Override
 	public boolean esBajaDePrecio() {
 		return true;

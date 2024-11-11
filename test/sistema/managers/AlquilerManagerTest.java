@@ -5,10 +5,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -18,13 +16,13 @@ import sistema.filtro.FiltroDeSistema;
 
 public class AlquilerManagerTest {
 
-    private AlquilerManager alqM;
-    
-    @BeforeEach
-    void setUp() {
-    	this.alqM = new AlquilerManager();
-    }
-    
+	private AlquilerManager alqM;
+
+	@BeforeEach
+	void setUp() {
+		this.alqM = new AlquilerManager();
+	}
+
 //    @Test
 //    public void unPropietarioDebeEstarRegistradoParaPoderCrearAlquiler() {
 //    	fail("Not yet implemented");
@@ -49,15 +47,15 @@ public class AlquilerManagerTest {
 //    public void unInquilinoPuedePedirElCalculoDePrecioParaUnPeriodo() {
 //    	fail("Not yet implemented");
 //    }
-    
-    @Test
-    public void unInquilinoQuiereFiltrarLosAlquileres() {
-    	FiltroDeSistema f  = mock(FiltroDeSistema.class);
-    	List<Alquiler> a = this.alqM.getAlquileres();
-    	
-    	this.alqM.filtrarAlquiler(f);
-    	verify(f,times(1)).filtrarLista(a);
-    }
-    
+
+	@Test
+	public void unInquilinoQuiereFiltrarLosAlquileres() {
+		FiltroDeSistema f = mock(FiltroDeSistema.class);
+		List<Alquiler> a = this.alqM.getAlquileres();
+
+		this.alqM.filtrarAlquiler(f);
+		verify(f, times(1)).filtrarLista(a);
+	}
+
 //    Add more tests
 }

@@ -10,12 +10,12 @@ public class Ranking {
 	private Categoria categoria;
 	private String comentario;
 	private Reserva reserva;
-	private Rankeable rankeable;
+	private Rankeable rankeable; 
 	private Usuario ranker;
 
 	public Ranking(int valoracion, Categoria categoria, String comentario, Reserva reserva, Rankeable rankeable,
 			Usuario ranker) throws RangoValoracionInvalidoException {
-		
+
 		if (valoracion < 1 || valoracion > 5) {
 			throw new RangoValoracionInvalidoException();
 		}

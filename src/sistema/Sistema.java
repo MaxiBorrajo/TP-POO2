@@ -65,7 +65,7 @@ public class Sistema {
 	private void validarExistenciaCustomEnum(String nombre, CustomEnumType tipo) throws NoExistenteException {
 		if (!this.customEnumManager.existeCustomEnum(nombre, tipo)) {
 			throw new NoExistenteException(tipo.name());
-		} 
+		}
 	}
 
 	public List<Ranking> getValoraciones(Rankeable rankeable) {

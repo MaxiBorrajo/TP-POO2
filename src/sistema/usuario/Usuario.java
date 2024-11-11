@@ -38,7 +38,7 @@ public class Usuario implements Rankeable {
 
 	@Override
 	public boolean equals(Object obj) {
-		
+
 		Usuario other = (Usuario) obj;
 		return email.equals(other.getEmail());
 	}

@@ -17,7 +17,7 @@ public class Visualizacion {
 	Sistema sistema;
 
 	public Visualizacion(Inmueble inmueble, Sistema sistema) {
-		this.inmueble = inmueble; 
+		this.inmueble = inmueble;
 		this.sistema = sistema;
 	}
 

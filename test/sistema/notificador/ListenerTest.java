@@ -16,22 +16,22 @@ import sistema.notificaciones.Suscriptor;
 public class ListenerTest {
 	private Listener lis;
 	private EventoNotificador even;
-	
+
 	@BeforeEach
 	void setUp() {
 		this.even = mock(CancelacionNotify.class);
 		this.lis = new Listener(even);
 	}
-	
+
 	@Test
 	void tesSepuedeAgregarSuscriptores() {
 		assertEquals(0, this.lis.cantidadSuscriptos());
 		Suscriptor s = mock(Suscriptor.class);
 		this.lis.add(s);
 		assertEquals(1, this.lis.cantidadSuscriptos());
-		
+
 	}
-	
+
 	@Test
 	void tesSepuedeRemoverSuscriptores() {
 		assertEquals(0, this.lis.cantidadSuscriptos());
@@ -40,27 +40,28 @@ public class ListenerTest {
 		assertEquals(1, this.lis.cantidadSuscriptos());
 		this.lis.remove(s);
 		assertEquals(0, this.lis.cantidadSuscriptos());
-		
+
 	}
+
 	@Test
 	void testPuedeSberSIElEventoEsComoOtro() {
-		EventoNotificador ev = mock(CancelacionNotify.class); 
-		
+		EventoNotificador ev = mock(CancelacionNotify.class);
+
 		this.lis.esEventoPara(ev);
 		verify(this.even, times(1)).esIgualA(ev);
 	}
+
 	@Test
 	void testPuedeNotificarATodosSuscriptos() {
 		Suscriptor s = mock(Suscriptor.class);
 		this.lis.add(s);
 		Suscriptor s1 = mock(Suscriptor.class);
 		this.lis.add(s1);
-		
+
 		this.lis.notificar();
-		
+
 		verify(this.even, times(1)).notificarEspecifica(s);
 		verify(this.even, times(1)).notificarEspecifica(s1);
 	}
-	
-	
+
 }

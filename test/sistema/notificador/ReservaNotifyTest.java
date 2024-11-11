@@ -20,38 +20,41 @@ import sistema.reserva.Reserva;
 public class ReservaNotifyTest {
 	private ReservaNotify can;
 	private Reserva re;
+
 	@BeforeEach
 	void setUp() {
 		this.re = mock(Reserva.class);
 		this.can = new ReservaNotify(re);
 	}
-	
+
 	@Test
 	void testSabeREsponderSiEsCancelado() {
 		assertTrue(this.can.esReserva());
-	
+
 	}
+
 	@Test
 	void testSabeResponderSiSonElMimsoEvento() {
 		EventoNotificador even = mock(ReservaNotify.class);
 		when(even.esReserva()).thenReturn(true);
 		assertTrue(this.can.esElMismoEvento(even));
 	}
-	
+
 	@Test
 	void testSabeResponderSiNoSonElMimsoEvento() {
 		EventoNotificador even = mock(BajaPrecioNotify.class);
 		when(even.esReserva()).thenReturn(false);
-		
+
 		assertFalse(this.can.esElMismoEvento(even));
 	}
+
 	@Test
 	void testMandaUnUpdateAlSuscriptorAlSerNotificada() {
 		Suscriptor sus = mock(Suscriptor.class);
-		
+
 		this.can.notificarEspecifica(sus);
-		
-		verify(sus,times(1)).update(this.can);
+
+		verify(sus, times(1)).update(this.can);
 	}
 
 }

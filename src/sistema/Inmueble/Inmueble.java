@@ -25,11 +25,11 @@ public class Inmueble implements Rankeable {
 	public Inmueble(int superficie, TipoDeInmueble tipo, Ubicacion ubi, List<Servicio> servicios, int capacidad,
 			Usuario propietario) {
 
-		if(!propietario.getRol().equals(RolDeUsuario.PROPIETARIO)) {
+		if (!propietario.getRol().equals(RolDeUsuario.PROPIETARIO)) {
 
 			new PermisoDenegadoException();
 		}
-		 
+
 		this.superficie = superficie;
 		this.tipo = tipo;
 		this.ubicacion = ubi;
@@ -52,10 +52,10 @@ public class Inmueble implements Rankeable {
 		this.vecesAlquilado = vecesAlquilado;
 	}
 
-	public void añadirFoto(String link)  {
+	public void añadirFoto(String link) {
 		if (this.fotos.size() < 5) {
 			this.fotos.add(link);
-		} 
+		}
 	}
 
 	public boolean esDeCiudad(String ciudad) {
@@ -73,9 +73,6 @@ public class Inmueble implements Rankeable {
 	public String getTipo() {
 		return this.tipo.getNombre();
 	}
-
-
-	
 
 	public Usuario getPropietario() {
 		return this.propietario;

@@ -24,8 +24,6 @@ public class Reserva implements Observable {
 	private NotificadorManager noti;
 	private double precioTotal;
 
-	
-
 	public Reserva(FormaDePago formaDepago, LocalDate fechaInicio, LocalDate fechaFinal, Alquiler alquiler,
 			Usuario usuario, double precioTotal) {
 		this.estado = new Pendiente();
@@ -103,7 +101,7 @@ public class Reserva implements Observable {
 
 	public void finalizar() {
 		this.estado.finalizar(this);
-		
+
 	}
 
 	public void aceptarReserva(NotificadorManager noti2) {
@@ -122,7 +120,7 @@ public class Reserva implements Observable {
 		this.alquiler.seCanceloReserva(this, reser);
 
 	}
-	
+
 	public double calcularReembolsoPorCancelacion() {
 		return this.alquiler.calcularReembolsoPorCancelacion(this.fechaInicio, this.fechaFinal, this.precioTotal);
 	}
@@ -140,8 +138,5 @@ public class Reserva implements Observable {
 		// TODO Auto-generated method stub
 		return this.estado.estaFinalizada();
 	}
-
-	
-
 
 }

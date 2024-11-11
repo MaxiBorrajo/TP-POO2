@@ -87,7 +87,7 @@ public class Alquiler implements Observable {
 	public void agregarFormaDePago(FormaDePago formaDePago) throws YaExistenteException {
 		if (!existeFormaDePago(formaDePago)) {
 			this.formasDePago.add(formaDePago);
-		}else {
+		} else {
 			throw new YaExistenteException("Forma de pago");
 		}
 	}
@@ -164,16 +164,15 @@ public class Alquiler implements Observable {
 	}
 
 	private void desocuparPeriodosDe(LocalDate fechaInicio, LocalDate fechaFinal) {
-	    FiltroSimple<Periodo> filtro = new FiltroSimple<>(p -> p.peridoDeFecha(fechaInicio, fechaFinal));
-	    Optional<Periodo> periodoOptional = filtro.filtrarLista(this.diasNoDisponibles).stream().findFirst();
-	    
-	    if (periodoOptional.isPresent()) {
-	        Periodo pe = periodoOptional.get();
-	        this.diasNoDisponibles.remove(pe);
-	        this.agregarPeriodo(pe);
-	    }
-	}
+		FiltroSimple<Periodo> filtro = new FiltroSimple<>(p -> p.periodoDeFecha(fechaInicio, fechaFinal));
+		Optional<Periodo> periodoOptional = filtro.filtrarLista(this.diasNoDisponibles).stream().findFirst();
 
+		if (periodoOptional.isPresent()) {
+			Periodo pe = periodoOptional.get();
+			this.diasNoDisponibles.remove(pe);
+			this.agregarPeriodo(pe);
+		}
+	}
 
 	public double calcularReembolsoPorCancelacion(LocalDate fechaInicio, LocalDate fechaFinal, double precioTotal) {
 		return this.politicaDeCancelacion.calcularReembolso(fechaInicio, fechaFinal, precioTotal);

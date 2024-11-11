@@ -10,9 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class FiltroSimpleTest {
-	
+
 	private Filtro<Integer> filtro;
-	
+
 	@BeforeEach
 	void setUp() throws Exception {
 		this.filtro = new FiltroSimple<Integer>((n -> n % 2 == 0));
@@ -20,9 +20,9 @@ class FiltroSimpleTest {
 
 	@Test
 	void testFiltra4Resultado() {
-		List<Integer> list = new ArrayList<Integer>(Arrays.asList(1,2,3));
-		
-		assertEquals(1,this.filtro.filtrarLista(list).size());
+		List<Integer> list = new ArrayList<Integer>(Arrays.asList(1, 2, 3));
+
+		assertEquals(1, this.filtro.filtrarLista(list).size());
 	}
 
 }

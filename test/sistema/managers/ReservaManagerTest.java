@@ -45,14 +45,14 @@ public class ReservaManagerTest {
 	private Alquiler alquiler;
 	private FormaDePago formaDePago;
 	private LocalDate entrada, salida;
-	private Reserva reservaMock; 
+	private Reserva reservaMock;
 	private MailSender mailSender;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		this.reservaManager = new ReservaManager();
 		this.inquilino = mock(Usuario.class);
-		this.propietario = mock(Usuario.class); 
+		this.propietario = mock(Usuario.class);
 		this.alquiler = mock(Alquiler.class);
 		this.formaDePago = mock(FormaDePago.class);
 		this.entrada = LocalDate.of(2023, 1, 1);
@@ -136,9 +136,6 @@ public class ReservaManagerTest {
 
 		when(alquiler.obtenerPrimeroDeReservasEncoladas()).thenReturn(reservaEncolada);
 
-
-		
-
 		reservaManager.cancelarReserva(reservaActiva, inquilino, mock(NotificadorManager.class), mailSender);
 
 		Reserva nuevaReserva = reservaManager.getReservas().stream()
@@ -164,7 +161,7 @@ public class ReservaManagerTest {
 		when(alquiler.getInmueble()).thenReturn(inmuebleMock);
 		when(inmuebleMock.getPropietario()).thenReturn(propietario);
 		when(alquiler.existeFormaDePago(formaDePago)).thenReturn(true);
-	
+
 		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada.plusDays(10), salida.plusDays(10))).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada.plusDays(20), salida.plusDays(20))).thenReturn(true);

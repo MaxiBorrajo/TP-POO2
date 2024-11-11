@@ -19,31 +19,34 @@ import sistema.reserva.Reserva;
 public class CancelacionNotifyTest {
 	private CancelacionNotify can;
 	private Reserva re;
+
 	@BeforeEach
 	void setUp() {
 		this.re = mock(Reserva.class);
 		this.can = new CancelacionNotify(re);
 	}
-	
+
 	@Test
 	void testSabeREsponderSiEsCancelado() {
 		assertTrue(this.can.esCancelacion());
-	
+
 	}
+
 	@Test
 	void testSabeResponderSiSonElMimsoEvento() {
 		EventoNotificador even = mock(CancelacionNotify.class);
 		when(even.esCancelacion()).thenReturn(true);
 		assertTrue(this.can.esElMismoEvento(even));
 	}
-	
+
 	@Test
 	void testSabeResponderSiNoSonElMimsoEvento() {
 		EventoNotificador even = mock(BajaPrecioNotify.class);
 		when(even.esCancelacion()).thenReturn(false);
-		
+
 		assertFalse(this.can.esElMismoEvento(even));
 	}
+
 	@Test
 	void testMandaUnPublishAlSuscriptorAlSerNotificada() {
 		Suscriptor sus = mock(Suscriptor.class);
@@ -51,8 +54,9 @@ public class CancelacionNotifyTest {
 		when(re.getAlquiler()).thenReturn(ai);
 		when(ai.getTipoDeInmueble()).thenReturn("Inmueble");
 		this.can.notificarEspecifica(sus);
-		
-		verify(sus,times(1)).popUp("El/la " +"Inmueble" + "que te interesa se ha liberado! Corre a reservarlo!","ROJO",24);
+
+		verify(sus, times(1)).popUp("El/la " + "Inmueble" + "que te interesa se ha liberado! Corre a reservarlo!",
+				"ROJO", 24);
 	}
 
 }
