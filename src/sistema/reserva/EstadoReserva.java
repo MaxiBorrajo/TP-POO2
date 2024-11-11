@@ -29,4 +29,14 @@ public class EstadoReserva {
 		return false;
 	}
 
+	public boolean estaRechazada() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean estaFinalizada() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
