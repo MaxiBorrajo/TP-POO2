@@ -9,6 +9,14 @@ public class Periodo {
 	private LocalDate fechaFinal;
 	private double precio;
 	
+	public LocalDate getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public LocalDate getFechaFinal() {
+		return fechaFinal;
+	}
+
 	public Periodo(LocalDate fechaInicio, LocalDate fechaFinal, double precio){
 		this.fechaInicio = fechaInicio;
 		this.fechaFinal = fechaFinal;

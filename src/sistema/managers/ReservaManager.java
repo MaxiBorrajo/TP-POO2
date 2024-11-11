@@ -27,7 +27,7 @@ public class ReservaManager {
 
 	private void validarReserva(FormaDePago formaDePago, LocalDate entrada, LocalDate salida, Alquiler alquiler)
 			throws FormaDePagoNoAceptadaException, AlquilerNoDisponibleException {
-		if (!alquiler.validateFormaDePago(formaDePago)) {
+		if (!alquiler.existeFormaDePago(formaDePago)) {
 			throw new FormaDePagoNoAceptadaException("Este alquiler no acepta esta forma de pago");
 		}
 

@@ -68,7 +68,7 @@ public class ReservaManagerTest {
 	@Test
 	public void unInquilinoPuedeCrearUnaReservaValida() throws Exception {
 
-		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
+		when(alquiler.existeFormaDePago(formaDePago)).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
 
 		Reserva reserva = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino, false);
@@ -79,7 +79,7 @@ public class ReservaManagerTest {
 	@Test
 	public void UnInquilinoNoPuedeCrearReservaConFormaDePagoNoAceptada() {
 
-		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(false);
+		when(alquiler.existeFormaDePago(formaDePago)).thenReturn(false);
 		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
 
 		assertThrows(FormaDePagoNoAceptadaException.class, () -> {
@@ -122,7 +122,7 @@ public class ReservaManagerTest {
 
 	@Test
 	public void testDesencolarReservaAlCancelar() throws Exception {
-		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
+		when(alquiler.existeFormaDePago(formaDePago)).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
 
 		Reserva reservaActiva = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino, true);
@@ -162,7 +162,7 @@ public class ReservaManagerTest {
 		Inmueble inmuebleMock = mock(Inmueble.class);
 		when(alquiler.getInmueble()).thenReturn(inmuebleMock);
 		when(inmuebleMock.getPropietario()).thenReturn(propietario);
-		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
+		when(alquiler.existeFormaDePago(formaDePago)).thenReturn(true);
 	
 		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada.plusDays(10), salida.plusDays(10))).thenReturn(true);
@@ -218,7 +218,7 @@ public class ReservaManagerTest {
 	@Test
 	public void testSeFiltranReservas() throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 		FiltroReserva fr = mock(FiltroReservasFuturas.class);
-		when(alquiler.validateFormaDePago(formaDePago)).thenReturn(true);
+		when(alquiler.existeFormaDePago(formaDePago)).thenReturn(true);
 		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
 		Reserva re = this.reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino, false);
 

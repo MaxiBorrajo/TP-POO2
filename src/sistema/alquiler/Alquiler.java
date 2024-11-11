@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 
 import sistema.reserva.Reserva;
@@ -13,6 +14,7 @@ import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
+import sistema.exceptions.YaExistenteException;
 import sistema.filtro.FiltroSimple;
 import sistema.managers.ReservaManager;
 import sistema.notificaciones.Observable;
@@ -47,88 +49,59 @@ public class Alquiler implements Observable {
 		this.politicaDeCancelacion = politicaDeCancelacion;
 	}
 
-	public void agregarPeriodo(Periodo periodo) {
-		// validar si no existe un periodo que coincida con este, no puede haber
-		// mas de un precio por dia
-		this.periodos.add(periodo);
+	public void agregarPeriodo(Periodo nuevoPeriodo) {
+		boolean existePeriodo = this.periodos.stream()
+				.anyMatch(periodo -> (nuevoPeriodo.perteneceAPeriodo(periodo.getFechaInicio())
+						|| nuevoPeriodo.perteneceAPeriodo(periodo.getFechaFinal()))
+						|| (periodo.perteneceAPeriodo(nuevoPeriodo.getFechaInicio())
+								|| periodo.perteneceAPeriodo(nuevoPeriodo.getFechaFinal())));
+
+		if (!existePeriodo) {
+			this.periodos.add(nuevoPeriodo);
+		} else {
+			throw new IllegalArgumentException(
+					"El periodo ya existe o se solapa con otro y no puede ser agregado nuevamente.");
+		}
 	}
 
 	private void agregarPeriodoNoDisponible(Periodo p) {
-		// TODO Auto-generated method stub
 		this.diasNoDisponibles.add(p);
 	}
 
 	public double calcularPrecioPeriodo(LocalDate fechaInicio, LocalDate fechaFinal) {
-		// this.periodos.strea().mapToInt(p -> p.valorParaPeriodo(fechaInicio,
-		// fechaFinal)).size() -
-		// - calcularDistanciaFecha(fechaInicio, fechaFinal)) modulo *precioBase + lo
-		// anterior
-		// this.periodos.stream().reduce(((acc, p ) -> acc + p.isEmpty() ? p.get() : 0)
-		// ,0)
-		//
-		double totalPrecio = 0.0;
-		LocalDate currentDate = fechaInicio;
-		while (!currentDate.isAfter(fechaFinal)) {
-			boolean precioAsignado = false;
-			for (Periodo periodo : periodos) {
-				if (periodo.perteneceAPeriodo(currentDate)) {
-					totalPrecio += periodo.getPrecio();
-					precioAsignado = true;
-					break;
-				}
-			}
-			if (!precioAsignado) {
-				totalPrecio += precioDefault;
-			}
-			currentDate = currentDate.plusDays(1);
-		}
-		return totalPrecio;
+		return fechaInicio.datesUntil(fechaFinal.plusDays(1))
+				.mapToDouble(date -> periodos.stream().filter(periodo -> periodo.perteneceAPeriodo(date)).findFirst()
+						.map(Periodo::getPrecio).orElse(precioDefault))
+				.sum();
 	}
 
 	public boolean puedeCrearReserva(LocalDate entrada, LocalDate salida) {
-		LocalDate currentDate = entrada;
-
-		while (!currentDate.isAfter(salida)) {
-			for (Periodo periodo : diasNoDisponibles) {
-				if (periodo.perteneceAPeriodo(currentDate)) {
-					return false;
-				}
-			}
-			currentDate = currentDate.plusDays(1);
-		}
-		return true;
+		return entrada.datesUntil(salida.plusDays(1))
+				.noneMatch(date -> diasNoDisponibles.stream().anyMatch(periodo -> periodo.perteneceAPeriodo(date)));
 	}
 
-	public boolean validateFormaDePago(FormaDePago formaDePago) {
+	public boolean existeFormaDePago(FormaDePago formaDePago) {
 		return this.formasDePago.contains(formaDePago);
 	}
 
-	public void agregarFormaDePago(FormaDePago formaDePago) {
-		if (!validateFormaDePago(formaDePago)) {
+	public void agregarFormaDePago(FormaDePago formaDePago) throws YaExistenteException {
+		if (!existeFormaDePago(formaDePago)) {
 			this.formasDePago.add(formaDePago);
+		}else {
+			throw new YaExistenteException("Forma de pago");
 		}
 	}
 
 	public boolean esDeCiudad(String ciudad) {
-		// TODO Auto-generated method stub
 		return this.inmueble.esDeCiudad(ciudad);
 	}
 
-	public boolean perteneceAAlgunPeriodo(LocalDate entrada, LocalDate salida) {
-		// TODO Auto-generated method stub ver si rompe con algun caso, esto
-		// posiblemente ya no se usa
-		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(entrada))
-				&& this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(salida));
-	}
-
 	public boolean aceptaCantidadHuespedes(int cant) {
-		// TODO Auto-generated method stub
 		return cant >= this.inmueble.getCapacidad();
 	}
 
 	public boolean cumplePrecioEnPeriodo(double precioMinimo, double precioMaximo, LocalDate entrada,
 			LocalDate salida) {
-		// TODO Auto-generated method stub
 		double precioPorFecha = this.calcularPrecioPeriodo(entrada, salida);
 		return precioMinimo <= precioPorFecha & precioPorFecha >= precioMaximo;
 	}
@@ -138,33 +111,26 @@ public class Alquiler implements Observable {
 	}
 
 	public boolean estaDisponibleLuego(LocalDate entrada) {
-		// TODO Auto-generated method stub
 		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(entrada));
 	}
 
 	public boolean estaDisponibleAntes(LocalDate salida) {
-		// TODO Auto-generated method stub
 		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(salida));
 	}
 
 	public String getTipoDeInmueble() {
-		// TODO Auto-generated method stub
 		return this.inmueble.getTipo();
 	}
 
 	public boolean tienenElMismoInmueble(Alquiler alq) {
-		// TODO Auto-generated method stub
-		// por precondicion de la solucion se podria compara por alquileres
 		return this.inmueble.sonElMismoInmueble(alq.getInmueble());
 	}
 
 	public double getPrecioBase() {
-		// TODO Auto-generated method stub
 		return this.precioDefault;
 	}
 
 	public String getCiudad() {
-		// TODO Auto-generated method stub
 		return this.inmueble.getCiudad();
 	}
 
@@ -177,13 +143,10 @@ public class Alquiler implements Observable {
 	}
 
 	public boolean hayReservasEncoladas() {
-		// TODO Auto-generated method stub
 		return !this.reservasEncoladas.isEmpty();
 	}
 
 	public void seAceptoReserva(Reserva reserva) {
-		// TODO Auto-generated method stub
-		// ocupar periodos
 		LocalDate fechaInicio = reserva.getFechaInicio();
 		LocalDate fechaFinal = reserva.getFechaFinal();
 		this.inmueble.setVecesAlquilado(this.inmueble.getVecesAlquilado() + 1);
@@ -193,9 +156,6 @@ public class Alquiler implements Observable {
 
 	public void seCanceloReserva(Reserva reserva, ReservaManager reser)
 			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
-		// TODO Auto-generated method stub
-		// estrategia de cancelacion
-		// ver si hay que desencolar
 		if (this.hayReservasEncoladas()) {
 			reser.desencolarReserva(this);
 		} else {
@@ -204,12 +164,16 @@ public class Alquiler implements Observable {
 	}
 
 	private void desocuparPeriodosDe(LocalDate fechaInicio, LocalDate fechaFinal) {
-		// TODO Auto-generated method stub
-		Periodo pe = (new FiltroSimple<Periodo>(p -> p.peridoDeFecha(fechaInicio, fechaFinal)))
-				.filtrarLista(this.diasNoDisponibles).stream().findFirst().get();
-		this.diasNoDisponibles.remove(pe);
-		this.agregarPeriodo(pe);
+	    FiltroSimple<Periodo> filtro = new FiltroSimple<>(p -> p.peridoDeFecha(fechaInicio, fechaFinal));
+	    Optional<Periodo> periodoOptional = filtro.filtrarLista(this.diasNoDisponibles).stream().findFirst();
+	    
+	    if (periodoOptional.isPresent()) {
+	        Periodo pe = periodoOptional.get();
+	        this.diasNoDisponibles.remove(pe);
+	        this.agregarPeriodo(pe);
+	    }
 	}
+
 
 	public double calcularReembolsoPorCancelacion(LocalDate fechaInicio, LocalDate fechaFinal, double precioTotal) {
 		return this.politicaDeCancelacion.calcularReembolso(fechaInicio, fechaFinal, precioTotal);
@@ -217,7 +181,6 @@ public class Alquiler implements Observable {
 
 	@Override
 	public Alquiler getAlquiler() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 

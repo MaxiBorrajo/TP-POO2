@@ -49,7 +49,7 @@ public class RankingManager {
 
 	public void validarPuedeAñadirValoracion(Ranking valoracion)
 			throws ServicioNoTerminadoException, ValoracionInvalidaException {
-		if (!valoracion.getReserva().fechaPosteriorAFinal(LocalDate.now())) {
+		if (!valoracion.getReserva().estaFinalizada()) {
 			throw new ServicioNoTerminadoException();
 		}
 
@@ -59,7 +59,6 @@ public class RankingManager {
 	};
 
 	public void añadirValoracion(Ranking valoracion) throws ServicioNoTerminadoException, ValoracionInvalidaException {
-		// TODO Auto-generated method stub
 		this.validarPuedeAñadirValoracion(valoracion);
 		this.rankings.add(valoracion);
 	}
