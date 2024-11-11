@@ -5,7 +5,7 @@ import sistema.alquiler.Alquiler;
 
 public class ReservaNotify extends EventoNotificador {
 
-	public ReservaNotify(Alquiler alq) {
+	public ReservaNotify(Observable alq) {
 		super(alq);
 	}
 

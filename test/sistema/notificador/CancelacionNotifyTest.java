@@ -14,14 +14,15 @@ import sistema.notificaciones.BajaPrecioNotify;
 import sistema.notificaciones.CancelacionNotify;
 import sistema.notificaciones.EventoNotificador;
 import sistema.notificaciones.Suscriptor;
+import sistema.reserva.Reserva;
 
 public class CancelacionNotifyTest {
 	private CancelacionNotify can;
-	private Alquiler alq;
+	private Reserva re;
 	@BeforeEach
 	void setUp() {
-		this.alq = mock(Alquiler.class);
-		this.can = new CancelacionNotify(alq);
+		this.re = mock(Reserva.class);
+		this.can = new CancelacionNotify(re);
 	}
 	
 	@Test
@@ -46,7 +47,9 @@ public class CancelacionNotifyTest {
 	@Test
 	void testMandaUnPublishAlSuscriptorAlSerNotificada() {
 		Suscriptor sus = mock(Suscriptor.class);
-		when(this.alq.getTipoDeInmueble()).thenReturn("Inmueble");
+		Alquiler ai = mock(Alquiler.class);
+		when(re.getAlquiler()).thenReturn(ai);
+		when(ai.getTipoDeInmueble()).thenReturn("Inmueble");
 		this.can.notificarEspecifica(sus);
 		
 		verify(sus,times(1)).popUp("El/la " +"Inmueble" + "que te interesa se ha liberado! Corre a reservarlo!","ROJO",24);

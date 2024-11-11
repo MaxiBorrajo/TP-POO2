@@ -15,9 +15,10 @@ import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.filtro.FiltroSimple;
 import sistema.managers.ReservaManager;
+import sistema.notificaciones.Observable;
 import sistema.periodo.Periodo;
 
-public class Alquiler {
+public class Alquiler implements Observable {
 
 	private Inmueble inmueble;
 	private LocalTime checkIn;
@@ -212,6 +213,12 @@ public class Alquiler {
 
 	public double calcularReembolsoPorCancelacion(LocalDate fechaInicio, LocalDate fechaFinal, double precioTotal) {
 		return this.politicaDeCancelacion.calcularReembolso(fechaInicio, fechaFinal, precioTotal);
+	}
+
+	@Override
+	public Alquiler getAlquiler() {
+		// TODO Auto-generated method stub
+		return this;
 	}
 
 }

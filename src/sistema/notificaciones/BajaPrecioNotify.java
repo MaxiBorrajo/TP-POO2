@@ -4,7 +4,7 @@ import sistema.alquiler.Alquiler;
 
 public class BajaPrecioNotify extends EventoNotificador {
 
-	public BajaPrecioNotify(Alquiler alq) {
+	public BajaPrecioNotify(Observable alq) {
 		super(alq);
 		// TODO Auto-generated constructor stub
 	}

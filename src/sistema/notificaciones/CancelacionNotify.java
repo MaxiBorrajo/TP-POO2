@@ -5,7 +5,7 @@ import sistema.alquiler.Alquiler;
 
 public class CancelacionNotify extends EventoNotificador {
 
-	public CancelacionNotify(Alquiler alq) {
+	public CancelacionNotify(Observable alq) {
 		super(alq);
 	}
 
