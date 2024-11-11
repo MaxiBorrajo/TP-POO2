@@ -118,7 +118,7 @@ public class ReservaManager {
 		reserva.aceptar(notificadorManager);
 		mailSender.sendEmail("hola@sistema.com", reserva.getInquilino().getEmail(), "Reserva aprobada",
 				"El propietario ha aceptado tu reserva del alquiler");
-	}
+	} 
 
 	public void rechazarReserva(Reserva reserva, Usuario propietarioRechaza)
 			throws NoExistenteException, PermisoDenegadoException {

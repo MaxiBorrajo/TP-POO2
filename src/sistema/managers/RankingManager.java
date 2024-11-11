@@ -1,17 +1,14 @@
 package sistema.managers;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import sistema.enums.customEnums.Categoria;
-import sistema.exceptions.ServicioNoTerminadoException;
+import sistema.exceptions.ReservaNoTerminadaException;
 import sistema.exceptions.ValoracionInvalidaException;
 import sistema.filtro.FiltroSimple;
 import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
-import sistema.reserva.Reserva;
-import sistema.usuario.Usuario;
 
 public class RankingManager {
 	private List<Ranking> rankings;
@@ -48,9 +45,9 @@ public class RankingManager {
 	}
 
 	public void validarPuedeAñadirValoracion(Ranking valoracion)
-			throws ServicioNoTerminadoException, ValoracionInvalidaException {
+			throws ReservaNoTerminadaException, ValoracionInvalidaException {
 		if (!valoracion.getReserva().estaFinalizada()) {
-			throw new ServicioNoTerminadoException();
+			throw new ReservaNoTerminadaException();
 		}
 
 		if (!valoracion.getRankeable().mePuedeValorar(valoracion.getRanker())) {
@@ -58,7 +55,7 @@ public class RankingManager {
 		}
 	};
 
-	public void añadirValoracion(Ranking valoracion) throws ServicioNoTerminadoException, ValoracionInvalidaException {
+	public void añadirValoracion(Ranking valoracion) throws ReservaNoTerminadaException, ValoracionInvalidaException {
 		this.validarPuedeAñadirValoracion(valoracion);
 		this.rankings.add(valoracion);
 	}

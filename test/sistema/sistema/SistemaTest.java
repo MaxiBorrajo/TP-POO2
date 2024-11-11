@@ -58,8 +58,7 @@ public class SistemaTest {
 	}
 
 	@Test
-	public void testAñadirValoracion()
-			throws ServicioNoTerminadoException, ValoracionInvalidaException, RangoValoracionInvalidoException {
+	public void testAñadirValoracion() throws ValoracionInvalidaException, RangoValoracionInvalidoException {
 		Rankeable rankeable = mock(Rankeable.class);
 		Usuario usuario = mock(Usuario.class);
 		Categoria categoria = new Categoria("Limpieza");
@@ -75,8 +74,8 @@ public class SistemaTest {
 	}
 
 	@Test
-	public void testGetValoracionesPorCategoria() throws ServicioNoTerminadoException, ValoracionInvalidaException,
-			RangoValoracionInvalidoException, NoExistenteException {
+	public void testGetValoracionesPorCategoria() throws ValoracionInvalidaException, RangoValoracionInvalidoException,
+			NoExistenteException, ReservaNoTerminadaException {
 		Rankeable rankeable = mock(Rankeable.class);
 		Usuario usuario = mock(Usuario.class);
 		Categoria categoria = new Categoria("Servicio");
@@ -99,8 +98,8 @@ public class SistemaTest {
 	}
 
 	@Test
-	public void testGetPromedioValoraciones() throws ServicioNoTerminadoException, ValoracionInvalidaException,
-			RangoValoracionInvalidoException, NoExistenteException {
+	public void testGetPromedioValoraciones() throws ValoracionInvalidaException, RangoValoracionInvalidoException,
+			NoExistenteException, ReservaNoTerminadaException {
 		Rankeable rankeable = mock(Rankeable.class);
 		Usuario usuario = mock(Usuario.class);
 		Categoria categoria = new Categoria("Servicio");
@@ -120,7 +119,7 @@ public class SistemaTest {
 	}
 
 	@Test
-	public void testGetPromedioValoracionesPorCategoria() throws ServicioNoTerminadoException,
+	public void testGetPromedioValoracionesPorCategoria() throws ReservaNoTerminadaException,
 			ValoracionInvalidaException, RangoValoracionInvalidoException, NoExistenteException {
 		Rankeable rankeable = mock(Rankeable.class);
 		Usuario usuario = mock(Usuario.class);
@@ -144,7 +143,7 @@ public class SistemaTest {
 	}
 
 	@Test
-	public void testGetComentarios() throws ServicioNoTerminadoException, ValoracionInvalidaException,
+	public void testGetComentarios() throws ReservaNoTerminadaException, ValoracionInvalidaException,
 			RangoValoracionInvalidoException, NoExistenteException {
 		Rankeable rankeable = mock(Rankeable.class);
 		Usuario usuario = mock(Usuario.class);
@@ -183,14 +182,14 @@ public class SistemaTest {
 		assertDoesNotThrow(() -> sistema.registrarUsuario("Jane Doe", "janedoe@example.com", "987654321",
 				RolDeUsuario.PROPIETARIO));
 
-		assertThrows(UsuarioExistenteException.class, () -> sistema.registrarUsuario("Jane Doe", "janedoe@example.com",
+		assertThrows(YaExistenteException.class, () -> sistema.registrarUsuario("Jane Doe", "janedoe@example.com",
 				"987654321", RolDeUsuario.PROPIETARIO));
 	}
 
 	@Test
 	public void testDarAltaCategoriaConAdmin() {
 		assertDoesNotThrow(() -> sistema.darAltaCategoria("CategoriaNueva", admin));
-		assertThrows(CustomEnumExistenteException.class, () -> sistema.darAltaCategoria("CategoriaNueva", admin));
+		assertThrows(YaExistenteException.class, () -> sistema.darAltaCategoria("CategoriaNueva", admin));
 	}
 
 	@Test
@@ -201,7 +200,7 @@ public class SistemaTest {
 	@Test
 	public void testDarAltaTipoInmuebleConAdmin() {
 		assertDoesNotThrow(() -> sistema.darAltaTipoInmueble("TipoInmuebleNuevo", admin));
-		assertThrows(CustomEnumExistenteException.class, () -> sistema.darAltaTipoInmueble("TipoInmuebleNuevo", admin));
+		assertThrows(YaExistenteException.class, () -> sistema.darAltaTipoInmueble("TipoInmuebleNuevo", admin));
 	}
 
 	@Test
@@ -212,7 +211,7 @@ public class SistemaTest {
 	@Test
 	public void testDarAltaServicioConAdmin() {
 		assertDoesNotThrow(() -> sistema.darAltaServicio("ServicioNuevo", admin));
-		assertThrows(CustomEnumExistenteException.class, () -> sistema.darAltaServicio("ServicioNuevo", admin));
+		assertThrows(YaExistenteException.class, () -> sistema.darAltaServicio("ServicioNuevo", admin));
 	}
 
 	@Test

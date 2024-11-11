@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import sistema.enums.customEnums.*;
-import sistema.exceptions.CustomEnumExistenteException;
+import sistema.exceptions.YaExistenteException;
 
 public class CustomEnumManager {
 
@@ -22,7 +22,7 @@ public class CustomEnumManager {
 		return enumList.stream().anyMatch(existingEnum -> existingEnum.getNombre().equals(nombre));
 	}
 
-	private void updateEnums(CustomEnumType tipo, CustomEnum newEnum) throws CustomEnumExistenteException {
+	private void updateEnums(CustomEnumType tipo, CustomEnum newEnum) throws YaExistenteException {
 		List<CustomEnum> enumList = enumMap.computeIfAbsent(tipo, k -> new ArrayList<>());
 
 		boolean exists = enumList.stream()
@@ -31,12 +31,12 @@ public class CustomEnumManager {
 		if (!exists) {
 			enumList.add(newEnum);
 		} else {
-			throw new CustomEnumExistenteException();
+			throw new YaExistenteException(tipo.name()); 
 		}
 
 	}
 
-	public CustomEnum createCustomEnum(String nombre, CustomEnumType tipo) throws CustomEnumExistenteException {
+	public CustomEnum createCustomEnum(String nombre, CustomEnumType tipo) throws YaExistenteException {
 		CustomEnum newEnum = tipo.crearInstancia(nombre);
 		updateEnums(tipo, newEnum);
 		return newEnum;

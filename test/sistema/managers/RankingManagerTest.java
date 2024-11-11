@@ -1,7 +1,6 @@
 package sistema.managers;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,14 +10,13 @@ import org.junit.jupiter.api.Test;
 import sistema.Inmueble.Inmueble;
 import sistema.enums.customEnums.Categoria;
 import sistema.exceptions.RangoValoracionInvalidoException;
-import sistema.exceptions.ServicioNoTerminadoException;
+import sistema.exceptions.ReservaNoTerminadaException;
 import sistema.exceptions.ValoracionInvalidaException;
 import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
 import sistema.reserva.Reserva;
 import sistema.usuario.Usuario;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class RankingManagerTest {
@@ -40,7 +38,7 @@ public class RankingManagerTest {
 
 	@Test
 	public void testAñadirValoracion()
-			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+			throws RangoValoracionInvalidoException, ValoracionInvalidaException, ReservaNoTerminadaException {
 		Ranking ranking = new Ranking(4, new Categoria("Servicio"), "Muy buen servicio", reserva, rankeable, usuario);
 		rankingManager.añadirValoracion(ranking);
 		assertEquals(1, rankingManager.getValoraciones(rankeable).size());
@@ -57,7 +55,7 @@ public class RankingManagerTest {
 
 	@Test
 	public void testGetValoracionesPorCategoria()
-			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+			throws RangoValoracionInvalidoException, ValoracionInvalidaException, ReservaNoTerminadaException {
 		rankingManager.añadirValoracion(
 				new Ranking(5, new Categoria("Limpieza"), "Limpio y ordenado", reserva, rankeable, usuario));
 		rankingManager.añadirValoracion(
@@ -69,7 +67,7 @@ public class RankingManagerTest {
 
 	@Test
 	public void testCalcularPromedioValoraciones()
-			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+			throws RangoValoracionInvalidoException, ValoracionInvalidaException, ReservaNoTerminadaException {
 		rankingManager.añadirValoracion(
 				new Ranking(1, new Categoria("Limpieza"), "Limpio y ordenado", reserva, rankeable, usuario));
 		rankingManager.añadirValoracion(
@@ -79,7 +77,7 @@ public class RankingManagerTest {
 
 	@Test
 	public void testCalcularPromedioPorCategoria()
-			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+			throws RangoValoracionInvalidoException, ValoracionInvalidaException, ReservaNoTerminadaException {
 		rankingManager.añadirValoracion(
 				new Ranking(5, new Categoria("Limpieza"), "Excelente limpieza", reserva, rankeable, usuario));
 		rankingManager.añadirValoracion(
@@ -89,7 +87,7 @@ public class RankingManagerTest {
 
 	@Test
 	public void testGetComentarios()
-			throws RangoValoracionInvalidoException, ServicioNoTerminadoException, ValoracionInvalidaException {
+			throws RangoValoracionInvalidoException, ValoracionInvalidaException, ReservaNoTerminadaException {
 		rankingManager
 				.añadirValoracion(new Ranking(5, new Categoria("Limpieza"), "Muy limpio", reserva, rankeable, usuario));
 		rankingManager.añadirValoracion(

@@ -7,9 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import sistema.enums.RolDeUsuario;
+import sistema.exceptions.NoExistenteException;
 import sistema.exceptions.PermisoDenegadoException;
-import sistema.exceptions.UsuarioExistenteException;
-import sistema.exceptions.UsuarioNoRegistradoException;
+import sistema.exceptions.YaExistenteException;
 import sistema.usuario.Usuario;
 
 public class UsuarioManagerTest {
@@ -49,14 +49,14 @@ public class UsuarioManagerTest {
 
 		usuarioManager.registrarUsuario(nombreCompleto, email, telefono, rol);
 
-		assertThrows(UsuarioExistenteException.class,
+		assertThrows(YaExistenteException.class,
 				() -> usuarioManager.registrarUsuario(nombreCompleto, email, telefono, rol));
 	}
 
 	@Test
 	public void testValidarUsuarioFallaAlUtilizarUnUsuarioNoRegistrado() {
 		Usuario usuario = mock(Usuario.class);
-		assertThrows(UsuarioNoRegistradoException.class,
+		assertThrows(NoExistenteException.class,
 				() -> usuarioManager.validarUsuario(usuario, RolDeUsuario.INQUILINO));
 	}
 

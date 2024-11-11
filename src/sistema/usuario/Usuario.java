@@ -1,16 +1,9 @@
 package sistema.usuario;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import sistema.enums.RolDeUsuario;
-import sistema.enums.customEnums.Categoria;
-import sistema.exceptions.ServicioNoTerminadoException;
-import sistema.exceptions.ValoracionInvalidaException;
-import sistema.managers.RankingManager;
 import sistema.ranking.Rankeable;
-import sistema.ranking.Ranking;
-import sistema.reserva.Reserva;
 
 public class Usuario implements Rankeable {
 	private String nombre;
