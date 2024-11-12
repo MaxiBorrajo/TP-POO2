@@ -6,7 +6,6 @@ import java.util.List;
 import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Servicio;
 import sistema.enums.customEnums.TipoDeInmueble;
-import sistema.exceptions.CantidadFotosExcedidaException;
 import sistema.exceptions.PermisoDenegadoException;
 import sistema.ranking.Rankeable;
 import sistema.usuario.Usuario;
@@ -23,11 +22,11 @@ public class Inmueble implements Rankeable {
 	private int vecesAlquilado;
 
 	public Inmueble(int superficie, TipoDeInmueble tipo, Ubicacion ubi, List<Servicio> servicios, int capacidad,
-			Usuario propietario) {
+			Usuario propietario) throws PermisoDenegadoException {
 
 		if (!propietario.getRol().equals(RolDeUsuario.PROPIETARIO)) {
 
-			new PermisoDenegadoException();
+			throw new PermisoDenegadoException();
 		}
 
 		this.superficie = superficie;

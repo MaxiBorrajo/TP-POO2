@@ -48,7 +48,9 @@ public class Alquiler implements Observable {
 	public void setPoliticaDeCancelacion(PoliticaDeCancelacion politicaDeCancelacion) {
 		this.politicaDeCancelacion = politicaDeCancelacion;
 	}
-
+	public PoliticaDeCancelacion getPoliticaDeCancelacion() {
+		return this.politicaDeCancelacion;
+	}
 	public void agregarPeriodo(Periodo nuevoPeriodo) {
 		boolean existePeriodo = this.periodos.stream()
 				.anyMatch(periodo -> (nuevoPeriodo.perteneceAPeriodo(periodo.getFechaInicio())

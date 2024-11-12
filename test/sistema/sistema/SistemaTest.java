@@ -10,12 +10,15 @@ import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Categoria;
+import sistema.enums.customEnums.CustomEnum;
+import sistema.enums.customEnums.CustomEnumType;
 import sistema.enums.customEnums.TipoDeInmueble;
 import sistema.exceptions.*;
 import sistema.filtro.FiltroReserva;
 import sistema.filtro.FiltroReservasFuturas;
 import sistema.filtro.FiltroSimple;
 import sistema.mailSender.MailSender;
+import sistema.managers.ReservaManager;
 import sistema.podio.Podio;
 import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
@@ -326,6 +329,21 @@ public class SistemaTest {
 	}
 
 	@Test
+	public void testPublicarAlquilerConCategoriasInvalidas() throws Exception {
+		// Arrange: mock inputs and behavior
+		Inmueble inmueble = mock(Inmueble.class);
+		when(inmueble.getTipo()).thenReturn("invalido");
+		when(inmueble.getPropietario()).thenReturn(propietario);
+
+		PoliticaDeCancelacion politica = mock(PoliticaDeCancelacion.class);
+		List<FormaDePago> formasDePago = Arrays.asList(FormaDePago.CREDITO);
+
+		// Act and Assert
+		assertThrows(NoExistenteException.class, () -> sistema.publicarAlquiler(inmueble, LocalTime.of(10, 0),
+				LocalTime.of(18, 0), 500.0, propietario, politica, formasDePago));
+	}
+
+	@Test
 	public void testCancelarReserva() throws Exception {
 		Inmueble inmueble = mock(Inmueble.class);
 		when(inmueble.getTipo()).thenReturn("Casa");
@@ -380,5 +398,18 @@ public class SistemaTest {
 		assertNotNull(visualizacion);
 		assertEquals(inmueble, visualizacion.getInmueble());
 	}
+
+	@Test
+	public void testValidacionDeEnumNoExistente() {
+		Rankeable rankeable = mock(Rankeable.class);
+		Categoria categoria = mock(Categoria.class);
+
+		String nonExistentCategoryName = "NonExistentCategory";
+		when(categoria.getNombre()).thenReturn(nonExistentCategoryName);
+
+		assertThrows(NoExistenteException.class, () -> sistema.getValoracionesPorCategoria(rankeable, categoria));
+
+	}
+
 
 }

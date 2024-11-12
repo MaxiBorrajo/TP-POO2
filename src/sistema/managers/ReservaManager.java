@@ -44,7 +44,7 @@ public class ReservaManager {
 		Reserva nuevaReserva = new Reserva(formaDePago, entrada, salida, alquiler, usuario, precioTotal);
 
 		if (!alquiler.puedeCrearReserva(entrada, salida) && !esReservaCondicional) {
-			throw new AlquilerNoDisponibleException("Alquiler no disponible para su reserva");
+			throw new AlquilerNoDisponibleException();
 		}
 
 		if (!alquiler.puedeCrearReserva(entrada, salida) && esReservaCondicional) {

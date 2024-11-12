@@ -12,6 +12,7 @@ import sistema.alquiler.Alquiler;
 import sistema.enums.RolDeUsuario;
 import sistema.enums.customEnums.Servicio;
 import sistema.enums.customEnums.TipoDeInmueble;
+import sistema.exceptions.PermisoDenegadoException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +23,7 @@ public class InmuebleTest {
 	private Usuario propietario;
 
 	@BeforeEach
-	public void setUp() {
+	public void setUp() throws PermisoDenegadoException {
 		this.propietario = mock(Usuario.class);
 		when(propietario.getRol()).thenReturn(RolDeUsuario.PROPIETARIO);
 		Ubicacion ubi = mock(Ubicacion.class);
@@ -79,7 +80,7 @@ public class InmuebleTest {
 	}
 
 	@Test
-	public void testSonElMismoInmueble() {
+	public void testSonElMismoInmueble() throws PermisoDenegadoException {
 		assertTrue(this.inmueble.sonElMismoInmueble(inmueble));
 		assertFalse(this.inmueble.sonElMismoInmueble(new Inmueble(120, mock(TipoDeInmueble.class),
 				mock(Ubicacion.class), Arrays.asList(mock(Servicio.class)), 5, propietario)));
@@ -106,5 +107,19 @@ public class InmuebleTest {
 		assertEquals(this.inmueble.fotos().size(), 5);
 
 	}
+    @Test
+    void testConstructorWhenUserIsNotPropietario() {
+        Usuario inquilino = mock(Usuario.class);
+        when(inquilino.getRol()).thenReturn(RolDeUsuario.INQUILINO);
+        
+        Ubicacion ubicacion = mock(Ubicacion.class);
+        TipoDeInmueble tipo = mock(TipoDeInmueble.class);
+        List<Servicio> servicios = Arrays.asList(mock(Servicio.class));
+        int capacidad = 4;
+
+        assertThrows(PermisoDenegadoException.class, () -> {
+            new Inmueble(100, tipo, ubicacion, servicios, capacidad, inquilino);
+        });
+    }
 
 }

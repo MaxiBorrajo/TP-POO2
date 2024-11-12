@@ -47,10 +47,6 @@ public class AlquilerManager {
 		return alquiler;
 	}
 
-	public Alquiler obtenerInformacionAlquiler(Alquiler alquiler) {
-		return alquiler;
-	}
-
 	public List<Alquiler> getAlquileres() {
 		return this.alquileres;
 	}

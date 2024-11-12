@@ -226,7 +226,6 @@ public class Sistema {
 	}
 
 	public List<Inmueble> getInmuebles(Usuario propietario) {
-		// TODO Auto-generated method stub
 		return this.alquilerManager.getAlquileres(propietario).stream().map(a -> a.getInmueble()).toList();
 	}
 

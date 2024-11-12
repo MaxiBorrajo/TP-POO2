@@ -187,4 +187,111 @@ public class AlquilerTest {
 		assertFalse(alquiler.aceptaCantidadHuespedes(3));
 	}
 
+	@Test
+	public void testSetearNuevaPoliticaDeCancelacion() {
+		PoliticaDeCancelacion nuevaPolitica = mock(PoliticaDeCancelacion.class);
+		alquiler.setPoliticaDeCancelacion(nuevaPolitica);
+		assertEquals(nuevaPolitica, alquiler.getPoliticaDeCancelacion());
+	}
+
+	@Test
+	public void testEstaDisponibleLuego() {
+		LocalDate testDate = LocalDate.of(2024, 11, 10);
+		Periodo periodoMock = mock(Periodo.class);
+		when(periodoMock.perteneceAPeriodo(testDate)).thenReturn(true);
+		alquiler.agregarPeriodo(periodoMock);
+
+		boolean result = alquiler.estaDisponibleLuego(testDate);
+
+		assertTrue(result);
+	}
+
+	@Test
+	public void testEstaDisponibleAntes() {
+		LocalDate testDate = LocalDate.of(2024, 11, 5);
+		Periodo periodoMock = mock(Periodo.class);
+		when(periodoMock.perteneceAPeriodo(testDate)).thenReturn(true);
+		alquiler.agregarPeriodo(periodoMock);
+
+		boolean result = alquiler.estaDisponibleAntes(testDate);
+
+		assertTrue(result);
+	}
+
+	@Test
+	public void testGetTipoDeInmueble() {
+		String expectedTipo = "Casa";
+		when(inmuebleMock.getTipo()).thenReturn(expectedTipo);
+
+		String tipoDeInmueble = alquiler.getTipoDeInmueble();
+
+		assertEquals(expectedTipo, tipoDeInmueble);
+	}
+
+	@Test
+	public void testTienenElMismoInmueble() {
+		Alquiler otherAlquiler = new Alquiler(inmuebleMock, LocalTime.of(14, 0), LocalTime.of(11, 0), 100.0,
+				mock(PoliticaDeCancelacion.class), List.of());
+
+		when(inmuebleMock.sonElMismoInmueble(inmuebleMock)).thenReturn(true);
+
+		boolean result = alquiler.tienenElMismoInmueble(otherAlquiler);
+
+		assertTrue(result);
+	}
+    @Test
+    public void testGetCiudad() {
+        String expectedCiudad = "Buenos Aires";
+        when(inmuebleMock.getCiudad()).thenReturn(expectedCiudad);
+        String ciudad = alquiler.getCiudad();
+        when(inmuebleMock.esDeCiudad(ciudad)).thenReturn(true);
+
+        assertEquals(expectedCiudad, ciudad);
+        assertTrue(alquiler.esDeCiudad(ciudad));
+    }
+    
+
+    @Test
+    public void testObtenerPrimeroDeReservasEncoladas() {
+        // Arrange
+        Reserva reservaMock = mock(Reserva.class);
+        alquiler = new Alquiler(
+                inmuebleMock,
+                LocalTime.of(14, 0),
+                LocalTime.of(11, 0),
+                100.0,
+                mock(PoliticaDeCancelacion.class),
+                List.of()
+        );
+        alquiler.encolarReserva(reservaMock);
+        Reserva reserva = alquiler.obtenerPrimeroDeReservasEncoladas();
+
+        assertNotNull(reserva);
+        assertEquals(reservaMock, reserva);
+    }
+
+    @Test
+    public void testObtenerPrimeroDeReservasEncoladasWhenQueueIsEmpty() {
+        Reserva reserva = alquiler.obtenerPrimeroDeReservasEncoladas();
+        assertNull(reserva);
+    }
+    @Test
+    public void testNoCumplePrecioEnPeriodoConPrecioMenorAlMinimo() {
+        LocalDate entrada = LocalDate.of(2024, 11, 10);
+        LocalDate salida = LocalDate.of(2024, 11, 15);
+        double precioMinimo = 900.0;
+        double precioMaximo = 1000.0;
+        
+        assertFalse(alquiler.cumplePrecioEnPeriodo(precioMinimo, precioMaximo, entrada, salida));
+    }
+
+    @Test
+    public void testNoCumplePrecioEnPeriodoConPrecioMayorAlMaximo() {
+        LocalDate entrada = LocalDate.of(2024, 11, 10);
+        LocalDate salida = LocalDate.of(2024, 11, 20);
+        double precioMinimo = 1000.0;
+        double precioMaximo = 1200.0;
+        
+        assertFalse(alquiler.cumplePrecioEnPeriodo(precioMinimo, precioMaximo, entrada, salida));
+    }
 }
