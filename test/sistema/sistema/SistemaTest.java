@@ -14,9 +14,11 @@ import sistema.enums.customEnums.CustomEnum;
 import sistema.enums.customEnums.CustomEnumType;
 import sistema.enums.customEnums.TipoDeInmueble;
 import sistema.exceptions.*;
+import sistema.filtro.FiltroDeSistema;
 import sistema.filtro.FiltroReserva;
 import sistema.filtro.FiltroReservasFuturas;
 import sistema.filtro.FiltroSimple;
+import sistema.filtro.FiltroTodasReservas;
 import sistema.mailSender.MailSender;
 import sistema.managers.ReservaManager;
 import sistema.podio.Podio;
@@ -410,6 +412,54 @@ public class SistemaTest {
 		assertThrows(NoExistenteException.class, () -> sistema.getValoracionesPorCategoria(rankeable, categoria));
 
 	}
+	
+	@Test
+	public void testVerReservasSegunFiltro() {
+		FiltroReserva fr = mock(FiltroTodasReservas.class);
+		
+		when(fr.filtrarReservas(Arrays.asList())).thenReturn(Arrays.asList());
+		
+		assertEquals(this.sistema.verReservasSegun(fr).size(), 0 );
+	}
+	
+	
+	
+	
+	@Test
+	public void testTodasLasCiudades() {
 
+		
+		assertEquals(this.sistema.todasLasCiudadesDeReservas(noAdmin), Arrays.asList() );
+	}
+	
+	@Test
+	public void testVerTodasLasCiudades() throws PermisoDenegadoException, NoExistenteException, YaExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
+		Inmueble inmueble = mock(Inmueble.class);
+		when(inmueble.getTipo()).thenReturn("Casa");
+		when(inmueble.getPropietario()).thenReturn(propietario);
+		when(inmueble.getCiudad()).thenReturn("Quilmes");
 
+		Alquiler alquiler = sistema.publicarAlquiler(inmueble, LocalTime.of(10, 0), LocalTime.of(18, 0), 500.0,
+				propietario, mock(PoliticaDeCancelacion.class), Arrays.asList(FormaDePago.CREDITO));
+
+		Reserva reserva = sistema.crearReserva(FormaDePago.CREDITO, LocalDate.now(), LocalDate.now().plusDays(5),
+				alquiler, noAdmin, false);
+
+		
+
+		sistema.aceptarReserva(reserva, propietario);
+
+		sistema.cancelarReserva(reserva, noAdmin);
+		
+		assertEquals(this.sistema.todasLasCiudadesDeReservas(noAdmin), Arrays.asList("Quilmes") );
+	}
+	
+	@Test
+	public void testSePuedeFiltrarPorAlquiler() {
+		FiltroDeSistema fs  = mock(FiltroDeSistema.class);
+		when(fs.filtrarLista(Arrays.asList())).thenReturn(Arrays.asList());
+		
+		assertEquals(this.sistema.buscarAlquiler(fs), Arrays.asList());
+		
+	}
 }

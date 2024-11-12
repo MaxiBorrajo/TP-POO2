@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Queue;
 
 import sistema.reserva.Reserva;
+import sistema.usuario.Usuario;
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
 import sistema.enums.FormaDePago;
@@ -183,6 +184,11 @@ public class Alquiler implements Observable {
 	@Override
 	public Alquiler getAlquiler() {
 		return this;
+	}
+
+	public Usuario getPropietario() {
+		// TODO Auto-generated method stub
+		return this.inmueble.getPropietario();
 	}
 
 }

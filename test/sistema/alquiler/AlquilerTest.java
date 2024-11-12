@@ -40,6 +40,8 @@ public class AlquilerTest {
 		alquiler = new Alquiler(inmuebleMock, LocalTime.of(14, 0), LocalTime.of(11, 0), 100.0,
 				politicaDeCancelacionMock, formasDePago);
 	}
+	
+	
 
 	@Test
 	public void testAgregarPeriodoSinConflictos() {
@@ -49,6 +51,11 @@ public class AlquilerTest {
 
 		assertDoesNotThrow(() -> alquiler.agregarPeriodo(periodo));
 
+	}
+	
+	@Test
+	public void testDevuelveSuAlquiler() {
+		assertEquals(this.alquiler, this.alquiler.getAlquiler());
 	}
 
 	@Test
