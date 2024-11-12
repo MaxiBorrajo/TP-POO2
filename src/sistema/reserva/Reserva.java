@@ -139,4 +139,9 @@ public class Reserva implements Observable {
 		return this.estado.estaFinalizada();
 	}
 
+	public Usuario getPropietario() {
+		// TODO Auto-generated method stub
+		return this.alquiler.getPropietario();
+	}
+
 }
