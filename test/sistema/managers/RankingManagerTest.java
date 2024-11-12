@@ -2,6 +2,7 @@ package sistema.managers;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -97,4 +98,15 @@ public class RankingManagerTest {
 		assertTrue(comentarios.contains("Muy limpio"));
 		assertTrue(comentarios.contains("Buen servicio"));
 	}
+	 @Test
+	    public void testAñadirValoracionThrowsReservaNoTerminadaException() {
+		 	when(reserva.estaFinalizada()).thenReturn(false);
+	        Ranking rankingMock = mock(Ranking.class);
+	        when(rankingMock.getReserva()).thenReturn(reserva);
+	        assertThrows(ReservaNoTerminadaException.class, () -> {
+	            rankingManager.añadirValoracion(rankingMock);
+	        });
+
+	        verify(reserva).estaFinalizada();
+	    }
 }

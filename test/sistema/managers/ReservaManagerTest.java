@@ -5,9 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,9 +13,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import sistema.Inmueble.Inmueble;
 import sistema.alquiler.Alquiler;
 import sistema.alquiler.politicaDeCancelacion.PoliticaDeCancelacion;
-import sistema.enums.EstadoDeReserva;
 import sistema.enums.FormaDePago;
 import sistema.enums.RolDeUsuario;
 import sistema.exceptions.AlquilerNoDisponibleException;
@@ -222,5 +216,21 @@ public class ReservaManagerTest {
 
 		this.reservaManager.filtrarReservas(fr);
 		verify(fr, times(1)).filtrarReservas(Arrays.asList(re));
+	}
+	 @Test
+	    public void testCrearReservaThrowsAlquilerNoDisponibleException() {
+	       
+	        FormaDePago formaDePago = FormaDePago.CREDITO;
+	        LocalDate entrada = LocalDate.of(2023, 5, 1);
+	        LocalDate salida = LocalDate.of(2023, 5, 10);
+	        boolean esReservaCondicional = false;
+	        Alquiler alquilerMock = mock(Alquiler.class);
+	        when(alquilerMock.existeFormaDePago(formaDePago)).thenReturn(true);
+	        when(alquilerMock.puedeCrearReserva(entrada, salida)).thenReturn(false);
+
+	        assertThrows(AlquilerNoDisponibleException.class, () -> {
+	            reservaManager.crearReserva(formaDePago, entrada, salida, alquilerMock, inquilino, esReservaCondicional);
+	        });
+	    
 	}
 }

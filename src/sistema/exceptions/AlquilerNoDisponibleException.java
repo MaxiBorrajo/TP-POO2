@@ -1,8 +1,8 @@
 package sistema.exceptions;
 
 public class AlquilerNoDisponibleException extends Exception {
-	public AlquilerNoDisponibleException(String message) {
-		super(message);
+	public AlquilerNoDisponibleException() {
+		super("Alquiler no disponible");
 	}
 
 }
