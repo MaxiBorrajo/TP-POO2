@@ -115,13 +115,7 @@ public class Alquiler implements Observable {
 		return this.inmueble;
 	}
 
-	public boolean estaDisponibleLuego(LocalDate entrada) {
-		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(entrada));
-	}
-
-	public boolean estaDisponibleAntes(LocalDate salida) {
-		return this.periodos.stream().anyMatch(p -> p.perteneceAPeriodo(salida));
-	}
+	
 
 	public String getTipoDeInmueble() {
 		return this.inmueble.getTipo();

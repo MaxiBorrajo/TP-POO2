@@ -26,9 +26,8 @@ public class FiltroDeSistema {
 	}
 
 	private Filtro<Alquiler> filtroCompuestoFechas(LocalDate entrada, LocalDate salida) {
-		Filtro<Alquiler> f = new FiltroSimple<Alquiler>((a -> a.estaDisponibleLuego(entrada)));
-		Filtro<Alquiler> g = new FiltroSimple<Alquiler>((a -> a.estaDisponibleAntes(salida)));
-		return new FiltroCompuesto<Alquiler>(Arrays.asList(f, g));
+		
+		return new FiltroSimple<Alquiler>(a -> a.puedeCrearReserva(entrada, salida));
 	}
 
 	private void agregarFiltro(Filtro<Alquiler> filtro) {

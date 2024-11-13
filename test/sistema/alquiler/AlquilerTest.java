@@ -10,7 +10,9 @@ import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.YaExistenteException;
+import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
+import sistema.notificaciones.BajaPrecioNotify;
 import sistema.periodo.Periodo;
 import sistema.reserva.Reserva;
 
@@ -201,29 +203,7 @@ public class AlquilerTest {
 		assertEquals(nuevaPolitica, alquiler.getPoliticaDeCancelacion());
 	}
 
-	@Test
-	public void testEstaDisponibleLuego() {
-		LocalDate testDate = LocalDate.of(2024, 11, 10);
-		Periodo periodoMock = mock(Periodo.class);
-		when(periodoMock.perteneceAPeriodo(testDate)).thenReturn(true);
-		alquiler.agregarPeriodo(periodoMock);
-
-		boolean result = alquiler.estaDisponibleLuego(testDate);
-
-		assertTrue(result);
-	}
-
-	@Test
-	public void testEstaDisponibleAntes() {
-		LocalDate testDate = LocalDate.of(2024, 11, 5);
-		Periodo periodoMock = mock(Periodo.class);
-		when(periodoMock.perteneceAPeriodo(testDate)).thenReturn(true);
-		alquiler.agregarPeriodo(periodoMock);
-
-		boolean result = alquiler.estaDisponibleAntes(testDate);
-
-		assertTrue(result);
-	}
+	
 
 	@Test
 	public void testGetTipoDeInmueble() {
@@ -300,5 +280,14 @@ public class AlquilerTest {
         double precioMaximo = 1200.0;
         
         assertFalse(alquiler.cumplePrecioEnPeriodo(precioMinimo, precioMaximo, entrada, salida));
+    }
+    
+    @Test
+    public void testBajaDePrecioTiraNotificacion() {
+    	NotificadorManager noti = mock(NotificadorManager.class);
+    	this.alquiler.cambiarPrecio(88d, noti);
+    	
+    	verify(noti).notify(any(BajaPrecioNotify.class));
+    	assertEquals(88d, this.alquiler.getPrecioBase());
     }
 }

@@ -20,7 +20,11 @@ import sistema.filtro.FiltroReservasFuturas;
 import sistema.filtro.FiltroSimple;
 import sistema.filtro.FiltroTodasReservas;
 import sistema.mailSender.MailSender;
+import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
+import sistema.notificaciones.BajaPrecioNotify;
+import sistema.notificaciones.EventoNotificador;
+import sistema.notificaciones.Suscriptor;
 import sistema.podio.Podio;
 import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
@@ -33,6 +37,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -457,5 +462,34 @@ public class SistemaTest {
 
 		assertEquals(this.sistema.buscarAlquiler(fs), Arrays.asList());
 
+	}
+	
+	@Test
+	public void testSePuedenSuscribirYremoverDeEventos() throws NoSuscriptoAlEvento {
+		Suscriptor sus = mock(Suscriptor.class);
+		EventoNotificador even = mock(BajaPrecioNotify.class);
+		
+		
+		this.sistema.agregarSuscriptor(sus, even);
+		when(even.esIgualA(even)).thenReturn(true);
+		assertTrue(this.sistema.estaSuscripto(sus, even));
+		this.sistema.removerSuscriptor(sus, even);
+		assertFalse(this.sistema.estaSuscripto(sus, even));
+	}
+	
+	@Test
+	public void testRechazarReserva() throws NoSuscriptoAlEvento, NoExistenteException, PermisoDenegadoException {
+		Reserva re = mock(Reserva.class);
+		when(re.getPropietario()).thenReturn(propietario);
+		this.sistema.rechazarReserva(re, propietario);;
+		verify(re).rechazar();
+	}
+	
+	@Test
+	public void testBajarPrecio() throws NoSuscriptoAlEvento, NoExistenteException, PermisoDenegadoException {
+		Alquiler alq = mock(Alquiler.class);
+		
+		this.sistema.cambiarPrecioAlquiler(199d, alq, propietario);;
+		verify(alq).cambiarPrecio(eq(199d), any(NotificadorManager.class));
 	}
 }
