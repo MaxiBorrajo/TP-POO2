@@ -27,11 +27,13 @@ public class FiltroDeSistemaTest {
 		when(a2.esDeCiudad("Quilmes")).thenReturn(false);
 		when(a3.esDeCiudad("Quilmes")).thenReturn(true);
 
-		when(a1.estaDisponibleLuego(LocalDate.of(2024, 6, 2))).thenReturn(true);
+		
+		when(a1.puedeCrearReserva(LocalDate.of(2024, 6, 2),LocalDate.of(2024, 6, 5))).thenReturn(true);
 
-		when(a3.estaDisponibleLuego(LocalDate.of(2024, 6, 2))).thenReturn(false);
 
-		when(a1.estaDisponibleAntes(LocalDate.of(2024, 6, 5))).thenReturn(true);
+		when(a3.puedeCrearReserva(LocalDate.of(2024, 6, 2),LocalDate.of(2024, 6, 5))).thenReturn(false);
+
+		
 
 		this.filtro = new FiltroDeSistema("Quilmes", LocalDate.of(2024, 6, 2), LocalDate.of(2024, 6, 5));
 	}
@@ -58,6 +60,21 @@ public class FiltroDeSistemaTest {
 
 	void seAgregaFiltroDeHuepedes() {
 		this.filtro.agregarFiltroPorHuespedes(5);
+		when(a1.aceptaCantidadHuespedes(5)).thenReturn(true);
+		when(a3.aceptaCantidadHuespedes(5)).thenReturn(false);
+
+		assertEquals(1, this.filtro.filtrarLista(Arrays.asList(a1, a2, a3)).size());
+
+	}
+	
+	@Test
+
+	void seAgreganTodosLosFiltrosOpcionaless() {
+		this.filtro.agregarFiltroPorHuespedes(5);
+		this.filtro.agregarFiltroPorPrecio(100d, 200d);
+		when(a1.cumplePrecioEnPeriodo(100d, 200d, LocalDate.of(2024, 6, 2), LocalDate.of(2024, 6, 5))).thenReturn(true);
+		when(a2.cumplePrecioEnPeriodo(100d, 200d, LocalDate.of(2024, 6, 2), LocalDate.of(2024, 6, 5))).thenReturn(true);
+
 		when(a1.aceptaCantidadHuespedes(5)).thenReturn(true);
 		when(a3.aceptaCantidadHuespedes(5)).thenReturn(false);
 

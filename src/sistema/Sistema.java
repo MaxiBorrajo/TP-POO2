@@ -1,6 +1,8 @@
 package sistema;
 
 import sistema.managers.*;
+import sistema.notificaciones.EventoNotificador;
+import sistema.notificaciones.Suscriptor;
 import sistema.podio.Podio;
 import sistema.ranking.Rankeable;
 import sistema.ranking.Ranking;
@@ -30,6 +32,7 @@ import sistema.enums.customEnums.Servicio;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.NoExistenteException;
+import sistema.exceptions.NoSuscriptoAlEvento;
 import sistema.exceptions.PermisoDenegadoException;
 import sistema.exceptions.ReservaNoAceptableException;
 import sistema.exceptions.ReservaNoCancelableException;
@@ -234,5 +237,17 @@ public class Sistema {
 	public List<Inmueble> getInmuebles(Usuario propietario) {
 		return this.alquilerManager.getAlquileres(propietario).stream().map(a -> a.getInmueble()).toList();
 	}
-
+	
+	public void agregarSuscriptor(Suscriptor sus, EventoNotificador even) {
+		this.notificadorManager.addSuscriptor(sus, even);
+	}
+	
+	public void removerSuscriptor(Suscriptor sus, EventoNotificador even) throws NoSuscriptoAlEvento {
+		this.notificadorManager.removeSuscriptor(sus, even);
+	}
+	
+	public boolean estaSuscripto(Suscriptor sus, EventoNotificador even) throws NoSuscriptoAlEvento {
+		return this.notificadorManager.estaRegistrado(sus, even);
+	};
+	
 }
