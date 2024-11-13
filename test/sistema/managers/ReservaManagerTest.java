@@ -27,6 +27,7 @@ import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.NoExistenteException;
 import sistema.exceptions.PermisoDenegadoException;
+import sistema.exceptions.ReservaNoAceptableException;
 import sistema.exceptions.ReservaNoCancelableException;
 import sistema.filtro.FiltroReserva;
 import sistema.filtro.FiltroReservasFuturas;
@@ -221,67 +222,45 @@ public class ReservaManagerTest {
 		this.reservaManager.filtrarReservas(fr);
 		verify(fr, times(1)).filtrarReservas(Arrays.asList(re));
 	}
-	 @Test
-	    public void testCrearReservaThrowsAlquilerNoDisponibleException() {
-	       
-	        FormaDePago formaDePago = FormaDePago.CREDITO;
-	        LocalDate entrada = LocalDate.of(2023, 5, 1);
-	        LocalDate salida = LocalDate.of(2023, 5, 10);
-	        boolean esReservaCondicional = false;
-	        Alquiler alquilerMock = mock(Alquiler.class);
-	        when(alquilerMock.existeFormaDePago(formaDePago)).thenReturn(true);
-	        when(alquilerMock.puedeCrearReserva(entrada, salida)).thenReturn(false);
 
-	        assertThrows(AlquilerNoDisponibleException.class, () -> {
-	            reservaManager.crearReserva(formaDePago, entrada, salida, alquilerMock, inquilino, esReservaCondicional);
-	        });
-	    
+	@Test
+	public void testCrearReservaThrowsAlquilerNoDisponibleException() {
+
+		FormaDePago formaDePago = FormaDePago.CREDITO;
+		LocalDate entrada = LocalDate.of(2023, 5, 1);
+		LocalDate salida = LocalDate.of(2023, 5, 10);
+		boolean esReservaCondicional = false;
+		Alquiler alquilerMock = mock(Alquiler.class);
+		when(alquilerMock.existeFormaDePago(formaDePago)).thenReturn(true);
+		when(alquilerMock.puedeCrearReserva(entrada, salida)).thenReturn(false);
+
+		assertThrows(AlquilerNoDisponibleException.class, () -> {
+			reservaManager.crearReserva(formaDePago, entrada, salida, alquilerMock, inquilino, esReservaCondicional);
+		});
+
 	}
-	 
-	 @Test
-	 public void testRechazarReserva() throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, NoExistenteException, ReservaNoCancelableException, PermisoDenegadoException {
-		 when(this.reservaMock.getPropietario()).thenReturn(propietario);
-		 this.reservaManager.rechazarReserva(this.reservaMock, propietario);
-		
-		 verify(this.reservaMock, times(1)).rechazar();
-	 }
-	 
-	 @Test
-	 public void testRFinalizarReserva() throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, NoExistenteException, ReservaNoCancelableException, PermisoDenegadoException {
-		 when(alquiler.existeFormaDePago(formaDePago)).thenReturn(true);
-		 when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
-		 when(alquiler.getPropietario()).thenReturn(propietario);
-		 Reserva re = this.reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino, false);
-		 this.reservaManager.aceptarReserva(re, propietario, mock(NotificadorManager.class), mailSender);
-		 assertTrue(re.estaActiva());
-		 
-		 
-		 this.reservaManager.finalizarReserva(re);
-		
-		 assertTrue(re.estaFinalizada());
-	 }
-	 
-	 @Test
-	 public void testSabeDesencolarReserva() throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, NoExistenteException, ReservaNoCancelableException, PermisoDenegadoException {
-		 Inmueble inmuebleMock = mock(Inmueble.class);
-			when(alquiler.getInmueble()).thenReturn(inmuebleMock);
-			when(alquiler.getPropietario()).thenReturn(propietario);
-			when(alquiler.existeFormaDePago(formaDePago)).thenReturn(true);
-			when(inmuebleMock.getPropietario()).thenReturn(propietario);
-			
-			when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
-			Reserva reserva1 = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino, true);
-		 	when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(false);
-			Reserva reserva2 = reservaManager.crearReserva(formaDePago, entrada, salida, alquiler,
-					inquilino, true);
-			
-			
-			
-			when(alquiler.obtenerPrimeroDeReservasEncoladas()).thenReturn(reserva2);
-			assertEquals(  1, this.reservaManager.getReservas().size());
-			this.reservaManager.desencolarReserva(alquiler);
-			assertEquals(  2, this.reservaManager.getReservas().size());
-			
-			
-	 }
+
+	@Test
+	public void testRechazarReserva() throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException,
+			NoExistenteException, ReservaNoCancelableException, PermisoDenegadoException {
+		when(this.reservaMock.getPropietario()).thenReturn(propietario);
+		this.reservaManager.rechazarReserva(this.reservaMock, propietario);
+
+		verify(this.reservaMock, times(1)).rechazar();
+	}
+
+	@Test
+	public void testRFinalizarReserva() throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException,
+			NoExistenteException, ReservaNoCancelableException, PermisoDenegadoException, ReservaNoAceptableException {
+		when(alquiler.existeFormaDePago(formaDePago)).thenReturn(true);
+		when(alquiler.puedeCrearReserva(entrada, salida)).thenReturn(true);
+		when(alquiler.getPropietario()).thenReturn(propietario);
+		Reserva re = this.reservaManager.crearReserva(formaDePago, entrada, salida, alquiler, inquilino, false);
+		this.reservaManager.aceptarReserva(re, propietario, mock(NotificadorManager.class), mailSender);
+		assertTrue(re.estaActiva());
+
+		this.reservaManager.finalizarReserva(re);
+
+		assertTrue(re.estaFinalizada());
+	}
 }

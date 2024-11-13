@@ -31,6 +31,7 @@ import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.NoExistenteException;
 import sistema.exceptions.PermisoDenegadoException;
+import sistema.exceptions.ReservaNoAceptableException;
 import sistema.exceptions.ReservaNoCancelableException;
 import sistema.exceptions.ReservaNoTerminadaException;
 import sistema.exceptions.ValoracionInvalidaException;
@@ -63,6 +64,11 @@ public class Sistema {
 		if (!this.customEnumManager.existeCustomEnum(nombre, tipo)) {
 			throw new NoExistenteException(tipo.name());
 		}
+	}
+	
+	public void cambiarPrecioAlquiler(double precio, Alquiler alquiler, Usuario propietario) throws NoExistenteException, PermisoDenegadoException {
+		this.usuarioManager.validarUsuario(propietario, RolDeUsuario.PROPIETARIO);
+		alquiler.cambiarPrecio(precio, notificadorManager);
 	}
 
 	public List<Ranking> getValoraciones(Rankeable rankeable) {
@@ -125,7 +131,7 @@ public class Sistema {
 	}
 
 	public void aceptarReserva(Reserva reserva, Usuario propietario)
-			throws PermisoDenegadoException, NoExistenteException {
+			throws PermisoDenegadoException, NoExistenteException, ReservaNoAceptableException {
 		this.usuarioManager.validarUsuario(propietario, RolDeUsuario.PROPIETARIO);
 		this.reservaManager.aceptarReserva(reserva, propietario, this.notificadorManager, this.mailSender);
 	}

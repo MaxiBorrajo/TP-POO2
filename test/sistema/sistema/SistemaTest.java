@@ -412,28 +412,26 @@ public class SistemaTest {
 		assertThrows(NoExistenteException.class, () -> sistema.getValoracionesPorCategoria(rankeable, categoria));
 
 	}
-	
+
 	@Test
 	public void testVerReservasSegunFiltro() {
 		FiltroReserva fr = mock(FiltroTodasReservas.class);
-		
+
 		when(fr.filtrarReservas(Arrays.asList())).thenReturn(Arrays.asList());
-		
-		assertEquals(this.sistema.verReservasSegun(fr).size(), 0 );
+
+		assertEquals(this.sistema.verReservasSegun(fr).size(), 0);
 	}
-	
-	
-	
-	
+
 	@Test
 	public void testTodasLasCiudades() {
 
-		
-		assertEquals(this.sistema.todasLasCiudadesDeReservas(noAdmin), Arrays.asList() );
+		assertEquals(this.sistema.todasLasCiudadesDeReservas(noAdmin), Arrays.asList());
 	}
-	
+
 	@Test
-	public void testVerTodasLasCiudades() throws PermisoDenegadoException, NoExistenteException, YaExistenteException, AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
+	public void testVerTodasLasCiudades()
+			throws PermisoDenegadoException, NoExistenteException, YaExistenteException, AlquilerNoDisponibleException,
+			FormaDePagoNoAceptadaException, ReservaNoCancelableException, ReservaNoAceptableException {
 		Inmueble inmueble = mock(Inmueble.class);
 		when(inmueble.getTipo()).thenReturn("Casa");
 		when(inmueble.getPropietario()).thenReturn(propietario);
@@ -445,21 +443,19 @@ public class SistemaTest {
 		Reserva reserva = sistema.crearReserva(FormaDePago.CREDITO, LocalDate.now(), LocalDate.now().plusDays(5),
 				alquiler, noAdmin, false);
 
-		
-
 		sistema.aceptarReserva(reserva, propietario);
 
 		sistema.cancelarReserva(reserva, noAdmin);
-		
-		assertEquals(this.sistema.todasLasCiudadesDeReservas(noAdmin), Arrays.asList("Quilmes") );
+
+		assertEquals(this.sistema.todasLasCiudadesDeReservas(noAdmin), Arrays.asList("Quilmes"));
 	}
-	
+
 	@Test
 	public void testSePuedeFiltrarPorAlquiler() {
-		FiltroDeSistema fs  = mock(FiltroDeSistema.class);
+		FiltroDeSistema fs = mock(FiltroDeSistema.class);
 		when(fs.filtrarLista(Arrays.asList())).thenReturn(Arrays.asList());
-		
+
 		assertEquals(this.sistema.buscarAlquiler(fs), Arrays.asList());
-		
+
 	}
 }

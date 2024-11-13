@@ -17,7 +17,9 @@ import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.YaExistenteException;
 import sistema.filtro.FiltroSimple;
+import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
+import sistema.notificaciones.BajaPrecioNotify;
 import sistema.notificaciones.Observable;
 import sistema.periodo.Periodo;
 
@@ -159,10 +161,10 @@ public class Alquiler implements Observable {
 
 	public void seCanceloReserva(Reserva reserva, ReservaManager reser)
 			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
+		this.desocuparPeriodosDe(reserva.getFechaInicio(), reserva.getFechaFinal());
+		
 		if (this.hayReservasEncoladas()) {
 			reser.desencolarReserva(this);
-		} else {
-			this.desocuparPeriodosDe(reserva.getFechaInicio(), reserva.getFechaFinal());
 		}
 	}
 
@@ -189,6 +191,14 @@ public class Alquiler implements Observable {
 	public Usuario getPropietario() {
 		// TODO Auto-generated method stub
 		return this.inmueble.getPropietario();
+	}
+
+	public void cambiarPrecio(double precio, NotificadorManager notificadorManager) {
+		if(getPrecioBase() > precio) {
+			notificadorManager.notify(new BajaPrecioNotify(this));
+		}
+		
+		this.precioDefault = precio;
 	}
 
 }

@@ -20,6 +20,7 @@ import sistema.enums.FormaDePago;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.NoExistenteException;
+import sistema.exceptions.ReservaNoAceptableException;
 import sistema.exceptions.ReservaNoCancelableException;
 import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
@@ -72,7 +73,7 @@ public class ReservaTest {
 	}
 
 	@Test
-	public void testSePuedeAceptarUnaReservaRecienCreada() {
+	public void testSePuedeAceptarUnaReservaRecienCreada() throws ReservaNoAceptableException {
 		NotificadorManager noti = mock(NotificadorManager.class);
 		this.re.aceptar(noti);
 
@@ -93,7 +94,7 @@ public class ReservaTest {
 
 	@Test
 	public void testSePuedeCancelarUnaReservaYaAceptada()
-			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
+			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException, ReservaNoAceptableException {
 		ReservaManager reser = mock(ReservaManager.class);
 		NotificadorManager noti = mock(NotificadorManager.class);
 		this.re.aceptar(noti);
@@ -107,7 +108,7 @@ public class ReservaTest {
 
 	@Test
 	public void testSePuedeFinalizarUnaReserva()
-			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
+			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException, ReservaNoAceptableException {
 		this.re.aceptar(mock(NotificadorManager.class));
 		this.re.finalizar();
 		assertFalse(this.re.estaActiva());
@@ -126,10 +127,10 @@ public class ReservaTest {
 
 	@Test
 	public void testUnaVezFinalizadaNoSePuedeAceptarNiRechazar()
-			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException {
+			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException, ReservaNoCancelableException, ReservaNoAceptableException {
 		this.re.aceptar(mock(NotificadorManager.class));
 		this.re.finalizar();
-		this.re.aceptar(mock(NotificadorManager.class));
+		assertThrows(ReservaNoAceptableException.class, () -> this.re.aceptar(mock(NotificadorManager.class)));
 		assertFalse(this.re.estaActiva());
 		this.re.rechazar();
 		assertFalse(this.re.estaRechazada());

@@ -6,6 +6,7 @@ import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
 import sistema.exceptions.NoExistenteException;
 import sistema.exceptions.PermisoDenegadoException;
+import sistema.exceptions.ReservaNoAceptableException;
 import sistema.exceptions.ReservaNoCancelableException;
 import sistema.filtro.FiltroReserva;
 import sistema.filtro.FiltroSimple;
@@ -57,7 +58,7 @@ public class ReservaManager {
 
 		return nuevaReserva;
 
-	}
+	} 
 
 	public void cancelarReserva(Reserva reserva, Usuario inquilinoCancela, NotificadorManager notificadorManager,
 			MailSender mailSender) throws NoExistenteException, AlquilerNoDisponibleException,
@@ -65,7 +66,7 @@ public class ReservaManager {
 		this.validarReservaActiveExiste(reserva);
 		this.verificarPermiso(reserva.getInquilino(), inquilinoCancela);
 		reserva.cancelar(this, notificadorManager);
-		mailSender.sendEmail("hola@sistema.com", reserva.getAlquiler().getInmueble().getPropietario().getEmail(),
+		mailSender.sendEmail("hola@sistema.com", reserva.getPropietario().getEmail(),
 				"Reserva cancelada", "El inquilino ha cancelado la reserva del alquiler");
 	}
 
@@ -78,11 +79,8 @@ public class ReservaManager {
 	public void desencolarReserva(Alquiler alquiler)
 			throws AlquilerNoDisponibleException, FormaDePagoNoAceptadaException {
 		Reserva reservaEncolada = alquiler.obtenerPrimeroDeReservasEncoladas();
-		/*this.crearReserva(reservaEncolada.getFormaDepago(), reservaEncolada.getFechaInicio(),
-				reservaEncolada.getFechaFinal(), alquiler, reservaEncolada.getInquilino(), true);*/
-		
-		this.reservas.add(new Reserva(reservaEncolada.getFormaDepago(), reservaEncolada.getFechaInicio(),
-				reservaEncolada.getFechaFinal(), alquiler, reservaEncolada.getInquilino(),alquiler.calcularPrecioPeriodo(reservaEncolada.getFechaInicio(),reservaEncolada.getFechaFinal())));
+		this.crearReserva(reservaEncolada.getFormaDepago(), reservaEncolada.getFechaInicio(),
+				reservaEncolada.getFechaFinal(), alquiler, reservaEncolada.getInquilino(), true);
 	}
 
 	public void finalizarReserva(Reserva reserva) throws NoExistenteException {
@@ -116,7 +114,7 @@ public class ReservaManager {
 	}
 
 	public void aceptarReserva(Reserva reserva, Usuario propietarioAcepta, NotificadorManager notificadorManager,
-			MailSender mailSender) throws NoExistenteException, PermisoDenegadoException {
+			MailSender mailSender) throws NoExistenteException, PermisoDenegadoException, ReservaNoAceptableException {
 		this.verificarPermiso(reserva.getPropietario(), propietarioAcepta);
 		reserva.aceptar(notificadorManager);
 		mailSender.sendEmail("hola@sistema.com", reserva.getInquilino().getEmail(), "Reserva aprobada",

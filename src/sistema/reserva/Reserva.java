@@ -6,6 +6,7 @@ import sistema.alquiler.Alquiler;
 import sistema.enums.*;
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
+import sistema.exceptions.ReservaNoAceptableException;
 import sistema.exceptions.ReservaNoCancelableException;
 import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
@@ -80,7 +81,7 @@ public class Reserva implements Observable {
 		return this.alquiler.getCiudad();
 	}
 
-	public void aceptar(NotificadorManager noti) {
+	public void aceptar(NotificadorManager noti) throws ReservaNoAceptableException {
 		this.estado.aceptar(this, noti);
 
 	}

@@ -2,13 +2,14 @@ package sistema.reserva;
 
 import sistema.exceptions.AlquilerNoDisponibleException;
 import sistema.exceptions.FormaDePagoNoAceptadaException;
+import sistema.exceptions.ReservaNoAceptableException;
 import sistema.exceptions.ReservaNoCancelableException;
 import sistema.managers.NotificadorManager;
 import sistema.managers.ReservaManager;
 
 public class EstadoReserva {
-	public void aceptar(Reserva re, NotificadorManager noti) {
-
+	public void aceptar(Reserva re, NotificadorManager noti) throws ReservaNoAceptableException {
+		throw new ReservaNoAceptableException();
 	}
 
 	public void cancelar(Reserva re, ReservaManager reservaManager, NotificadorManager notificadorManager)
